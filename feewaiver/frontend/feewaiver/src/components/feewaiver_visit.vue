@@ -20,7 +20,7 @@
                 <div class="col-sm-10">
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-4 control-label">Paid Park/s</label>
+                            <label class="col-sm-4 control-label">Park/s you intend to visit</label>
                             <div :id="'parks_parent_' + visit.index" class="col-sm-6 parkclass">
                                 <select :disabled="readonly" :id="'parks_' + visit.index" class="form-control" multiple="multiple">
                                     <option v-for="park in paidParks" :value="park.id">{{park.name}}</option>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-4 control-label">Free Park/s</label>
+                            <label class="col-sm-4 control-label">Are there other parks not listed above you intend to camp at?</label>
                             <div class="col-sm-6 campgroundclass">
                                 <select :disabled="readonly" :id="'free_parks_' + visit.index" class="form-control" multiple="multiple">
                                 </select>

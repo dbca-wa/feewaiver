@@ -18,14 +18,14 @@ Dear Sir/Madam,
 {% block signature %}
 Yours sincerely,
 
-{{ system_name_short }} Section
 {% endblock %}
 
 
 
 {% block reply_statement %}
-Please do not reply directly to this email. Should you need to contact the {{department_name}},
-please contact the Fee Waiver administrator on {{ support_email }}.
+Tourism and Concessions Branch
+
+Please do not reply directly to this email. Should you need to contact the {{department_name}}, please email {{support_email}}.
 This is an automated email, please don't reply to this.
 {% endblock %}
 

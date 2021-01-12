@@ -154,6 +154,7 @@ class FeeWaiver(RevisionedMixin):
         self.save()
 
     def return_to_assessor(self, request):
+        self.assigned_officer = None
         self.processing_status = self.PROCESSING_STATUS_WITH_ASSESSOR
         self.log_user_action(
             FeeWaiverUserAction.ACTION_RETURN_TO_ASSESSOR.format(self.lodgement_number), 
@@ -396,4 +397,16 @@ class ApproversGroup(models.Model):
         app_label = 'feewaiver'
         verbose_name_plural = "Approvers group"
 
+
+import reversion
+reversion.register(Participants)
+reversion.register(Park)
+reversion.register(ContactDetails, follow=['participants', 'documents'])
+reversion.register(FeeWaiver, follow=['assigned_officer', 'visit', 'documents'])
+reversion.register(ContactDetailsDocument)
+reversion.register(FeeWaiverDocument)
+reversion.register(FeeWaiverVisit, follow=['parks', 'free_parks'])
+reversion.register(AssessorsGroup)
+reversion.register(ApproversGroup)
+reversion.register(EmailUser)
 

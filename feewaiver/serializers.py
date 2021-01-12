@@ -168,6 +168,8 @@ class FeeWaiverVisitSerializer(serializers.ModelSerializer):
     fee_waiver_id = serializers.IntegerField(
             required=True, write_only=True, allow_null=False)
     camping_approved = serializers.SerializerMethodField()
+    date_from_display = serializers.SerializerMethodField()
+    date_to_display = serializers.SerializerMethodField()
 
     class Meta:
         model = FeeWaiverVisit
@@ -178,6 +180,8 @@ class FeeWaiverVisitSerializer(serializers.ModelSerializer):
                 'camping_requested',
                 'date_from',     
                 'date_to',     
+                'date_from_display',     
+                'date_to_display',     
                 'selected_park_ids',    
                 'selected_free_park_ids',    
                 'selected_park_names',    
@@ -193,6 +197,12 @@ class FeeWaiverVisitSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'id',
         )
+
+    def get_date_from_display(self, obj):
+        return obj.date_from.strftime('%d/%m/%Y')
+
+    def get_date_to_display(self, obj):
+        return obj.date_to.strftime('%d/%m/%Y')
 
     def get_selected_park_ids(self, obj):
         park_id_list = []

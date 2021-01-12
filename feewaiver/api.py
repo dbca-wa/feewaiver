@@ -64,7 +64,7 @@ import logging
 from feewaiver.emails import (
         send_fee_waiver_received_notification,
         send_workflow_notification,
-        send_approver_notification,
+        #send_approver_notification,
         send_approval_notification,
         )
 from feewaiver.main_decorators import basic_exception_handler
@@ -450,7 +450,7 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
                     send_approval_notification(instance, request, action, email_subject)
 
                 # send email
-                send_approver_notification(instance, request, action)
+                #send_approver_notification(instance, request, action)
                 return Response()
 
         except serializers.ValidationError:

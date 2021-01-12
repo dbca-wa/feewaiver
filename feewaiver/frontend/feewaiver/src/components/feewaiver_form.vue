@@ -4,7 +4,7 @@
     </div>
     <div v-else :class="containingClass">
     <form id="feewaiver-form" @submit.prevent="submit">
-        <div class="panel panel-default headerbox">
+        <div v-if="!isInternal" class="panel panel-default headerbox">
             <strong>
                 <p>Welcome to the Entry Fee Request Waiver form. Please fill out the details in the form below and submit the form to the Department.  
                 You will be notified of the outcome of your request by email.</p>
