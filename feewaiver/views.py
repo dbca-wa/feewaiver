@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views.decorators.csrf import csrf_protect
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from reversion_compare.views import HistoryCompareDetailView
 
 from datetime import datetime, timedelta
 
@@ -18,7 +19,6 @@ from feewaiver.forms import *
 from django.core.management import call_command
 import json
 from decimal import Decimal
-from feewaiver.models import FeeWaiver
 from feewaiver.serializers import (
         ParticipantsSerializer,
         ParkSerializer,
@@ -29,7 +29,16 @@ from feewaiver.models import (
         Participants,
         Park,
         CampGround,
+        FeeWaiver
 )
+
+
+class FeeWaiverHistoryCompareView(HistoryCompareDetailView):
+    """
+    View for reversion_compare
+    """
+    model = FeeWaiver
+    template_name = 'feewaiver/reversion_history.html'
 
 
 class InternalView(UserPassesTestMixin, TemplateView):

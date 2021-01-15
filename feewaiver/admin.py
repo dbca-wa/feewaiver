@@ -64,12 +64,12 @@ class ContactDetailsAdmin(admin.ModelAdmin):
 
 @admin.register(Participants)
 class ParticipantsAdmin(admin.ModelAdmin):
-    pass
+    ordering = ('name',)
 
 
 @admin.register(Park)
 class ParkAdmin(admin.ModelAdmin):
-    pass
+    ordering = ('name',)
 
 
 #@admin.register(CampGround)

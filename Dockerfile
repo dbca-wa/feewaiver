@@ -21,7 +21,7 @@ FROM builder_base_feewaiver as python_libs_feewaiver
 WORKDIR /app
 COPY requirements.txt ./
 RUN touch /app/git_hash
-RUN pip3 install --no-cache-dir -r requirements.txt \
+RUN pip install --no-cache-dir -r requirements.txt \
   # Update the Django <1.11 bug in django/contrib/gis/geos/libgeos.py
   # Reference: https://stackoverflow.com/questions/18643998/geodjango-geosexception-error
   #&& sed -i -e "s/ver = geos_version().decode()/ver = geos_version().decode().split(' ')[0]/" /usr/local/lib/python3.6/dist-packages/django/contrib/gis/geos/libgeos.py \
@@ -40,6 +40,7 @@ COPY timezone /etc/timezone
 ENV TZ=Australia/Perth
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN touch /app/.env
+COPY .git ./.git
 COPY feewaiver ./feewaiver
 RUN python manage_fw.py collectstatic --noinput
 

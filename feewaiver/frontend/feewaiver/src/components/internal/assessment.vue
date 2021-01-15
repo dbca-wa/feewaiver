@@ -1,7 +1,8 @@
 <template lang="html">
     <div v-if="feeWaiver" class="container" id="internalAssessment">
       <div class="row">
-        <h3>Entry Fee Waiver Request: {{ feeWaiver.lodgement_number }}</h3>
+        <!--h3>Entry Fee Waiver Request: {{ feeWaiver.lodgement_number }}</h3-->
+        <h3>{{ assessmentTitle }}</h3>
         <div class="col-md-3">
             <CommsLogs :comms_url="comms_url" :logs_url="logs_url" :comms_add_url="comms_add_url" :disable_add_entry="false"/>
 
@@ -168,6 +169,23 @@ export default {
 
     },
     computed: {
+        assessmentTitle: function() {
+            let title = 'Entry Fee Waiver Request: ' + this.feeWaiver.lodgement_number;
+            if (this.feeWaiver && this.feeWaiver.proposed_status && this.feeWaiver.processing_status === "With Approver") {
+                switch (this.feeWaiver.proposed_status) {
+                    case "Decline":
+                        title += ' (Proposed Decision: Decline)';
+                        break;
+                    case "Fee Waiver":
+                        title += ' (Proposed Decision: Issue Fee Waiver)';
+                        break;
+                    case "Concession":
+                        title += ' (Proposed Decision: Issue Concession)';
+                        break;
+                }
+            }
+            return title;
+        },
         feeWaiver_form_url: function() {
         },
         canProcess: function() {

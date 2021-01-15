@@ -58,8 +58,6 @@ export default {
             url: '/api/feewaivers_paginated/feewaiver_internal/?format=datatables',
             pBody: 'pBody' + vm._uid,
             datatable_id: 'feewaiver-datatable-'+vm._uid,
-            //Profile to check if user has access to process Proposal
-            profile: {},
             show_spinner: false, 
             filterFeeWaiverStatus: 'All',
             filterFeeWaiverLodgedFrom: '',

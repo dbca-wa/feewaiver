@@ -1,5 +1,12 @@
 <template lang="html">
             <FormSection :formCollapse="false" :label="label" :Index="'index_' + visit.index" :noChevron="!isInternal" >
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="row">
+                            <button v-if="visit.index > 0 && !isInternal" class="btn btn-primary pull-right" style="margin-top:5px;" @click.prevent="removeVisit()">Remove Visit</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-10">
                     <div class="form-group">
                         <div class="row">
@@ -297,6 +304,9 @@
                 this.updateSelectableCampGrounds(this.visit.selected_park_ids, internal);
             },
             */
+            removeVisit: function() {
+                this.$parent.removeVisit(this.visit.index);
+            },
             triggerFreeParksSelector: async function(internal) {
                 await this.$nextTick();
                 this.addFreeParksEventListener(internal);

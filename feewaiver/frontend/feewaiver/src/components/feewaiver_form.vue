@@ -6,7 +6,7 @@
     <form id="feewaiver-form" @submit.prevent="submit">
         <div v-if="!isInternal" class="panel panel-default headerbox">
             <strong>
-                <p>Welcome to the Entry Fee Request Waiver form. Please fill out the details in the form below and submit the form to the Department.  
+                <p>Welcome to the entry fee request waiver form. Please fill out the details in the form below and submit the form to the Department.  
                 You will be notified of the outcome of your request by email.</p>
                 <p>You can add multiple visits to the same fee waiver request by clicking add another visit prior to submitting</p>
 
@@ -214,7 +214,7 @@
                 parksList: [],
                 //campGroundsList: [],
                 campingChoices: [],
-                visitIdx: 0,
+                //visitIdx: 0,
                 visits: [
                     {
                         index: 0,
@@ -304,8 +304,11 @@
                 this.temporary_document_collection_id = id.temp_doc_id;
             },
             addVisit: async function () {
+                await this.$nextTick();
+                let lastVisitPosition = this.visits.length;
                 let visit = {
-                    index: ++this.visitIdx,
+                    //index: ++this.visitIdx,
+                    index: lastVisitPosition,
                     selected_park_ids: [],
                     selected_free_park_ids: [],
                     //selected_campground_ids: [],
@@ -381,9 +384,9 @@
                 let ageOfParticipants = null;
                 for (let visit of this.visits) {
                     if (visit && visit.age_of_participants_array && visit.age_of_participants_array.length < 1) {
-                        const visitIdx = 'visit_' + visit.index;
+                        const visitIdxRef = 'visit_' + visit.index;
                         const ageOfParticipantsIdx = 'age_of_participants_' + visit.index
-                        visitRef = this.$refs[visitIdx];
+                        visitRef = this.$refs[visitIdxRef];
                         ageOfParticipants = visitRef[0].$refs[ageOfParticipantsIdx];
                     }
                 }
@@ -427,6 +430,24 @@
                     }
 
                 }
+            },
+            removeVisit: function(visitIdx) {
+                // remove visit
+                let i = 0;
+                for (let visit of this.visits) {
+                    if (visit.index === visitIdx) {
+                        this.visits.splice(i, 1);
+                    }
+                    i++
+                }
+                // reindex
+                let ii = 0;
+                for (let visit of this.visits) {
+                    visit.index = ii;
+                    ii++
+                }
+                // force load of visit child components
+                ++this.uuid;
             },
             updatePayload: async function() {
                 await this.$nextTick();
@@ -490,7 +511,7 @@
                 this.feeWaiver.can_process = returnVal.body.fee_waiver.can_process;
                 // visits should be empty if reading from backend
                 this.visits = []
-                this.visitIdx = -1;
+                //this.visitIdx = -1;
                 for (let retrievedVisit of returnVal.body.fee_waiver.visits) {
                     let visit = Object.assign({}, retrievedVisit);
                     // we are now saving the index to db
@@ -499,6 +520,10 @@
                     visit.number_of_vehicles = visit.number_of_vehicles.toString()
                     this.visits.push(visit);
                 }
+                // sort array
+                this.visits.sort(function(a, b) {
+                    return a.index - b.index
+                });
                 this.contactDetails = Object.assign({}, returnVal.body.contact_details);
                 // TODO: try to improve this
                 if (this.contactDetails.participants_code) {

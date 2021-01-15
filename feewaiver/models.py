@@ -21,6 +21,7 @@ class Participants(models.Model):
     class Meta:
         app_label = 'feewaiver'
         verbose_name_plural = 'Participants'
+        ordering = ['name']
 
 
 class Park(models.Model):
@@ -33,6 +34,7 @@ class Park(models.Model):
 
     class Meta:
         app_label = 'feewaiver'
+        ordering = ['name']
 
 
 class CampGround(models.Model):
@@ -409,4 +411,6 @@ reversion.register(FeeWaiverVisit, follow=['parks', 'free_parks'])
 reversion.register(AssessorsGroup)
 reversion.register(ApproversGroup)
 reversion.register(EmailUser)
-
+reversion.register(FeeWaiverLogEntry, follow=['documents',])
+reversion.register(FeeWaiverLogDocument)
+reversion.register(FeeWaiverUserAction)
