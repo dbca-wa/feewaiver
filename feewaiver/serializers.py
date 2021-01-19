@@ -26,6 +26,7 @@ class EmailUserSerializer(serializers.ModelSerializer):
                 'first_name',
                 'last_name',
                 'title',
+                'position_title',
                 'organisation',
                 'name'
                 )
@@ -429,6 +430,7 @@ class FeeWaiverDTSerializer(serializers.ModelSerializer):
     assigned_officer = serializers.SerializerMethodField(read_only=True)
     latest_feewaiver_document = serializers.SerializerMethodField()
     participants = serializers.SerializerMethodField()
+    organisation = serializers.SerializerMethodField()
 
     class Meta:
         model = FeeWaiver
@@ -445,14 +447,19 @@ class FeeWaiverDTSerializer(serializers.ModelSerializer):
                 'action_shortcut',
                 'comments_to_applicant',
                 'latest_feewaiver_document',
+                'organisation',
                 )
         read_only_fields = (
             'id',
         )
 
     def get_participants(self, obj):
-        if obj.contact_details:
+        if obj.contact_details and obj.contact_details.participants:
             return obj.contact_details.participants.name
+
+    def get_organisation(self, obj):
+        if obj.contact_details:
+            return obj.contact_details.organisation
 
     def get_assigned_officer(self,obj):
         if obj.assigned_officer:
@@ -472,7 +479,8 @@ class FeeWaiverDTSerializer(serializers.ModelSerializer):
     def get_can_process(self,obj):
         # Check if currently logged in user has access to process the proposal
         request = self.context.get('request')
-        if request:
+        if request and obj.processing_status not in ['issued', 'concession', 'declined']:
+        #if request:
             user = request.user
             if obj.assigned_officer:
                 if obj.assigned_officer == user:
@@ -507,6 +515,7 @@ class FeeWaiverDocSerializer(serializers.ModelSerializer):
     can_process = serializers.SerializerMethodField()
     assigned_officer = serializers.SerializerMethodField()
     approver = serializers.SerializerMethodField()
+    approver_title = serializers.SerializerMethodField()
     full_camping_waiver_exists = serializers.SerializerMethodField()
     part_camping_waiver_exists = serializers.SerializerMethodField()
     concession = serializers.SerializerMethodField()
@@ -524,6 +533,7 @@ class FeeWaiverDocSerializer(serializers.ModelSerializer):
                 'can_process',
                 'assigned_officer',
                 'approver',
+                'approver_title',
                 'comments_to_applicant',
                 'visits',
                 'address',
@@ -573,6 +583,12 @@ class FeeWaiverDocSerializer(serializers.ModelSerializer):
             return request.user.get_full_name()
         return None
 
+    def get_approver_title(self,obj):
+        request = self.context.get('request')
+        if request:
+            return request.user.position_title
+        return None
+
     def get_contact_name(self, obj):
         if obj.contact_details:
             return obj.contact_details.contact_name
@@ -590,7 +606,8 @@ class FeeWaiverDocSerializer(serializers.ModelSerializer):
     def get_can_process(self,obj):
         # Check if currently logged in user has access to process the proposal
         request = self.context.get('request')
-        if request:
+        #if request:
+        if request and obj.processing_status not in ['issued', 'concession', 'declined']:
             user = request.user
             if obj.assigned_officer:
                 if obj.assigned_officer == user:

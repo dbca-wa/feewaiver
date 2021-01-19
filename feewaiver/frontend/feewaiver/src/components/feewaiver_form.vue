@@ -144,14 +144,18 @@
         <div>
             <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
             <div class="row" style="margin-bottom: 50px">
-              <div class="navbar navbar-fixed-bottom" style="background-color: #f5f5f5;">
+              <div v-if="feeWaiverId && canProcess" class="navbar navbar-fixed-bottom" style="background-color: #f5f5f5;">
                 <div class="navbar-inner">
-                    <div v-if="feeWaiverId" class="container">
+                    <div class="container">
                       <p class="pull-right">
                         <button class="btn btn-primary pull-right" style="margin-top:5px;" @click.prevent="save()">Save Changes</button>
                       </p>
                     </div>
-                    <div v-else class="container">
+                </div>
+              </div>
+              <div v-else-if="!feeWaiverId" class="navbar navbar-fixed-bottom" style="background-color: #f5f5f5;">
+                <div class="navbar-inner">
+                    <div class="container">
                       <p class="pull-right">
                         <input type="button" @click.prevent="addVisit" class="btn btn-primary" value="Add another visit"/>
                         <button :title="submitDisabledText" :disabled="submitDisabled" class="btn btn-primary" type="submit">Submit</button>

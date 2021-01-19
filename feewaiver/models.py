@@ -135,6 +135,7 @@ class FeeWaiver(RevisionedMixin):
         self.save()
 
     def issue(self, request):
+        self.assigned_officer = None
         self.processing_status = self.PROCESSING_STATUS_ISSUED
         self.log_user_action(
             FeeWaiverUserAction.ACTION_ISSUE.format(self.lodgement_number), 
@@ -142,6 +143,7 @@ class FeeWaiver(RevisionedMixin):
         self.save()
 
     def issue_concession(self, request):
+        self.assigned_officer = None
         self.processing_status = self.PROCESSING_STATUS_CONCESSION
         self.log_user_action(
             FeeWaiverUserAction.ACTION_CONCESSION.format(self.lodgement_number), 
@@ -149,6 +151,7 @@ class FeeWaiver(RevisionedMixin):
         self.save()
 
     def decline(self, request):
+        self.assigned_officer = None
         self.processing_status = self.PROCESSING_STATUS_DECLINED
         self.log_user_action(
             FeeWaiverUserAction.ACTION_DECLINE.format(self.lodgement_number), 

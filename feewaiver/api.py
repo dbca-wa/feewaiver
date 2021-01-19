@@ -89,14 +89,22 @@ class FeeWaiverFilterBackend(DatatablesFilterBackend):
         total_count = queryset.count()
 
         def get_choice(status, choices=FeeWaiver.PROCESSING_STATUS_CHOICES):
+            #import ipdb; ipdb.set_trace()
             for i in choices:
                 if i[1]==status:
                     return i[0]
             return None
+        def get_choice_display(status, choices=FeeWaiver.PROCESSING_STATUS_CHOICES):
+            #import ipdb; ipdb.set_trace()
+            for i in choices:
+                if i[0]==status:
+                    return i[1]
+            return None
 
+        # filters
         processing_status = request.GET.get('processing_status')
         if processing_status and not processing_status.lower() == 'all':
-            processing_status = get_choice(processing_status, FeeWaiver.PROCESSING_STATUS_CHOICES)
+            processing_status = get_choice(processing_status)
             queryset = queryset.filter(processing_status=processing_status)
 
         date_from = request.GET.get('date_from')
@@ -105,6 +113,27 @@ class FeeWaiverFilterBackend(DatatablesFilterBackend):
             queryset = queryset.filter(lodgement_date__gte=date_from)
         if date_to:
             queryset = queryset.filter(lodgement_date__lte=date_to)
+        # search text
+        search_text = request.GET.get('search[value]', '')
+        if search_text:
+            search_text = search_text.lower()
+            search_text_feewaiver_ids = []
+            for feewaiver in queryset:
+                lodgement_date_str = feewaiver.lodgement_date.strftime('%d/%m/%Y')
+                if (search_text in (feewaiver.lodgement_number.lower() if feewaiver.lodgement_number else '')
+                    or search_text in (get_choice_display(feewaiver.processing_status).lower() if get_choice_display(feewaiver.processing_status) else '')
+                    or search_text in (feewaiver.contact_details.organisation.lower() if feewaiver.contact_details.organisation else '')
+                    or search_text in (feewaiver.contact_details.participants.name.lower() 
+                        if feewaiver.contact_details.participants and feewaiver.contact_details.participants.name else '')
+                    or search_text in (feewaiver.comments_to_applicant.lower() if feewaiver.comments_to_applicant else '')
+                    or search_text in (lodgement_date_str.lower() if lodgement_date_str else '')
+                    or search_text in (
+                        feewaiver.assigned_officer.first_name.lower() + ' ' + feewaiver.assigned_officer.last_name.lower()
+                        if feewaiver.assigned_officer else ''
+                        )
+                    ):
+                    search_text_feewaiver_ids.append(feewaiver.id)
+            queryset = queryset.filter(id__in=search_text_feewaiver_ids)
 
         getter = request.query_params.get
         fields = self.get_fields(getter)

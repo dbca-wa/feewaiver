@@ -140,7 +140,6 @@ export default {
             form: null,
             members: [],
             //department_users : [],
-            apiaryReferralGroups: [],
             contacts_table_initialised: false,
             initialisedSelects: false,
             showingProposal:false,
