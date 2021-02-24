@@ -1,6 +1,6 @@
 from django.core.exceptions import ImproperlyConfigured
 
-import os
+import os, hashlib
 import confy
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 confy.read_environment_file(BASE_DIR+"/.env")
@@ -88,6 +88,7 @@ if DEV_STATIC and not DEV_STATIC_URL:
     raise ImproperlyConfigured('If running in DEV_STATIC, DEV_STATIC_URL has to be set')
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 DEV_APP_BUILD_URL = env('DEV_APP_BUILD_URL')  # URL of the Dev app.js served by webpack & express
+BUILD_TAG = env('BUILD_TAG', hashlib.md5(os.urandom(32)).hexdigest())
 
 # Department details
 SYSTEM_NAME = env('SYSTEM_NAME', 'Fee waiver')

@@ -71,6 +71,7 @@ class ContactDetailsSaveSerializer(serializers.ModelSerializer):
                 'phone',
                 'email',
                 'email_confirmation',
+                'cc_email',
                 'participants_id',
                 'organisation_description'
                 )
@@ -99,6 +100,7 @@ class ContactDetailsSerializer(serializers.ModelSerializer):
                 'phone',
                 'email',
                 'email_confirmation',
+                'cc_email',
                 'participants_id',
                 'participants_code',
                 'organisation_description'
@@ -490,15 +492,20 @@ class FeeWaiverDTSerializer(serializers.ModelSerializer):
         return False
 
     def get_action_shortcut(self, obj):
-        link = ''
+        links = ''
         if self.get_can_process(obj) and obj.processing_status == 'with_approver':
             if obj.proposed_status == 'issue':
-                link +=  '<a href="{}" class="action-{}" data-issue="{}">Issue Fee Waiver</a><br/>'.format(obj.id, obj.id, obj.id)
+                links +=  '<a href="{}" class="action-{}" data-issue="{}">Issue Fee Waiver</a><br/>'.format(obj.id, obj.id, obj.id)
             if obj.proposed_status == 'concession':
-                link +=  '<a href="{}" class="action-{}" data-concession="{}">Issue Concession</a><br/>'.format(obj.id, obj.id, obj.id)
+                links +=  '<a href="{}" class="action-{}" data-concession="{}">Issue Concession</a><br/>'.format(obj.id, obj.id, obj.id)
             if obj.proposed_status == 'decline':
-                link +=  '<a href="{}" class="action-{}" data-decline="{}">Decline</a><br/>'.format(obj.id, obj.id, obj.id)
-        return link
+                links +=  '<a href="{}" class="action-{}" data-decline="{}">Decline</a><br/>'.format(obj.id, obj.id, obj.id)
+        # add Process/View
+        if self.get_can_process(obj):
+            links += '<a class="process-view-{}" href=/internal/fee_waiver/{}>Process</a><br/>'.format(obj.id, obj.id);
+        else:
+            links += '<a class="process-view-{}" href=/internal/fee_waiver/{}>View</a><br/>'.format(obj.id, obj.id);
+        return links
 
     def get_latest_feewaiver_document(self, obj):
         return obj.latest_feewaiver_document

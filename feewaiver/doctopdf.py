@@ -3,18 +3,13 @@ from io import BytesIO
 
 from django.conf import settings
 from docxtpl import DocxTemplate
-from feewaiver.main_models import GlobalSettings
+from feewaiver.main_models import FeeWaiverWordTemplate
 
 
 def create_feewaiver_pdf_contents(feewaiver, request):
 
-    feewaiver_template = GlobalSettings.objects.get(key=GlobalSettings.KEY_FEEWAIVER_TEMPLATE_FILE)
-
-    if feewaiver_template._file:
-        path_to_template = feewaiver_template._file.path
-    else:
-        # Use default template file
-        path_to_template = os.path.join(settings.BASE_DIR, 'feewaiver', 'static', 'feewaiver', 'fee_waiver_template.docx')
+    feewaiver_template = FeeWaiverWordTemplate.objects.order_by('-id')[0]
+    path_to_template = feewaiver_template._file.path
 
     doc = DocxTemplate(path_to_template)
     from feewaiver.serializers import FeeWaiverDocSerializer

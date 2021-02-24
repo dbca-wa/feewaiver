@@ -170,12 +170,14 @@ export default {
                         mRender:function (data,type,full) {
                             //let links = '';
                             let links = full.action_shortcut;
+                            /*
                             if(full.can_process){
 
                                 links +=  `<a href='/internal/fee_waiver/${full.id}'>Process</a><br/>`;
                             } else{
                                 links +=  `<a href='/internal/fee_waiver/${full.id}'>View</a><br/>`;
                             }
+                            */
                             return links;
                         },
                         name: '',
@@ -271,8 +273,11 @@ export default {
         actionShortcut: async function(id, approvalType) {
             let vm = this;
             let processingTableStr = `.action-${id}`;
+            let processViewStr = `.process-view-${id}`;
             let processingTable = $(processingTableStr);
+            let processView = $(processViewStr);
             processingTable.replaceWith("<div><i class='fa fa-2x fa-spinner fa-spin'></i></div>");
+            processView.replaceWith("");
             let post_url = '/api/feewaivers/' + id + '/final_approval/'
             let res = await Vue.http.post(post_url, {'approval_type': approvalType});
             if (res.ok) {
@@ -314,6 +319,7 @@ export default {
                 await vm.actionShortcut(id, 'issue');
             }).on('click', 'a[data-concession]', async function(e) {
                 e.preventDefault();
+
                 var id = $(this).attr('data-concession');
                 await vm.actionShortcut(id, 'issue_concession');
             }).on('click', 'a[data-decline]', async function(e) {

@@ -2,11 +2,33 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.auth.admin import UserAdmin
 from feewaiver.models import *
-from feewaiver.main_models import GlobalSettings, SystemMaintenance
+from feewaiver.main_models import SystemMaintenance, FeeWaiverWordTemplate
 from ledger.accounts import admin as ledger_admin
 from ledger.accounts.models import EmailUser
 from copy import deepcopy
 from feewaiver import forms
+from feewaiver.utils import to_local_tz
+
+
+@admin.register(FeeWaiverWordTemplate)
+class FeeWaiverWordTemplateAdmin(admin.ModelAdmin):
+    list_display = ('Version', '_file', 'description', 'Date', 'Time')
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return ['_file', 'description', 'Date', 'Time']
+        else:
+            return []
+
+    def Version(self, obj):
+        return obj.id
+
+    def Date(self, obj):
+        local_date = to_local_tz(obj.uploaded_date)
+        return local_date.strftime('%d/%m/%Y')
+
+    def Time(self, obj):
+        local_date = to_local_tz(obj.uploaded_date)
+        return local_date.strftime('%H:%M')
 
 
 @admin.register(SystemMaintenance)
@@ -108,20 +130,4 @@ class ApproversGroupAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False 
-
-
-@admin.register(GlobalSettings)
-class GlobalSettingsAdmin(admin.ModelAdmin):
-    def get_fields(self, request, obj=None):
-        if obj.key == GlobalSettings.KEY_FEEWAIVER_TEMPLATE_FILE:
-            return ['key', '_file',]
-        else:
-            return ['key', 'value',]
-
-    def get_readonly_fields(self, request, obj=None):
-        return ['key',]
-
-    list_display = ['key', 'value', '_file',]
-    ordering = ('key',)
-
 

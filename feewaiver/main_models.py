@@ -8,6 +8,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.core.exceptions import ValidationError
 from ledger.accounts.models import EmailUser, RevisionedMixin
 from django.contrib.postgres.fields.jsonb import JSONField
+from datetime import datetime
 
 
 class UserSystemSettings(models.Model):
@@ -95,21 +96,26 @@ class Document(models.Model):
     def __str__(self):
         return self.name or self.filename
 
-class GlobalSettings(models.Model):
-    KEY_FEEWAIVER_TEMPLATE_FILE = 'feewaiver_template_file'
-    keys = (
-            (KEY_FEEWAIVER_TEMPLATE_FILE, 'Feewaiver template file'),
-            )
-    default_values = (
-            (KEY_FEEWAIVER_TEMPLATE_FILE, ''),
-            )
-    key = models.CharField(max_length=255, choices=keys, blank=False, null=False,)
-    value = models.CharField(max_length=255)
-    _file = models.FileField(upload_to='feewaiver_template', null=True, blank=True)
+
+def update_feewaiver_word_filename(instance, filename):
+    cur_time = datetime.now().strftime('%Y%m%d_%H_%M') 
+    new_filename = 'fee_waiver_template_{}'.format(cur_time)
+    return 'feewaiver_template/{}.docx'.format(new_filename)
+
+
+class FeeWaiverWordTemplate(models.Model):
+    _file = models.FileField(upload_to=update_feewaiver_word_filename, max_length=255)
+    uploaded_date = models.DateTimeField(auto_now_add=True, editable=False)
+    description = models.TextField(blank=True,
+                                   verbose_name='description', help_text='')
 
     class Meta:
         app_label = 'feewaiver'
-        verbose_name_plural = "Global Settings"
+        verbose_name_plural = 'Fee Waiver Templates'
+        ordering = ['-id']
+
+    def __str__(self):
+        return "Version: {}, {}".format(self.id, self._file.name)
 
 
 @python_2_unicode_compatible

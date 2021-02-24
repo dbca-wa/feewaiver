@@ -8,9 +8,10 @@
     </p>
 {% else %}
     <p>
-    Unfortunately your fee waiver request <strong>{{feewaiver.lodgement_number}}</strong> has been declined as your visit was not applicable 
-    for a fee waiver under the department's guidlines. However, members of your group may wish to 
-    consider purchasing a park pass, which provide several value-for-money options for visiting parks with entry fees.
+    Unfortunately your fee waiver request <strong>{{feewaiver.lodgement_number}}</strong> has been declined. The {{department_name}} can grant a fee waiver for organised outings arranged for, and by disabled, aged and infirm groups accompanied by their carers, as well as Australian faculty education groups within school hours as part of the core curriculum.  Unfortunately, we are unable to approve a waiver as your group does not fall within any of these categories.
+    </p>
+    <p>
+    However, members of your group may wish to consider purchasing a park pass, which provide several value-for-money options for visiting parks with entry fees.
     </p>
     <p>
     Information on park passes is available at: https://parks.dpaw.wa.gov.au/know/park-passes.

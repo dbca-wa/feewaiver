@@ -7,7 +7,6 @@ from rest_framework import routers
 from feewaiver import views, api
 
 from ledger.urls import urlpatterns as ledger_patterns
-from feewaiver.management.default_data_manager import DefaultDataManager
 from feewaiver.utils import are_migrations_running
 
 # API patterns
@@ -52,8 +51,4 @@ if settings.SHOW_DEBUG_TOOLBAR:
     urlpatterns = [
         url('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
-
-
-if not are_migrations_running():
-    DefaultDataManager()
 

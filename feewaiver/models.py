@@ -55,11 +55,12 @@ class ContactDetails(RevisionedMixin):
     contact_name = models.CharField(max_length=256, blank=True, null=True)
     postal_address = models.CharField(max_length=256, blank=True, null=True)
     suburb = models.CharField(max_length=256, blank=True, null=True)
-    state = models.CharField(max_length=10, blank=True, null=True)
+    state = models.CharField(max_length=30, blank=True, null=True)
     postcode = models.CharField(max_length=10, blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField()
     email_confirmation = models.EmailField()
+    cc_email = models.EmailField(blank=True, null=True)
     organisation_description = models.TextField(blank=True)
 
     def __str__(self):
@@ -101,6 +102,7 @@ class FeeWaiver(RevisionedMixin):
     fee_waiver_purpose = models.TextField(blank=True)
     assigned_officer = models.ForeignKey(EmailUser, blank=True, null=True, related_name='feewaiver_assigned', on_delete=models.SET_NULL)
     comments_to_applicant = models.TextField(blank=True)
+    finalised = models.BooleanField(default=False)
 
     def __str__(self):
         return self.lodgement_number
@@ -250,7 +252,7 @@ class FeeWaiver(RevisionedMixin):
 
 class FeeWaiverDocument(Document):
     feewaiver = models.ForeignKey(FeeWaiver,related_name='documents')
-    _file = models.FileField(upload_to=update_feewaiver_doc_filename)
+    _file = models.FileField(upload_to=update_feewaiver_doc_filename, max_length=255)
 
     class Meta:
         app_label = 'feewaiver'
@@ -300,7 +302,7 @@ class FeeWaiverVisit(RevisionedMixin):
 
 class ContactDetailsDocument(Document):
     contact_details = models.ForeignKey(ContactDetails,related_name='documents')
-    _file = models.FileField(null=True)
+    _file = models.FileField(null=True, max_length=255)
     can_delete = models.BooleanField(default=True) # after initial submit prevent document from being deleted
 
     def delete(self):
@@ -321,7 +323,7 @@ class FeeWaiverLogEntry(CommunicationsLogEntry):
 
 class FeeWaiverLogDocument(Document):
     log_entry = models.ForeignKey(FeeWaiverLogEntry,related_name='documents', null=True,)
-    _file = models.FileField(null=True)
+    _file = models.FileField(null=True, max_length=255)
 
     class Meta:
         app_label = 'feewaiver'

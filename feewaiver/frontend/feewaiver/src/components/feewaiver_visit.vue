@@ -383,7 +383,7 @@
               el_fr_date.datetimepicker({
                 format: "DD/MM/YYYY",
                 //format: 'LT',
-                //minDate: "now",
+                minDate: "now",
                 showClear: true,
                 //allowInputToggle: true,
               });

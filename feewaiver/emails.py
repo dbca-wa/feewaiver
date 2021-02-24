@@ -192,31 +192,35 @@ def send_approval_notification(fee_waiver,request, action, email_subject):
     email.subject = email_subject
     status = 'approved' if fee_waiver.processing_status in ['issued', 'concession'] else 'declined'
     bcc = []
-    for visit in fee_waiver.visit.all():
-        # paid parks
-        for paid_park in visit.parks.all():
-            if paid_park.email_list:
-                email_list = paid_park.email_list.split(';')
-                for address_str in email_list:
-                    address = address_str.strip()
-                    if address and address not in bcc:
-                        bcc.append(address)
-        # free parks
-        for free_park in visit.free_parks.all():
-            if free_park.email_list:
-                email_list = free_park.email_list.split(';')
-                for address_str in email_list:
-                    address = address_str.strip()
-                    if address and address not in bcc:
-                        bcc.append(address)
+    if status == 'approved':
+        for visit in fee_waiver.visit.all():
+            # paid parks
+            for paid_park in visit.parks.all():
+                if paid_park.email_list:
+                    email_list = paid_park.email_list.split(';')
+                    for address_str in email_list:
+                        address = address_str.strip()
+                        if address and address not in bcc:
+                            bcc.append(address)
+            # free parks
+            for free_park in visit.free_parks.all():
+                if free_park.email_list:
+                    email_list = free_park.email_list.split(';')
+                    for address_str in email_list:
+                        address = address_str.strip()
+                        if address and address not in bcc:
+                            bcc.append(address)
 
     context = {
         'feewaiver': fee_waiver,
         'status': status
     }
     to_addresses = fee_waiver.contact_details.email
+    cc_email = []
+    if fee_waiver.contact_details.cc_email:
+        cc_email.append(fee_waiver.contact_details.cc_email)
     sender = settings.DEFAULT_FROM_EMAIL
-    msg = email.send(to_addresses, sender, context=context, attachments=prepare_attachments(fee_waiver.documents), bcc=bcc)
+    msg = email.send(to_addresses, sender, context=context, attachments=prepare_attachments(fee_waiver.documents), bcc=bcc, cc=cc_email)
     _log_feewaiver_email(msg, fee_waiver, sender=sender)
 
 def _log_feewaiver_email(email_message, fee_waiver, sender=None, workflow_entry=None):
