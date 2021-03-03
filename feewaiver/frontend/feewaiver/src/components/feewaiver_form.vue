@@ -73,7 +73,7 @@
                 </div>
                 <div class="form-group">
                     <div class="row">
-                        <label for="email" class="col-sm-2 control-label">Cc</label>
+                        <label for="email" class="col-sm-2 control-label">CC Email (if applicable)</label>
                         <div class="col-sm-4">
                             <input :disabled="readonly" type="email" class="form-control" name="email" placeholder="" v-model="contactDetails.cc_email" id="contact_details_cc_email">
                             <span class="error" aria-live="polite"></span>
