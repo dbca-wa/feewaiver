@@ -31,3 +31,7 @@ def dept_support_phone():
 def can_show_tests():
     return settings.SHOW_TESTS_URL
 
+@register.simple_tag()
+def GIT_COMMIT_HASH():
+    return settings.GIT_COMMIT_HASH
+

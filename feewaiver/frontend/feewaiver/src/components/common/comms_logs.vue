@@ -334,6 +334,7 @@ export default {
                     <table id="${commsLogId}" class="hover table table-striped table-bordered dt-responsive " cellspacing="0" width="100%">
                     </table>`
                 },
+                sanitize:false,
                 html: true,
                 title: 'Communications Log',
                 container: 'body',
@@ -394,6 +395,7 @@ export default {
                         </tbody>
                     </table>`
                 },
+                sanitize:false,
                 html: true,
                 title: 'Action Log',
                 container: 'body',

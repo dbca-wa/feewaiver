@@ -98,3 +98,12 @@ importo.py
 uwsgi*.ini
 *.djcache
 
+# npm lock
+feewaiver/frontend/feewaiver/package-lock.json
+
+# npm build files
+feewaiver/static/feewaiver_vue/css/app.css
+feewaiver/static/feewaiver_vue/js/app.js
+feewaiver/static/feewaiver_vue/js/manifest.js
+feewaiver/static/feewaiver_vue/js/vendor.js
+feewaiver/static/feewaiver_vue/js/babel-polyfill.js
