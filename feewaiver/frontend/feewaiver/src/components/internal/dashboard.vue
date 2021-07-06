@@ -55,6 +55,7 @@ export default {
     data() {
         let vm = this;
         return {
+            processingActionShortcut: false,
             url: '/api/feewaivers_paginated/feewaiver_internal/?format=datatables',
             pBody: 'pBody' + vm._uid,
             datatable_id: 'feewaiver-datatable-'+vm._uid,
@@ -270,8 +271,18 @@ export default {
             },(error) => {
             })
         },
+        actionShortcutWrapper: async function(id, approvalType) {
+            this.removeActionShortcutEventListeners();
+            this.$nextTick(async () => {
+                if (!this.processingActionShortcut) {
+                    await this.actionShortcut(id, approvalType);
+                    this.processingActionShortcut = false;
+                }
+            });
+        },
         actionShortcut: async function(id, approvalType) {
             let vm = this;
+            this.processingActionShortcut = true;
             let processingTableStr = `.action-${id}`;
             let processViewStr = `.process-view-${id}`;
             let processingTable = $(processingTableStr);
@@ -281,13 +292,15 @@ export default {
             let post_url = '/api/feewaivers/' + id + '/final_approval/'
             let res = await Vue.http.post(post_url, {'approval_type': approvalType});
             if (res.ok) {
-                this.refreshFromResponse();
+                // this should also be await?
+                await this.refreshFromResponse();
             }
         },
-        refreshFromResponse: function(){
-            this.$refs.feewaiver_datatable.vmDataTable.ajax.reload();
+        refreshFromResponse: async function(){
+            await this.$refs.feewaiver_datatable.vmDataTable.ajax.reload();
+            this.addActionShortcutEventListeners();
         },
-        addEventListeners: function(){
+        addEventListeners: async function(){
             let vm = this;
             // Initialise Proposal Date Filters
             $(vm.$refs.feewaiverDateToPicker).datetimepicker(vm.datepickerOptions);
@@ -309,24 +322,8 @@ export default {
                     vm.filterFeeWaiverLodgedFrom = "";
                 }
             });
-            //Internal Action shortcut listeners
             let table = vm.$refs.feewaiver_datatable.vmDataTable
-            table.on('processing.dt', function(e) {
-            })
-            table.on('click', 'a[data-issue]', async function(e) {
-                e.preventDefault();
-                var id = $(this).attr('data-issue');
-                await vm.actionShortcut(id, 'issue');
-            }).on('click', 'a[data-concession]', async function(e) {
-                e.preventDefault();
-
-                var id = $(this).attr('data-concession');
-                await vm.actionShortcut(id, 'issue_concession');
-            }).on('click', 'a[data-decline]', async function(e) {
-                e.preventDefault();
-                var id = $(this).attr('data-decline');
-                await vm.actionShortcut(id, 'decline');
-            }).on('responsive-display.dt', function () {
+            table.on('responsive-display.dt', function () {
                 var tablePopover = $(this).find('[data-toggle="popover"]');
                 if (tablePopover.length > 0) {
                     tablePopover.popover();
@@ -343,9 +340,54 @@ export default {
                     // the next line prevents from scrolling up to the top after clicking on the popover.
                     $(tablePopover).on('click', function (e) {
                         e.preventDefault();
-                        return true;   
+                        return true;
                     });
                 }
+            });
+
+            vm.addActionShortcutEventListeners();
+        },
+        addActionShortcutEventListeners: function() {
+            let vm = this;
+            //Internal Action shortcut listeners
+            let table = vm.$refs.feewaiver_datatable.vmDataTable
+            table.on('click', 'a[data-issue]', async function(e) {
+                e.preventDefault();
+                var id = $(this).attr('data-issue');
+                await vm.actionShortcutWrapper(id, 'issue');
+            }).on('click', 'a[data-concession]', async function(e) {
+                e.preventDefault();
+                var id = $(this).attr('data-concession');
+                await vm.actionShortcutWrapper(id, 'issue_concession');
+            }).on('click', 'a[data-decline]', async function(e) {
+                e.preventDefault();
+                var id = $(this).attr('data-decline');
+                await vm.actionShortcutWrapper(id, 'decline');
+            });
+        },
+        removeActionShortcutEventListeners: function() {
+            let vm = this;
+            //Internal Action shortcut listeners
+            let table = vm.$refs.feewaiver_datatable.vmDataTable
+            table.off('click', 'a[data-issue]', async function(e) {
+                /*
+                e.preventDefault();
+                var id = $(this).attr('data-issue');
+                await vm.actionShortcutWrapper(id, 'issue');
+                */
+            }).off('click', 'a[data-concession]', async function(e) {
+                /*
+                e.preventDefault();
+
+                var id = $(this).attr('data-concession');
+                await vm.actionShortcutWrapper(id, 'issue_concession');
+                */
+            }).off('click', 'a[data-decline]', async function(e) {
+                /*
+                e.preventDefault();
+                var id = $(this).attr('data-decline');
+                await vm.actionShortcutWrapper(id, 'decline');
+                */
             });
         },
         initialiseSearch:function(){
@@ -390,21 +432,27 @@ export default {
 
     },
     mounted: function(){
-		this.fetchFilterLists();
-        let vm = this;
-        $( 'a[data-toggle="collapse"]' ).on( 'click', function () {
-            var chev = $( this ).children()[ 0 ];
-            window.setTimeout( function () {
-                $( chev ).toggleClass( "glyphicon-chevron-down glyphicon-chevron-up" );
-            }, 100 );
+        this.$nextTick(() => {
+            this.fetchFilterLists();
+            let vm = this;
+            $( 'a[data-toggle="collapse"]' ).on( 'click', function () {
+                var chev = $( this ).children()[ 0 ];
+                window.setTimeout( function () {
+                    $( chev ).toggleClass( "glyphicon-chevron-down glyphicon-chevron-up" );
+                }, 100 );
+            });
+            this.initialiseSearch();
+            this.addEventListeners();
         });
     },
+    /*
     updated: function() {
         this.$nextTick(() => {
             this.initialiseSearch();
             this.addEventListeners();
         });
     },
+    */
     created: function() {
     },
 }

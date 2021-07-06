@@ -141,15 +141,15 @@
                             <div class="col-sm-8">
                             <p>
                                 <input :ref="'age_of_participants_' + visit.index" :disabled="readonly" type="checkbox" :id="'15_' + visit.index" value="15" v-model="visit.age_of_participants_array">
-                                <label>Under 15 yrs</label>
+                                <label :for="'15_' + visit.index">Under 15 yrs</label>
                                 <input :disabled="readonly" type="checkbox" :id="'24_' + visit.index" value="24" v-model="visit.age_of_participants_array">
-                                <label>15-24 yrs</label>
+                                <label :for="'24_' + visit.index">15-24 yrs</label>
                                 <input :disabled="readonly" type="checkbox" :id="'25_' + visit.index" value="25" v-model="visit.age_of_participants_array">
-                                <label>25-39 yrs</label>
+                                <label :for="'25_' + visit.index">25-39 yrs</label>
                                 <input :disabled="readonly" type="checkbox" :id="'40_' + visit.index" value="40" v-model="visit.age_of_participants_array">
-                                <label>40-59 yrs</label>
+                                <label :for="'40_' + visit.index">40-59 yrs</label>
                                 <input :disabled="readonly" type="checkbox" :id="'60_' + visit.index" value="60" v-model="visit.age_of_participants_array">
-                                <label>60 yrs and over</label>
+                                <label :for="'60_' + visit.index">60 yrs and over</label>
                             </p>
                             <p>
                                 <span class="error" aria-live="polite">{{ ageOfParticipantsErrorText }}</span>
