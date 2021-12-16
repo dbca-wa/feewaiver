@@ -1,0 +1,1 @@
+0 */6 * * * root eval $(grep -v '^#' /etc/.cronenv | xargs -d "\n" -I {} echo export \"{}\" ) && cd /app && python manage_fw.py sync_ad_users > logs/sync_ad_users.log 2>&1
