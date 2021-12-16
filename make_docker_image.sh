@@ -3,11 +3,11 @@
 BUILD_TAG=dbcawa/feewaiver:v$(date +%Y.%m.%d).$1
 git checkout dbca_dev &&
 git pull &&
-cd feewaiver/frontend/feeewaiver/ &&
+cd feewaiver/frontend/feewaiver/ &&
 npm run build &&
 cd ../../../ &&
 source venv/bin/activate &&
-./manage.py collectstatic --no-input &&
+./manage_fw.py collectstatic --no-input &&
 git log --pretty=medium -30 > ./fw_git_history &&
 docker image build --no-cache --tag $BUILD_TAG . &&
 git checkout working &&
