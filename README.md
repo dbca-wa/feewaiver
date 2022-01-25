@@ -24,14 +24,9 @@ required environment variables at run time. Example content:
     DATABASE_URL='postgis://USER:PASSWORD@HOST:PORT/DB_NAME'
     ALLOWED_HOSTS=[u'das.domain.com.au',u'das-internal.domain.com.au']
     EMAIL_HOST='EMAIL_HOST'
-    BPOINT_USERNAME='BPOINT_USER'
-    BPOINT_PASSWORD='BPOINT_PW'
-    BPOINT_BILLER_CODE='123456'
     BPOINT_MERCHANT_NUM='987654'
     BPAY_BILLER_CODE='121212'
     CMS_URL="https://url-used-to-retrieve-system-id-via-api/"
-    LEDGER_USER="UserForSystemIdAPI"
-    LEDGER_PASS="Password"
     OSCAR_SHOP_NAME='Shop 1'
     DEFAULT_FROM_EMAIL='system@email_address.com.au'
     NOTIFICATION_EMAIL='user.notification@email_address.com.au'
@@ -42,7 +37,4 @@ required environment variables at run time. Example content:
     LEDGER_GST=10
     SITE_PREFIX='das'
     SITE_DOMAIN='domain.com.au
-    TENURE_SECTION="Section1-0"
-    SUPERVISOR_STOP_CMD="supervisorctl stop disturbance-uat"
-
 
