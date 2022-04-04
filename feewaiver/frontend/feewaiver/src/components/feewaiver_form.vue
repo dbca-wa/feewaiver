@@ -6,9 +6,12 @@
     <form id="feewaiver-form" @submit.prevent="submit">
         <div v-if="!isInternal" class="panel panel-default headerbox">
             <strong>
-                <p>Welcome to the entry fee request waiver form. Please fill out the details in the form below and submit the form to the Department.  
+                <p>Welcome to the entry fee waiver request form. Entry fee waivers may be provided to certain groups undertaking organised outings in <a href='https://parks.dpaw.wa.gov.au/know/park-entry-fees' target='_blank'>parks with entry fees</a> managed by the Department of Biodiversity Conservation and Attractions (DBCA).</p>
+                <p>Please fill out the details in the form below and submit to the Department. You will be notified of the outcome of your request by email. You may also apply for a camping fee waiver by selecting yes to camping during your visit. If the park you are camping at does not have park entry fees, it can be selected once you have selected yes to camping. Any applicable camping fee reduction or waiver will be applied by the department when processing your request.</p>
+                <p>You can add multiple visits to the same fee waiver request by clicking add another visit prior to submitting.</p>
+                <!--p>Welcome to the entry fee request waiver form. Please fill out the details in the form below and submit the form to the Department.  
                 You will be notified of the outcome of your request by email.</p>
-                <p>You can add multiple visits to the same fee waiver request by clicking add another visit prior to submitting</p>
+                <p>You can add multiple visits to the same fee waiver request by clicking add another visit prior to submitting</p-->
 
             </strong>
         </div>

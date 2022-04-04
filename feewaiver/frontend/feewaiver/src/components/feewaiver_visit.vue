@@ -27,7 +27,7 @@
                 <div class="col-sm-10">
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-4 control-label">Park/s you intend to visit</label>
+                            <label class="col-sm-4 control-label">Park/s with entry fees you intend to visit</label>
                             <div :id="'parks_parent_' + visit.index" class="col-sm-6 parkclass">
                                 <select :disabled="readonly" :id="'parks_' + visit.index" class="form-control" multiple="multiple">
                                     <option v-for="park in paidParks" :value="park.id">{{park.name}}</option>
@@ -38,7 +38,7 @@
 
                     <div class="form-group">
                         <div class="row">
-                              <label class="col-sm-4">Are you intending to camp on CALM land during your visit?</label>
+                              <label class="col-sm-4">Are you intending to camp during your visit?</label>
                                 <input :disabled="readonly" class="col-sm-1" :id="'yes_' + visit.index" type="radio" v-model="visit.camping_requested" v-bind:value="true">
                                 <label class="col-sm-1" for="yes">Yes</label>
                                 <input :disabled="readonly" class="col-sm-1" :id="'no_' + visit.index" type="radio" v-model="visit.camping_requested" v-bind:value="false">
