@@ -1,5 +1,6 @@
 #!/bin/bash
-## first parameter is DBCA branch name, optional second parameter is an integer indicating incremental daily version
+## first parameter is DBCA branch name
+
 set -e
 if [[ $# -lt 1 ]]; then
     echo "ERROR: DBCA branch must be specified"
@@ -10,26 +11,53 @@ fi
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 #REPO=$(basename -s .git `git config --get remote.origin.url` | sed 's/-//g')
 REPO=$(awk '{split($0, arr, "\/"); print arr[2]}' <<< $(git config -l|grep remote|grep url|head -n 1|sed 's/-//g'|sed 's/....$//'))
-DBCA_BRANCH="dbca_"$1
 BUILD_TAG=dbcawa/$REPO:$1_v$(date +%Y.%m.%d.%H.%M%S)
+DBCA_ORIGIN_HASH=$(echo "$REPO" | md5sum -t | cut -c1-32)
+DBCA_BRANCH=$DBCA_ORIGIN_HASH"_"$1
+EXISTING_REMOTES=$(git remote)
+
 {
-    git checkout $DBCA_BRANCH
+    if (( ! $(grep -c "$EXISTING_REMOTES" <<< "$DBCA_ORIGIN_HASH") )); then
+        echo "Attempt to create branch"
+        echo $REPO
+        echo "git remote add $DBCA_ORIGIN_HASH git@github.com:dbca-wa/$REPO.git"
+        git remote add $DBCA_ORIGIN_HASH git@github.com:dbca-wa/$REPO.git &&
+        git fetch $DBCA_ORIGIN_HASH &&
+        git remote set-url --push $DBCA_ORIGIN_HASH no_push &&
+        git checkout -b $DBCA_ORIGIN_HASH"_"$1 $DBCA_ORIGIN_HASH"/"$1
+    fi
+    echo "DBCA branch already exists"
 } ||
 {
-    echo "ERROR: You must have your local code checked in and the DBCA branch set up on local with the 'dbca_' prefix.  Example Instructions:"
-    echo "git remote add dbca git@github.com:dbca-wa/wildlifecompliance.git"
-    echo "git checkout -b dbca_compliance_mgt_dev dbca/compliance_mgt_dev"
+    echo "ERROR: Failed to create dbca branch"
     echo "$0 1"
     exit 1
 }
+
+{
+    git checkout $DBCA_BRANCH
+    echo $(git status)
+} ||
+{
+    echo "ERROR: Failed to checkout dbca branch"
+    echo "$0 1"
+    exit 1
+}
+
 {
     git pull &&
     cd $REPO/frontend/$REPO/ &&
-    npm run build &&
+    # Apply front end venv if it exists
+    { 
+        source venv/bin/activate && npm run build 
+    } || 
+    { 
+        npm run build
+        echo "INFO: Front end built without venv"
+    }
     cd ../../../ &&
     source venv/bin/activate &&
-    #./manage.py collectstatic --no-input &&
-    $(find . -maxdepth 1 -name "manage*.py") collectstatic --no-input &&
+    python manage_fw.py collectstatic --no-input &&
     git log --pretty=medium -30 > ./git_history_recent &&
     docker image build --no-cache --tag $BUILD_TAG . &&
     git checkout $CURRENT_BRANCH
@@ -38,7 +66,6 @@ BUILD_TAG=dbcawa/$REPO:$1_v$(date +%Y.%m.%d.%H.%M%S)
 {
     git checkout $CURRENT_BRANCH
     echo "ERROR: Docker build failed"
-    echo "NB: This script assumes that your virtual environment folder is 'venv'"
     echo "$0 1"
     exit 1
 }

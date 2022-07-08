@@ -2,9 +2,8 @@
 .env
 venv/
 venv2/
+venv*/
 node_modules/
-#cronjobs
-.ropeproject/
 mooring/cache/*
 .ropeproject/
 
@@ -26,13 +25,13 @@ eggs/
 .eggs/
 lib/
 lib64/
-parts/
 sdist/
 var/
 *.egg-info/
 .installed.cfg
 *.egg
 *.bak
+*.uin
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -66,6 +65,8 @@ staticfiles*
 
 # vim
 *.swp
+*.swo
+*.swn
 
 # Sphinx documentation
 docs/_build/
@@ -77,6 +78,9 @@ target/
 # Eclipse project files
 /.pydevproject
 /.project
+
+# VS Code settings
+.vscode/
 
 **/local/
 *.map
@@ -98,14 +102,22 @@ importo.py
 uwsgi*.ini
 *.djcache
 
-# npm lock
-feewaiver/frontend/feewaiver/package-lock.json
+# feewaiver build static files
+feewaiver/static/feewaiver_vue/*
 
-# npm build files
-feewaiver/static/feewaiver_vue/css/app.css
-feewaiver/static/feewaiver_vue/js/app.js
-feewaiver/static/feewaiver_vue/js/manifest.js
-feewaiver/static/feewaiver_vue/js/vendor.js
-feewaiver/static/feewaiver_vue/js/babel-polyfill.js
+# npm locks
+# *-lock.json
 
 git_history_recent
+feewaiver/static/feewaiver_vue/*
+
+# Jupyter lab
+.ipynb_checkpoints/
+*.ipynb
+
+# Reversion utility
+reversion_utility_output.txt
+
+# data files
+*.csv
+*.xls*
