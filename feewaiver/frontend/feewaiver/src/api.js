@@ -8,4 +8,5 @@ module.exports = {
     filter_list: '/api/feewaivers/filter_list/',
     temporary_document: '/api/temporary_document/',
     admin_data: '/admin_data/',
+    park_entry_fees_url: '/api/park_entry_fees_url',
 }

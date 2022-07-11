@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'^mgt-commands/$', views.ManagementCommandsView.as_view(), name='mgt-commands'),
     url(r'^internal/fee_waiver/(?P<feewaiver_pk>\d+)/$', views.InternalFeeWaiverView.as_view(), name='internal-feewaiver-detail'),
     url(r'^history/fee_waiver/(?P<pk>\d+)/$', views.FeeWaiverHistoryCompareView.as_view(), name='feewaiver_history'),
+    url(r'^api/park_entry_fees_url$', api.GetParkEntryFeesUrl.as_view(), name='park-entry-fees-url'),
 ] + ledger_patterns
 
 if settings.DEBUG:  # Serve media locally in development.
