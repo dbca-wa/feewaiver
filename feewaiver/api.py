@@ -73,6 +73,12 @@ from feewaiver.process_document import save_document, cancel_document, delete_do
 logger = logging.getLogger(__name__)
 
 
+class GetParkEntryFeesUrl(views.APIView):
+
+    def get(self, request, format=None):
+        return Response(settings.PARK_ENTRY_FEES_URL)
+
+
 class GetEmptyList(views.APIView):
     renderer_classes = [JSONRenderer, ]
 
