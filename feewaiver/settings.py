@@ -138,3 +138,4 @@ CKEDITOR_CONFIGS = {
 if env('CONSOLE_EMAIL_BACKEND', False):
    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+PARK_ENTRY_FEES_URL = env('PARK_ENTRY_FEES_URL', 'https://exploreparks.dbca.wa.gov.au/park-entry-fees')
