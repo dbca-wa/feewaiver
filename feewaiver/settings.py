@@ -49,6 +49,11 @@ INSTALLED_APPS += [
     #'rest_framework_gis',
     'reset_migrations',
     'ckeditor',
+    'appmonitor_client',
+]
+
+CRON_CLASSES = [
+    'appmonitor_client.cron.CronJobAppMonitorClient',
 ]
 
 ADD_REVERSION_ADMIN=True
