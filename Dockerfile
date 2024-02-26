@@ -24,7 +24,7 @@ WORKDIR /app
 #RUN touch /app/git_hash
 #COPY .git/refs/heads/main /app/git_hash
 COPY requirements.txt ./
-COPY git_history_recent ./
+#COPY git_history_recent ./
 RUN touch /app/rand_hash
 RUN pip install --no-cache-dir -r requirements.txt \
   # Update the Django <1.11 bug in django/contrib/gis/geos/libgeos.py
