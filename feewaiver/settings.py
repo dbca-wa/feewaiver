@@ -34,6 +34,9 @@ if SHOW_DEBUG_TOOLBAR:
         "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
         'INTERCEPT_REDIRECTS': False,
     }
+MIDDLEWARE_CLASSES += [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+]
 
 STATIC_URL = '/static/'
 
