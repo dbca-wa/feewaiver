@@ -1,0 +1,15 @@
+{
+	"name": "Feewaiver",
+	"image": "dbcawa/docker_app_dev:feewaiver_dev_latest",
+	"remoteUser": "container",
+	"workspaceFolder": "/data/data/projects/feewaiver/",
+	"mounts": ["type=bind,source=/data/,target=/data/",
+	           "type=bind,source=/data/data/containerhome/,target=/home/container/"
+	          ],	
+	"appPort": [ "7011:8080","9171:9171","9172:9172","9173:9173","9174:9174","9175:9175"],
+	"runArgs": ["--env-file","${localEnv:HOME}/vscode-env/feewaiver.env",
+		   "--hostname","feewaiver-dev"
+		   ],
+	"forwardPorts": [9171,9172,9173,9174,9175],
+	"initializeCommand" : "${localEnv:HOME}/docker-scripts-dev/windows_vbox/postgres_docker_load.sh"
+}

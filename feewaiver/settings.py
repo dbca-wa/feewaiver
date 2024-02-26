@@ -37,6 +37,7 @@ if SHOW_DEBUG_TOOLBAR:
 
 STATIC_URL = '/static/'
 
+SHOW_ROOT_API = env('SHOW_ROOT_API', False)
 
 INSTALLED_APPS += [
     'reversion_compare',
@@ -48,6 +49,11 @@ INSTALLED_APPS += [
     #'rest_framework_gis',
     'reset_migrations',
     'ckeditor',
+    'appmonitor_client',
+]
+
+CRON_CLASSES = [
+    'appmonitor_client.cron.CronJobAppMonitorClient',
 ]
 
 ADD_REVERSION_ADMIN=True
