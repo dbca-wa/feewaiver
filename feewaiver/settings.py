@@ -37,6 +37,7 @@ if SHOW_DEBUG_TOOLBAR:
 
 STATIC_URL = '/static/'
 
+SHOW_ROOT_API = env('SHOW_ROOT_API', False)
 
 INSTALLED_APPS += [
     'reversion_compare',

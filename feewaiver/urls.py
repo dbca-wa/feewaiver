@@ -11,6 +11,7 @@ from feewaiver.utils import are_migrations_running
 
 # API patterns
 router = routers.DefaultRouter()
+router.include_root_view = settings.SHOW_ROOT_API
 router.register(r'feewaivers',api.FeeWaiverViewSet)
 router.register(r'feewaivers_paginated',api.FeeWaiverPaginatedViewSet)
 router.register(r'participants',api.ParticipantsViewSet)
