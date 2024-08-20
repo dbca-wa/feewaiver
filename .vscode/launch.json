@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Django & Frontend",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage_fw.py",
@@ -14,8 +14,29 @@
                 "runserver",
                 "0.0.0.0:9171"
             ],
-            "django": true
-            
+            "django": true,
+            "justMyCode": false
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "env": { "PORT": "9073" },
+            "name": "Node: Chrome",
+            "url": "http://localhost:9071",
+            "webRoot": "${workspaceFolder}/feewaiver/frontend/feewaiver/",
+            "skipFiles": [
+                "${workspaceFolder}/feewaiver/frontend/feewaiver/node_modules/**/",
+                "*/<node_internals>/**",
+                "*/<node_modules>/**"
+            ],
+            "sourceMaps": true,
+            "smartStep": true,
+            "outFiles": [
+                "${workspaceFolder}/feewaiver/frontend/feewaiver/src/**/*.js",
+                "${workspaceFolder}/feewaiver/frontend/feewaiver/src/**/*.vue",
+                "${workspaceFolder}/feewaiver/templates/feewaiver/**/*.html"
+            ],
+            "preLaunchTask": "node: serve",
         }
     ]
 }
