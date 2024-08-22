@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Django & Frontend",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/manage_fw.py",
             "python": "${workspaceFolder}/venv/bin/python",
