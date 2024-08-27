@@ -2,11 +2,10 @@ from __future__ import unicode_literals
 
 # import os
 # import zlib
-
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.contrib.postgres.fields import JSONField
 from django.db import models, IntegrityError, transaction
-# from django.utils.encoding import python_2_unicode_compatible
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
 from django.dispatch import receiver
 # from django.db.models import Q
@@ -23,14 +22,96 @@ from datetime import datetime, date
 
 from ledger.accounts.signals import name_changed, post_clean
 from ledger.accounts.utils import get_department_user_compact, in_dbca_domain
-from ledger.address.models import UserAddress, Country
-# from django.conf import settings
+from ledger.address.models import UserAddress  #, Country
+from django.conf import settings
 
-# from django.core.files.storage import FileSystemStorage
+from django.core.files.storage import FileSystemStorage
+
+from reversion import revisions
+from reversion.models import Version
 
 import logging
 logger = logging.getLogger('log')
 
+
+class EmailUserManager(BaseUserManager):
+    """A custom Manager for the EmailUser model.
+    """
+    use_in_migrations = True
+
+    def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
+        """Creates and saves an EmailUser with the given email and password.
+        """
+        if not email:
+            raise ValueError('Email must be set')
+        email = self.normalize_email(email).lower()
+        if (EmailUser.objects.filter(email__iexact=email) or
+            Profile.objects.filter(email__iexact=email) or
+            EmailIdentity.objects.filter(email__iexact=email)):
+            raise ValueError('This email is already in use')
+        user = self.model(
+            email=email, is_staff=is_staff, is_superuser=is_superuser)
+        user.extra_data = extra_fields
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email=None, password=None, **extra_fields):
+        return self._create_user(email, password, False, False, **extra_fields)
+
+    def create_superuser(self, email, password, **extra_fields):
+        return self._create_user(email, password, True, True, **extra_fields)
+
+
+@python_2_unicode_compatible
+class Document(models.Model):
+    name = models.CharField(max_length=100, blank=True,
+                            verbose_name='name', help_text='')
+    description = models.TextField(blank=True,
+                                   verbose_name='description', help_text='')
+    file = models.FileField(upload_to='%Y/%m/%d')
+    uploaded_date = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def path(self):
+        return self.file.path
+
+    @property
+    def filename(self):
+        return os.path.basename(self.path)
+
+    def __str__(self):
+        return self.name or self.filename
+
+upload_storage = FileSystemStorage(location=settings.LEDGER_PRIVATE_MEDIA_ROOT, base_url=settings.LEDGER_PRIVATE_MEDIA_URL)
+
+@python_2_unicode_compatible
+class PrivateDocument(models.Model):
+
+    FILE_GROUP = (
+        (1,'Identification'),
+        (2,'Senior Card'),
+    )
+
+    upload = models.FileField(max_length=512, upload_to='uploads/%Y/%m/%d', storage=upload_storage)
+    name = models.CharField(max_length=256)
+    metadata = JSONField(null=True, blank=True)
+    text_content = models.TextField(null=True, blank=True, editable=False)  # Text for indexing
+    file_group = models.IntegerField(choices=FILE_GROUP, null=True, blank=True)
+    file_group_ref_id = models.IntegerField(null=True, blank=True)
+    extension = models.CharField(max_length=5, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    @property
+    def file_url(self):
+         if self.extension is None:
+                self.extension = ''
+         return settings.LEDGER_PRIVATE_MEDIA_URL+str(self.pk)+'-file'+self.extension
+
+    def __str__(self):
+        if self.file_group:
+            return '{} ({})'.format(self.name, self.get_file_group_display())
+        return self.name
 
 class BaseAddress(models.Model):
     """Generic address model, intended to provide billing and shipping
@@ -370,3 +451,32 @@ class EmailUser(AbstractBaseUser, PermissionsMixin):
             return EmailUserAction.log_action(self, action, request.user)
         else:
             pass
+
+
+class RevisionedMixin(models.Model):
+    """
+    A model tracked by reversion through the save method.
+    """
+    def save(self, **kwargs):
+        if kwargs.pop('no_revision', False):
+            super(RevisionedMixin, self).save(**kwargs)
+        else:
+            with revisions.create_revision():
+                if 'version_user' in kwargs:
+                    revisions.set_user(kwargs.pop('version_user', None))
+                if 'version_comment' in kwargs:
+                    revisions.set_comment(kwargs.pop('version_comment', ''))
+                super(RevisionedMixin, self).save(**kwargs)
+
+    @property
+    def created_date(self):
+        #return revisions.get_for_object(self).last().revision.date_created
+        return Version.objects.get_for_object(self).last().revision.date_created
+
+    @property
+    def modified_date(self):
+        #return revisions.get_for_object(self).first().revision.date_created
+        return Version.objects.get_for_object(self).first().revision.date_created
+
+    class Meta:
+        abstract = True

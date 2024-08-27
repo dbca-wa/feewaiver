@@ -53,6 +53,7 @@ INSTALLED_APPS += [
     'reset_migrations',
     'ckeditor',
     'appmonitor_client',
+    'ledger',
 ]
 
 CRON_CLASSES = [
