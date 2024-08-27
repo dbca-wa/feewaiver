@@ -22,7 +22,7 @@ from datetime import datetime, date
 
 from ledger.accounts.signals import name_changed, post_clean
 from ledger.accounts.utils import get_department_user_compact, in_dbca_domain
-from ledger.address.models import UserAddress  #, Country
+from ledger.address.models import UserAddress, Country
 from django.conf import settings
 
 from django.core.files.storage import FileSystemStorage
@@ -453,6 +453,18 @@ class EmailUser(AbstractBaseUser, PermissionsMixin):
             pass
 
 
+class EmailUserChangeLog(models.Model):
+    emailuser = models.ForeignKey(EmailUser, related_name='change_log_email_user')
+    change_key = models.CharField(max_length=1024, blank=True, null=True)
+    change_value = models.CharField(max_length=1024, blank=True, null=True)
+    change_by = models.ForeignKey(EmailUser, related_name='change_log_request_user', blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        app_label = 'accounts'
+        ordering = ['-created']
+
+
 class RevisionedMixin(models.Model):
     """
     A model tracked by reversion through the save method.
@@ -480,3 +492,47 @@ class RevisionedMixin(models.Model):
 
     class Meta:
         abstract = True
+
+
+
+class Organisation(models.Model):
+    """This model represents the details of a company or other organisation.
+    Management of these objects will be delegated to 0+ EmailUsers.
+    """
+    name = models.CharField(max_length=128, unique=True)
+    abn = models.CharField(max_length=50, null=True, blank=True, verbose_name='ABN')
+    # TODO: business logic related to identification file upload/changes.
+    identification = models.FileField(upload_to='%Y/%m/%d', null=True, blank=True)
+    postal_address = models.ForeignKey('OrganisationAddress', related_name='org_postal_address', blank=True, null=True, on_delete=models.SET_NULL)
+    billing_address = models.ForeignKey('OrganisationAddress', related_name='org_billing_address', blank=True, null=True, on_delete=models.SET_NULL)
+    email = models.EmailField(blank=True, null=True,)
+    trading_name = models.CharField(max_length=256, null=True, blank=True)
+
+    def upload_identification(self, request):
+        with transaction.atomic():
+            self.identification = request.data.dict()['identification']
+            self.save()
+
+    def __str__(self):
+        return self.name
+
+class OrganisationAddress(BaseAddress):
+    organisation = models.ForeignKey(Organisation, null=True,blank=True, related_name='adresses')
+    class Meta:
+        verbose_name_plural = 'organisation addresses'
+        #unique_together = ('organisation','hash')
+
+
+class EmailUserReport(models.Model):
+    hash = models.TextField(primary_key=True)
+    occurence = models.IntegerField()
+    first_name = models.CharField(max_length=128, blank=False, verbose_name='Given name(s)')
+    last_name = models.CharField(max_length=128, blank=False)
+    dob = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=False,verbose_name="date of birth", help_text='')
+
+    def __str__(self):
+        return 'Given Name(s): {}, Last Name: {}, DOB: {}, Occurence: {}'.format(self.first_name,self.last_name,self.dob,self.occurence)
+
+    class Meta:
+        managed = False
+        db_table = 'accounts_emailuser_report_v'

@@ -53,14 +53,14 @@ INSTALLED_APPS = [
     # ])
     # + [
     'ledger.accounts',   #  Defines custom user model, passwordless auth pipeline.
-    'ledger.api',
-    'ledger.licence',
-    'ledger.payments',
-    'ledger.payments.bpay',
-    'ledger.payments.bpoint',
-    'ledger.payments.cash',
-    'ledger.payments.invoice',
-    'ledger.taxonomy',
+    # 'ledger.api',
+    # 'ledger.licence',
+    # 'ledger.payments',
+    # 'ledger.payments.bpay',
+    # 'ledger.payments.bpoint',
+    # 'ledger.payments.cash',
+    # 'ledger.payments.invoice',
+    # 'ledger.taxonomy',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -74,7 +74,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'dpaw_utils.middleware.SSOLoginMiddleware',
     'dpaw_utils.middleware.AuditMiddleware',  # Sets model creator/modifier field values.
-    'ledger.basket.middleware.BasketMiddleware',
+    # 'ledger.basket.middleware.BasketMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
