@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 class UserSystemSettings(models.Model):
-    user = models.OneToOneField(EmailUser, related_name='system_settings')
+    user = models.OneToOneField(EmailUser, related_name='system_settings', on_delete=models.CASCADE)
 
     class Meta:
         app_label = 'feewaiver'
@@ -21,7 +21,7 @@ class UserSystemSettings(models.Model):
 
 # @python_2_unicode_compatible
 class UserAction(models.Model):
-    who = models.ForeignKey(EmailUser, null=False, blank=False)
+    who = models.ForeignKey(EmailUser, null=False, blank=False, on_delete=models.CASCADE)
     when = models.DateTimeField(null=False, blank=False, auto_now_add=True)
     what = models.TextField(blank=False)
 
@@ -60,8 +60,8 @@ class CommunicationsLogEntry(models.Model):
     subject = models.CharField(max_length=200, blank=True, verbose_name="Subject / Description")
     text = models.TextField(blank=True)
 
-    customer = models.ForeignKey(EmailUser, null=True, related_name='+')
-    staff = models.ForeignKey(EmailUser, null=True, related_name='+')
+    customer = models.ForeignKey(EmailUser, null=True, related_name='+', on_delete=models.SET_NULL)
+    staff = models.ForeignKey(EmailUser, null=True, related_name='+', on_delete=models.SET_NULL)
 
     created = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
@@ -147,7 +147,8 @@ class TemporaryDocumentCollection(models.Model):
 class TemporaryDocument(Document):
     temp_document_collection = models.ForeignKey(
         TemporaryDocumentCollection,
-        related_name='documents')
+        related_name='documents',
+        on_delete=models.SET_NULL)
     _file = models.FileField(max_length=255)
 
     class Meta:

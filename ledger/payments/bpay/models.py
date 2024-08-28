@@ -91,7 +91,7 @@ class BpayTransaction(models.Model):
     discount_ref = models.CharField(max_length=20, null=True, blank=True, help_text='Discount Reference Code.')
     discount_method = models.CharField(max_length=3, null=True, blank=True, help_text='Discount Method Code.')
     biller_code = models.CharField(max_length=10)
-    file = models.ForeignKey(BpayFile, related_name='transactions')
+    file = models.ForeignKey(BpayFile, related_name='transactions', on_delete=models.SET_NULL)
 
     class Meta:
         unique_together = ('crn', 'txn_ref', 'p_date')

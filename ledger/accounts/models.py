@@ -217,8 +217,8 @@ class BaseAddress(models.Model):
 
 
 class Address(BaseAddress):
-    user = models.ForeignKey('EmailUser', related_name='profile_addresses')
-    oscar_address = models.ForeignKey(UserAddress, related_name='profile_addresses')
+    user = models.ForeignKey('EmailUser', related_name='profile_addresses', on_delete=models.SET_NULL)
+    oscar_address = models.ForeignKey(UserAddress, related_name='profile_addresses', on_delete=models.SET_NULL)
     class Meta:
         verbose_name_plural = 'addresses'
         unique_together = ('user','hash')
@@ -270,10 +270,10 @@ class EmailUser(AbstractBaseUser, PermissionsMixin):
     organisation = models.CharField(max_length=300, null=True, blank=True,
                                     verbose_name="organisation", help_text='organisation, institution or company')
 
-    residential_address = models.ForeignKey(Address, null=True, blank=False, related_name='+')
-    postal_address = models.ForeignKey(Address, null=True, blank=True, related_name='+')
+    residential_address = models.ForeignKey(Address, null=True, blank=False, related_name='+', on_delete=models.SET_NULL)
+    postal_address = models.ForeignKey(Address, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
     postal_same_as_residential = models.NullBooleanField(default=False) 
-    billing_address = models.ForeignKey(Address, null=True, blank=True, related_name='+')
+    billing_address = models.ForeignKey(Address, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
     billing_same_as_residential = models.NullBooleanField(default=False)
 
     identification = models.ForeignKey(Document, null=True, blank=True, on_delete=models.SET_NULL, related_name='identification_document')
@@ -454,10 +454,10 @@ class EmailUser(AbstractBaseUser, PermissionsMixin):
 
 
 class EmailUserChangeLog(models.Model):
-    emailuser = models.ForeignKey(EmailUser, related_name='change_log_email_user')
+    emailuser = models.ForeignKey(EmailUser, related_name='change_log_email_user', on_delete=models.SET_NULL)
     change_key = models.CharField(max_length=1024, blank=True, null=True)
     change_value = models.CharField(max_length=1024, blank=True, null=True)
-    change_by = models.ForeignKey(EmailUser, related_name='change_log_request_user', blank=True, null=True)
+    change_by = models.ForeignKey(EmailUser, related_name='change_log_request_user', blank=True, null=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
@@ -517,7 +517,7 @@ class Organisation(models.Model):
         return self.name
 
 class OrganisationAddress(BaseAddress):
-    organisation = models.ForeignKey(Organisation, null=True,blank=True, related_name='adresses')
+    organisation = models.ForeignKey(Organisation, null=True,blank=True, related_name='adresses', on_delete=models.SET_NULL)
     class Meta:
         verbose_name_plural = 'organisation addresses'
         #unique_together = ('organisation','hash')

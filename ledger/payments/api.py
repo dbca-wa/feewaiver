@@ -13,7 +13,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import list_route,detail_route
 
-from ledger.payments.bpay.models import BpayTransaction, BpayFile, BpayCollection
+# from ledger.payments.bpay.models import BpayTransaction, BpayFile, BpayCollection
 from ledger.payments.invoice.models import Invoice, InvoiceBPAY
 from ledger.payments.bpoint.models import BpointTransaction, BpointToken
 from ledger.payments.cash.models import CashTransaction, Region, District, DISTRICT_CHOICES, REGION_CHOICES
