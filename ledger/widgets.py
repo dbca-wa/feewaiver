@@ -14,7 +14,8 @@ from django.utils.safestring import SafeText
 # from ledger.validationchecks import is_json
 
 from django.utils.encoding import (
-      force_str, force_text, python_2_unicode_compatible,
+    #   force_str, force_text, python_2_unicode_compatible,
+      force_str, force_text,
 )
 
 __all__ = (

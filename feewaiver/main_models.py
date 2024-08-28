@@ -4,7 +4,7 @@ import os
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_delete
-from django.utils.encoding import python_2_unicode_compatible
+# from django.utils.encoding import python_2_unicode_compatible
 from django.core.exceptions import ValidationError
 from ledger.accounts.models import EmailUser  #, RevisionedMixin
 from django.contrib.postgres.fields.jsonb import JSONField
@@ -19,7 +19,7 @@ class UserSystemSettings(models.Model):
         verbose_name_plural = "User System Settings"
 
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class UserAction(models.Model):
     who = models.ForeignKey(EmailUser, null=False, blank=False)
     when = models.DateTimeField(null=False, blank=False, auto_now_add=True)
@@ -69,7 +69,7 @@ class CommunicationsLogEntry(models.Model):
         app_label = 'feewaiver'
 
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class Document(models.Model):
     name = models.CharField(max_length=255, blank=True,
                             verbose_name='name', help_text='')
@@ -118,7 +118,7 @@ class FeeWaiverWordTemplate(models.Model):
         return "Version: {}, {}".format(self.id, self._file.name)
 
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class SystemMaintenance(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()

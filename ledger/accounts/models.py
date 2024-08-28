@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.contrib.postgres.fields import JSONField
 from django.db import models, IntegrityError, transaction
-from django.utils.encoding import python_2_unicode_compatible
+# from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
 from django.dispatch import receiver
 # from django.db.models import Q
@@ -63,7 +63,7 @@ class EmailUserManager(BaseUserManager):
         return self._create_user(email, password, True, True, **extra_fields)
 
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class Document(models.Model):
     name = models.CharField(max_length=100, blank=True,
                             verbose_name='name', help_text='')
@@ -85,7 +85,7 @@ class Document(models.Model):
 
 upload_storage = FileSystemStorage(location=settings.LEDGER_PRIVATE_MEDIA_ROOT, base_url=settings.LEDGER_PRIVATE_MEDIA_URL)
 
-@python_2_unicode_compatible
+# @python_2_unicode_compatible
 class PrivateDocument(models.Model):
 
     FILE_GROUP = (
