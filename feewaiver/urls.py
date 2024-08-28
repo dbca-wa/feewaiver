@@ -6,7 +6,7 @@ from rest_framework import routers
 #from feewaiver import views, users_api, api
 from feewaiver import views, api
 
-# from ledger.urls import urlpatterns as ledger_patterns
+from ledger.urls import urlpatterns as ledger_patterns
 from feewaiver.utils import are_migrations_running
 
 # API patterns
@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^mgt-commands/$', views.ManagementCommandsView.as_view(), name='mgt-commands'),
     url(r'^internal/fee_waiver/(?P<feewaiver_pk>\d+)/$', views.InternalFeeWaiverView.as_view(), name='internal-feewaiver-detail'),
     url(r'^history/fee_waiver/(?P<pk>\d+)/$', views.FeeWaiverHistoryCompareView.as_view(), name='feewaiver_history'),
-] # + ledger_patterns
+]  + ledger_patterns
 
 if settings.DEBUG:  # Serve media locally in development.
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
