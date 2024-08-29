@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.response import TemplateResponse
