@@ -13,7 +13,7 @@ from feewaiver.utils import are_migrations_running
 router = routers.DefaultRouter()
 router.include_root_view = settings.SHOW_ROOT_API
 router.register(r'feewaivers',api.FeeWaiverViewSet)
-router.register(r'feewaivers_paginated',api.FeeWaiverPaginatedViewSet)
+router.register(r'feewaivers_paginated',api.FeeWaiverPaginatedViewSet, basename='feewaiver-paginated')
 router.register(r'participants',api.ParticipantsViewSet)
 router.register(r'parks',api.ParkViewSet)
 router.register(r'campgrounds',api.CampGroundViewSet)
