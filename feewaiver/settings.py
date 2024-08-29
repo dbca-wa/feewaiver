@@ -37,6 +37,8 @@ if SHOW_DEBUG_TOOLBAR:
 MIDDLEWARE_CLASSES += [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+MIDDLEWARE = MIDDLEWARE_CLASSES
+MIDDLEWARE_CLASSES = None
 
 STATIC_URL = '/static/'
 
