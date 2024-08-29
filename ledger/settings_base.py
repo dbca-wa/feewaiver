@@ -35,10 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
-    'social_django',
+    # 'social_django',
     'django_extensions',
     'reversion',
-    'widget_tweaks',
+    # 'widget_tweaks',
     'django_countries',
     'django_cron',
     ] + [
@@ -72,8 +72,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'dpaw_utils.middleware.SSOLoginMiddleware',
-    'dpaw_utils.middleware.AuditMiddleware',  # Sets model creator/modifier field values.
+    'dbca_utils.middleware.SSOLoginMiddleware',
+    # 'dpaw_utils.middleware.AuditMiddleware',  # Sets model creator/modifier field values.
     # 'ledger.basket.middleware.BasketMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
@@ -88,8 +88,8 @@ AUTH_USER_MODEL = 'accounts.EmailUser'
 # for reference, django.conf.settings.X == backend.setting('X')
 # this one prevents the email auth backend from creating EmailUsers with a username param
 USER_FIELDS = ['email']
-SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
-SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
+# SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
+# SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
 SOCIAL_AUTH_EMAIL_FORM_URL = '/ledger/'
 SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'ledger.accounts.mail.send_validation'
 SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/ledger/validation-sent/'

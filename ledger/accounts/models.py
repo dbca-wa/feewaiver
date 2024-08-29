@@ -217,8 +217,8 @@ class BaseAddress(models.Model):
 
 
 class Address(BaseAddress):
-    user = models.ForeignKey('EmailUser', related_name='profile_addresses', on_delete=models.SET_NULL)
-    oscar_address = models.ForeignKey(UserAddress, related_name='profile_addresses', on_delete=models.SET_NULL)
+    user = models.ForeignKey('EmailUser', related_name='profile_addresses', on_delete=models.CASCADE)
+    oscar_address = models.ForeignKey(UserAddress, related_name='profile_addresses', on_delete=models.PROTECT)
     class Meta:
         verbose_name_plural = 'addresses'
         unique_together = ('user','hash')
@@ -454,7 +454,7 @@ class EmailUser(AbstractBaseUser, PermissionsMixin):
 
 
 class EmailUserChangeLog(models.Model):
-    emailuser = models.ForeignKey(EmailUser, related_name='change_log_email_user', on_delete=models.SET_NULL)
+    emailuser = models.ForeignKey(EmailUser, related_name='change_log_email_user', blank=True, null=True, on_delete=models.SET_NULL)
     change_key = models.CharField(max_length=1024, blank=True, null=True)
     change_value = models.CharField(max_length=1024, blank=True, null=True)
     change_by = models.ForeignKey(EmailUser, related_name='change_log_request_user', blank=True, null=True, on_delete=models.SET_NULL)

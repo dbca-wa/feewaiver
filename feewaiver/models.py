@@ -98,7 +98,7 @@ class FeeWaiver(RevisionedMixin):
     proposed_status = models.CharField('Proposed Status', max_length=30, choices=PROPOSED_STATUS_CHOICES, null=True)
     lodgement_number = models.CharField(max_length=12, blank=True, default='')
     lodgement_date = models.DateTimeField(auto_now_add=True)
-    contact_details = models.OneToOneField(ContactDetails, related_name="fee_waiver", on_delete=models.SET_NULL)
+    contact_details = models.OneToOneField(ContactDetails, related_name="fee_waiver", blank=True, null=True, on_delete=models.SET_NULL)
     fee_waiver_purpose = models.TextField(blank=True)
     assigned_officer = models.ForeignKey(EmailUser, blank=True, null=True, related_name='feewaiver_assigned', on_delete=models.SET_NULL)
     comments_to_applicant = models.TextField(blank=True)
@@ -251,7 +251,7 @@ class FeeWaiver(RevisionedMixin):
 
 
 class FeeWaiverDocument(Document):
-    feewaiver = models.ForeignKey(FeeWaiver,related_name='documents', on_delete=models.SET_NULL)
+    feewaiver = models.ForeignKey(FeeWaiver,related_name='documents', blank=True, null=True, on_delete=models.SET_NULL)
     _file = models.FileField(upload_to=update_feewaiver_doc_filename, max_length=255)
 
     class Meta:
@@ -260,7 +260,7 @@ class FeeWaiverDocument(Document):
 
 
 class FeeWaiverVisit(RevisionedMixin):
-    fee_waiver = models.ForeignKey(FeeWaiver, related_name="visit", on_delete=models.SET_NULL)
+    fee_waiver = models.ForeignKey(FeeWaiver, related_name="visit", on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     date_from = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=False,verbose_name="Date from", help_text='')
     date_to = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=False,verbose_name="Date to", help_text='')
@@ -301,7 +301,7 @@ class FeeWaiverVisit(RevisionedMixin):
 
 
 class ContactDetailsDocument(Document):
-    contact_details = models.ForeignKey(ContactDetails,related_name='documents', on_delete=models.SET_NULL)
+    contact_details = models.ForeignKey(ContactDetails,related_name='documents', blank=True, null=True, on_delete=models.SET_NULL)
     _file = models.FileField(null=True, max_length=255)
     can_delete = models.BooleanField(default=True) # after initial submit prevent document from being deleted
 
@@ -315,7 +315,7 @@ class ContactDetailsDocument(Document):
 
 
 class FeeWaiverLogEntry(CommunicationsLogEntry):
-    fee_waiver = models.ForeignKey(FeeWaiver, related_name='comms_logs', on_delete=models.SET_NULL)
+    fee_waiver = models.ForeignKey(FeeWaiver, related_name='comms_logs', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         app_label = 'feewaiver'
@@ -357,7 +357,7 @@ class FeeWaiverUserAction(UserAction):
             what=str(action)
         )
 
-    fee_waiver = models.ForeignKey(FeeWaiver, related_name='action_logs', on_delete=models.SET_NULL)
+    fee_waiver = models.ForeignKey(FeeWaiver, related_name='action_logs', blank=True, null=True, on_delete=models.SET_NULL)
     who = models.ForeignKey(EmailUser, null=True, blank=True, on_delete=models.SET_NULL)
 
 

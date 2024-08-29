@@ -148,7 +148,7 @@ class TemporaryDocument(Document):
     temp_document_collection = models.ForeignKey(
         TemporaryDocumentCollection,
         related_name='documents',
-        on_delete=models.SET_NULL)
+        on_delete=models.CASCADE)
     _file = models.FileField(max_length=255)
 
     class Meta:
