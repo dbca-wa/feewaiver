@@ -4,6 +4,8 @@ from django.conf.urls import url, include
 from ledger.accounts import views
 from ledger.accounts.api import UserReportView, UserAccountsList, UserAccountsLogsList
 
+app_name = 'accounts'
+
 api_patterns = [
     url(r'api/report/duplicate_identity$', UserReportView.as_view(),name='ledger-user-report'),
     url(r'api/account/list$', UserAccountsList.as_view(),name='ledger-user-account'),
