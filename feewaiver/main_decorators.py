@@ -2,9 +2,11 @@ import time
 import traceback
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from functools import wraps
 
 
 def basic_exception_handler(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
