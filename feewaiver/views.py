@@ -73,7 +73,7 @@ class FeeWaiverRoutingView(TemplateView):
     def get(self, *args, **kwargs):
         web_url = self.request.META.get('HTTP_HOST', None)
         # only send internal users to login page
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             if is_internal(self.request):
                 return redirect('internal')
         elif web_url and '-internal' in web_url:
@@ -95,7 +95,7 @@ class HelpView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HelpView, self).get_context_data(**kwargs)
 
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             application_type = kwargs.get('application_type', None)
             if kwargs.get('help_type', None)=='assessor':
                 if is_internal(self.request):
@@ -126,7 +126,7 @@ class InternalFeeWaiverView(DetailView):
     template_name = 'feewaiver/dash/index.html'
 
     def get(self, *args, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             if is_internal(self.request):
                 return super(InternalFeeWaiverView, self).get(*args, **kwargs)
 
