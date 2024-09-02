@@ -152,3 +152,7 @@ if env('CONSOLE_EMAIL_BACKEND', False):
 
 VERSION_NO='1.0.1'
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
