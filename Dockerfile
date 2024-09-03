@@ -85,6 +85,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Install the project (ensure that frontend projects have been built prior to this step).
 FROM python_libs_feewaiver as build_vue_feewaiver
 
+COPY ledger ./ledger
 COPY feewaiver ./feewaiver
 RUN cd /app/feewaiver/frontend/feewaiver; npm install && \
     cd /app/feewaiver/frontend/feewaiver; npm run build
