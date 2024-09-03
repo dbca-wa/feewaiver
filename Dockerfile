@@ -95,7 +95,7 @@ RUN python manage_fw.py collectstatic --noinput
 
 FROM collectstatic_feewaiver as configure_feewaiver
 
-COPY .git ./.git
+COPY .git ./
 COPY gunicorn.ini ./
 COPY timezone /etc/timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
