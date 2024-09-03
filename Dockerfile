@@ -73,8 +73,9 @@ FROM node_feewaiver as python_libs_feewaiver
 WORKDIR /app
 COPY requirements.txt ./
 RUN touch /app/rand_hash
-RUN pip install --no-cache-dir -r requirements.txt && \
-    rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
+RUN pip install --no-cache-dir -r requirements.txt
+# && \
+#    rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
 # COPY libgeos.py.patch /app/
 # RUN patch /usr/local/lib/python3.9/dist-packages/django/contrib/gis/geos/libgeos.py /app/libgeos.py.patch && \
