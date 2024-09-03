@@ -1,6 +1,6 @@
 psycopg2==2.8.6
 reportlab==3.5.55
-Django==3.2.25
+Django==5.0.8
 #ipython==7.19.0
 jedi==0.17.2
 #git+https://github.com/xzzy/ledger.git@master2#egg=ledger
