@@ -134,9 +134,11 @@ class FeeWaiverFilterBackend(DatatablesFilterBackend):
                     search_text_feewaiver_ids.append(feewaiver.id)
             queryset = queryset.filter(id__in=search_text_feewaiver_ids)
 
-        getter = request.query_params.get
-        fields = self.get_fields(getter)
-        ordering = self.get_ordering(getter, fields)
+        # getter = request.query_params.get
+        # fields = self.get_fields(getter)
+        fields = self.get_fields(request)
+        # ordering = self.get_ordering(getter, fields)
+        ordering = self.get_ordering(request, view, fields)
         queryset = queryset.order_by(*ordering)
         if len(ordering):
             queryset = queryset.order_by(*ordering)
