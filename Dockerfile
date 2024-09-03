@@ -17,7 +17,7 @@ FROM builder_base_feewaiver as apt_packages_feewaiver
 # RUN sed 's/archive.ubuntu.com/au.archive.ubuntu.com/g' /etc/apt/sources.list > /etc/apt/sourcesau.list && \
 #    mv /etc/apt/sourcesau.list /etc/apt/sources.list
 
-RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
+RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install --no-install-recommends -y \
     binutils \
