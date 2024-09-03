@@ -282,7 +282,7 @@ class FeeWaiverVisit(RevisionedMixin):
     age_of_participants_array = ArrayField(
             models.CharField(max_length=100, choices=AGE_CHOICES),
             size=5,
-            default=[],
+            default=list,
             #null=True,
             )
     CAMPING_CHOICES = (
