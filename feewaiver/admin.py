@@ -76,12 +76,13 @@ class EmailUserAdmin(ledger_admin.EmailUserAdmin):
 
 @admin.register(FeeWaiver)
 class FeeWaiverAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'lodgement_number', 'lodgement_date', 'fee_waiver_purpose', 'assigned_officer', 'finalised',]
+    list_filter = ['finalised',]
 
 
 @admin.register(ContactDetails)
 class ContactDetailsAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'organisation', 'contact_name', 'email', 'postal_address', 'suburb', 'state', 'postcode', 'phone',]
 
 
 @admin.register(Participants)
@@ -91,6 +92,9 @@ class ParticipantsAdmin(admin.ModelAdmin):
 
 @admin.register(Park)
 class ParkAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'email_list', 'entrance_fee',]
+    list_display_links = ['id', 'name',]
+    list_filter = ['entrance_fee',]
     ordering = ('name',)
 
 
