@@ -1,26 +1,13 @@
-import re
 import traceback
-import os
-
-import json
-
-import pytz
-from ledger.settings_base import TIME_ZONE, DATABASES
-from django.db.models import Q
 from django.db import transaction
 from django.core.exceptions import ValidationError
-from rest_framework import viewsets, serializers, status, views
-from rest_framework.decorators import detail_route, list_route, renderer_classes
+from rest_framework import viewsets, serializers, views
+from rest_framework.decorators import renderer_classes
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from ledger.accounts.models import EmailUser
-from datetime import datetime
 
-from django.http import HttpResponse
-from feewaiver import settings
-
-from django.urls import reverse
-from django.shortcuts import redirect, get_object_or_404
 from feewaiver.serializers import (
         ContactDetailsSerializer,
         FeeWaiverSerializer,
@@ -38,38 +25,32 @@ from feewaiver.serializers import (
         TemporaryDocumentCollectionSerializer,
 )
 from feewaiver.models import (
-        ContactDetails,
-        ContactDetailsDocument,
         FeeWaiver,
         FeeWaiverVisit,
-        FeeWaiverLogEntry,
         FeeWaiverUserAction,
         Participants,
         Park,
         CampGround,
 )
-from feewaiver.helpers import is_internal, is_feewaiver_admin
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
-from rest_framework.pagination import PageNumberPagination
+from feewaiver.helpers import is_internal
 from rest_framework_datatables.pagination import DatatablesPageNumberPagination
 from rest_framework_datatables.filters import DatatablesFilterBackend
 from rest_framework_datatables.renderers import DatatablesRenderer
 from feewaiver.process_document import (
         process_generic_document,
-        save_contact_details_document_obj,
         save_default_document_obj,
         )
 import logging
 from feewaiver.emails import (
         send_fee_waiver_received_notification,
         send_workflow_notification,
-        #send_approver_notification,
         send_approval_notification,
         )
 from feewaiver.main_decorators import basic_exception_handler
 from feewaiver.main_models import TemporaryDocumentCollection
 from feewaiver.process_document import save_document, cancel_document, delete_document
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -133,9 +114,11 @@ class FeeWaiverFilterBackend(DatatablesFilterBackend):
                     search_text_feewaiver_ids.append(feewaiver.id)
             queryset = queryset.filter(id__in=search_text_feewaiver_ids)
 
-        getter = request.query_params.get
-        fields = self.get_fields(getter)
-        ordering = self.get_ordering(getter, fields)
+        # getter = request.query_params.get
+        # fields = self.get_fields(getter)
+        fields = self.get_fields(request)
+        # ordering = self.get_ordering(getter, fields)
+        ordering = self.get_ordering(request, view, fields)
         queryset = queryset.order_by(*ordering)
         if len(ordering):
             queryset = queryset.order_by(*ordering)
@@ -162,7 +145,8 @@ class FeeWaiverPaginatedViewSet(viewsets.ModelViewSet):
             return FeeWaiver.objects.all()
         return Feewaiver.objects.none()
 
-    @list_route(methods=['GET',])
+    # @list_route(methods=['GET',])
+    @action(detail=False, methods=['GET'])
     def feewaiver_internal(self, request, *args, **kwargs):
         """
         Used by the internal dashboard
@@ -190,7 +174,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             return FeeWaiver.objects.all()
         return FeeWaiver.objects.none()
 
-    @detail_route(methods=['POST'])
+    # @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     @renderer_classes((JSONRenderer,))
     @basic_exception_handler
     def process_contact_details_document(self, request, *args, **kwargs):
@@ -201,7 +186,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
         else:
             return Response()
 
-    @detail_route(methods=['POST'])
+    # @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     @renderer_classes((JSONRenderer,))
     def process_comms_log_document(self, request, *args, **kwargs):
         try:
@@ -225,7 +211,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(str(e))
 
 
-    @detail_route(methods=['GET',])
+    # @detail_route(methods=['GET',])
+    @action(detail=True, methods=['GET'])
     def assign_request_user(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
@@ -242,7 +229,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @list_route(methods=['GET',])
+    # @list_route(methods=['GET',])
+    @action(detail=False, methods=['GET'])
     def filter_list(self, request, *args, **kwargs):
         """ Used by the internal/external dashboard filters """
         feewaiver_status = []
@@ -251,14 +239,16 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
         )
         return Response(data)
 
-    @list_route(methods=['GET',])
+    # @list_route(methods=['GET',])
+    @action(detail=False, methods=['GET'])
     def camping_choices(self, request, *args, **kwargs):
         camping_choices = []
         for choice in FeeWaiverVisit.CAMPING_CHOICES:
             camping_choices.append({choice[0]: choice[1]})
         return Response(camping_choices)
 
-    @detail_route(methods=['GET',])
+    # @detail_route(methods=['GET',])
+    @action(detail=True, methods=['GET'])
     def action_log(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
@@ -275,7 +265,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['GET',])
+    # @detail_route(methods=['GET',])
+    @action(detail=True, methods=['GET'])
     def comms_log(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
@@ -292,7 +283,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['POST',])
+    # @detail_route(methods=['POST',])
+    @action(detail=True, methods=['POST'])
     @renderer_classes((JSONRenderer,))
     def add_comms_log(self, request, *args, **kwargs):
         try:
@@ -322,7 +314,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(str(e))
 
 
-    @detail_route(methods=['POST',])
+    # @detail_route(methods=['POST',])
+    @action(detail=True, methods=['POST'])
     def assign_to(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
@@ -347,7 +340,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['GET',])
+    # @detail_route(methods=['GET',])
+    @action(detail=True, methods=['GET'])
     def unassign(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
@@ -364,7 +358,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['POST',])
+    # @detail_route(methods=['POST',])
+    @action(detail=True, methods=['POST'])
     def switch_status(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
@@ -392,7 +387,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(str(e))
 
 
-    @detail_route(methods=['POST'])
+    # @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     @renderer_classes((JSONRenderer,))
     def workflow_action(self, request, *args, **kwargs):
         try:
@@ -426,7 +422,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['POST'])
+    # @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     @renderer_classes((JSONRenderer,))
     def log_visit_action(self, request, *args, **kwargs):
         try:
@@ -454,7 +451,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['POST'])
+    # @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     @renderer_classes((JSONRenderer,))
     def final_approval(self, request, *args, **kwargs):
         try:
@@ -492,7 +490,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['POST'])
+    # @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     @renderer_classes((JSONRenderer,))
     def assessor_save(self, request, *args, **kwargs):
         try:
@@ -563,7 +562,8 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['get'])
+    # @detail_route(methods=['get'])
+    @action(detail=True, methods=['GET'])
     @renderer_classes((JSONRenderer,))
     def feewaiver_contactdetails_pack(self, request, *args, **kwargs):
         try:
@@ -687,7 +687,8 @@ class ParticipantsViewSet(viewsets.ModelViewSet):
             return Participants.objects.all()
         return Participants.objects.none()
 
-    @list_route(methods=['GET',])
+    # @list_route(methods=['GET',])
+    @action(detail=False, methods=['GET'])
     def participants_list(self, request, *args, **kwargs):
         serializer = ParticipantsSerializer(Participants.objects.all(), many=True)
         return Response(serializer.data)
@@ -703,7 +704,8 @@ class ParkViewSet(viewsets.ModelViewSet):
             return Park.objects.all()
         return Park.objects.none()
 
-    @list_route(methods=['GET',])
+    # @list_route(methods=['GET',])
+    @action(detail=False, methods=['GET'])
     def parks_list(self, request, *args, **kwargs):
         serializer = ParkSerializer(Park.objects.all(), many=True)
         return Response(serializer.data)
@@ -719,7 +721,8 @@ class CampGroundViewSet(viewsets.ModelViewSet):
             return CampGround.objects.all()
         return CampGround.objects.none()
 
-    @list_route(methods=['GET',])
+    # @list_route(methods=['GET',])
+    @action(detail=False, methods=['GET'])
     def campgrounds_list(self, request, *args, **kwargs):
         serializer = CampGroundSerializer(CampGround.objects.all(), many=True)
         return Response(serializer.data)
@@ -755,7 +758,8 @@ class TemporaryDocumentCollectionViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
-    @detail_route(methods=['POST'])
+    # @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     @renderer_classes((JSONRenderer,))
     # Designed for uploading comms_log files within "create" modals when no parent entity instance yet exists
     # response returned to compliance_file.vue
@@ -790,7 +794,8 @@ class TemporaryDocumentCollectionViewSet(viewsets.ModelViewSet):
             print(traceback.print_exc())
             raise e
 
-    @detail_route(methods=['POST'])
+    # @detail_route(methods=['POST'])
+    @action(detail=True, methods=['POST'])
     @renderer_classes((JSONRenderer,))
     # Designed for uploading comms_log files within "create" modals when no parent entity instance yet exists
     # response returned to compliance_file.vue

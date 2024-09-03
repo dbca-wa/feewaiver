@@ -36,10 +36,17 @@ class EmailUserSerializer(serializers.ModelSerializer):
 
 
 class FeeWaiverUserActionSerializer(serializers.ModelSerializer):
-    who = serializers.CharField(source='who.get_full_name')
+    # who = serializers.CharField(source='who.get_full_name')
+    who = serializers.SerializerMethodField()
     class Meta:
         model = FeeWaiverUserAction
         fields = '__all__'
+
+    def get_who(self, obj):
+        if obj.who:
+            return obj.who.get_full_name()
+        else:
+            return '---'
 
 
 class FeeWaiverLogEntrySerializer(CommunicationLogEntrySerializer):
