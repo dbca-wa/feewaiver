@@ -4,12 +4,12 @@ import mimetypes
 import six
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, EmailMessage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template import loader, Template#, Context
 from django.utils.html import strip_tags
 from ledger.accounts.models import Document
 from django.utils.encoding import smart_text
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from feewaiver.models import AssessorsGroup, ApproversGroup
 from ledger.accounts.models import EmailUser
 import os

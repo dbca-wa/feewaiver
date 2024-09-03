@@ -13,7 +13,7 @@ from feewaiver.utils import are_migrations_running
 router = routers.DefaultRouter()
 router.include_root_view = settings.SHOW_ROOT_API
 router.register(r'feewaivers',api.FeeWaiverViewSet)
-router.register(r'feewaivers_paginated',api.FeeWaiverPaginatedViewSet)
+router.register(r'feewaivers_paginated',api.FeeWaiverPaginatedViewSet, basename='feewaiver-paginated')
 router.register(r'participants',api.ParticipantsViewSet)
 router.register(r'parks',api.ParkViewSet)
 router.register(r'campgrounds',api.CampGroundViewSet)
@@ -30,7 +30,7 @@ api_patterns = [
 urlpatterns = [
     url(r'^ledger/admin/', admin.site.urls, name='ledger_admin'),
     url(r'', include(api_patterns)),
-    url(r'^$', views.FeeWaiverRoutingView.as_view(), name='ds_home'),
+    url(r'^$', views.FeeWaiverRoutingView.as_view(), name='home'),
     url(r'^contact/', views.FeeWaiverContactView.as_view(), name='ds_contact'),
     url(r'^admin_data/', views.FeeWaiverAdminDataView.as_view(), name='admin_data'),
     url(r'^further_info/', views.FeeWaiverFurtherInformationView.as_view(), name='ds_further_info'),
@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^mgt-commands/$', views.ManagementCommandsView.as_view(), name='mgt-commands'),
     url(r'^internal/fee_waiver/(?P<feewaiver_pk>\d+)/$', views.InternalFeeWaiverView.as_view(), name='internal-feewaiver-detail'),
     url(r'^history/fee_waiver/(?P<pk>\d+)/$', views.FeeWaiverHistoryCompareView.as_view(), name='feewaiver_history'),
-] + ledger_patterns
+]  + ledger_patterns
 
 if settings.DEBUG:  # Serve media locally in development.
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

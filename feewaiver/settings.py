@@ -37,6 +37,8 @@ if SHOW_DEBUG_TOOLBAR:
 MIDDLEWARE_CLASSES += [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+MIDDLEWARE = MIDDLEWARE_CLASSES
+MIDDLEWARE_CLASSES = None
 
 STATIC_URL = '/static/'
 
@@ -53,6 +55,7 @@ INSTALLED_APPS += [
     'reset_migrations',
     'ckeditor',
     'appmonitor_client',
+    'ledger',
 ]
 
 CRON_CLASSES = [
@@ -148,3 +151,8 @@ if env('CONSOLE_EMAIL_BACKEND', False):
    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 VERSION_NO='1.0.1'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)

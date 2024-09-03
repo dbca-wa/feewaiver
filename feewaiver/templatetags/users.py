@@ -2,7 +2,7 @@ from django.template import Library
 from django.conf import settings
 from feewaiver import helpers as feewaiver_helpers
 from feewaiver.main_models import SystemMaintenance
-from ledger.payments.helpers import is_payment_admin
+# from ledger.payments.helpers import is_payment_admin
 from datetime import datetime, timedelta
 from django.utils import timezone
 import pytz
@@ -29,10 +29,10 @@ def is_model_backend(context):
     request = context['request']
     return feewaiver_helpers.is_model_backend(request)
 
-@register.simple_tag(takes_context=True)
-def is_payment_officer(context):
-    request = context['request']
-    return is_payment_admin(request.user)
+# @register.simple_tag(takes_context=True)
+# def is_payment_officer(context):
+#     request = context['request']
+#     return is_payment_admin(request.user)
 
 @register.simple_tag()
 def system_maintenance_due():
