@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.urls import re_path, include
 # from django.contrib import admin
 # from django.views.generic import TemplateView
 # from oscar.app import application
@@ -22,7 +22,7 @@ from ledger import uploads
 
 urlpatterns = [
     #url(r'^ledger/admin/', admin.site.urls, name='ledger_admin'),
-    url(r'^ledger/', include('ledger.accounts.urls', namespace='accounts')),
+    re_path(r'^ledger/', include('ledger.accounts.urls', namespace='accounts')),
     # url(r'^ledger/', include('ledger.payments.urls', namespace='payments')),
     # url(r'^ledger/', include('social_django.urls', namespace='social')),
     # url(r'^ledger/checkout/', application.urls),

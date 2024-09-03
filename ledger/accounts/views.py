@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import logout as auth_logout
@@ -6,16 +7,17 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from ledger.accounts import helpers
 from ledger.accounts import forms as app_forms
-from django.utils.http import urlquote_plus, urlencode
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
+from django.utils.http import urlencode
+from django.views.generic import UpdateView
 from django.views import generic
-from django.http import HttpResponse, HttpResponseRedirect
-from django import forms
+from django.http import HttpResponseRedirect
 from .forms import FirstTimeForm
 from .models import EmailUser,EmailUserChangeLog,PrivateDocument
 import json
 
 # Example views, most of them are just template rendering
+
+logger = logging.getLogger(__name__)
 
 
 def home(request):

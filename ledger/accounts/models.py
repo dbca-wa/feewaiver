@@ -3,13 +3,14 @@ from __future__ import unicode_literals
 # import os
 # import zlib
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
-from django.contrib.postgres.fields import JSONField
-from django.db import models, IntegrityError, transaction
+# from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
+from django.db import models, transaction
 # from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
 from django.dispatch import receiver
 # from django.db.models import Q
-from django.db.models.signals import post_delete, pre_save, post_save
+# from django.db.models.signals import post_delete, pre_save, post_save
 # from django.core.exceptions import ValidationError
 
 # from reversion import revisions
@@ -272,9 +273,9 @@ class EmailUser(AbstractBaseUser, PermissionsMixin):
 
     residential_address = models.ForeignKey(Address, null=True, blank=False, related_name='+', on_delete=models.SET_NULL)
     postal_address = models.ForeignKey(Address, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
-    postal_same_as_residential = models.NullBooleanField(default=False) 
+    postal_same_as_residential = models.BooleanField(default=False) 
     billing_address = models.ForeignKey(Address, null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
-    billing_same_as_residential = models.NullBooleanField(default=False)
+    billing_same_as_residential = models.BooleanField(default=False)
 
     identification = models.ForeignKey(Document, null=True, blank=True, on_delete=models.SET_NULL, related_name='identification_document')
     identification2 = models.ForeignKey(PrivateDocument, null=True, blank=True, on_delete=models.SET_NULL, related_name='identification_document_2')
