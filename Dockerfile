@@ -93,7 +93,7 @@ FROM build_vue_feewaiver as collectstatic_feewaiver
 
 RUN touch /app/.env
 COPY manage_fw.py ./
-RUN python manage_fw.py collectstatic --noinput
+RUN python3 manage_fw.py collectstatic --noinput
 
 FROM collectstatic_feewaiver as configure_feewaiver
 
