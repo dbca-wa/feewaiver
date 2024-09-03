@@ -156,3 +156,47 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
+
+LOGGING = {
+    "version": 1,
+    'formatters': {
+        'verbose2': {
+            "format": "%(levelname)s %(asctime)s %(name)s [Line:%(lineno)s][%(funcName)s] %(message)s"
+        }
+    },
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose2',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'feewaiver.log'),
+            'formatter': 'verbose2',
+            'maxBytes': 5242880
+        },
+        'file_for_sql': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'feewaiver_sql.log'),
+            'formatter': 'verbose2',
+            'maxBytes': 5242880
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        # Log SQL
+        # 'django.db.backends': {
+        #     'level': 'DEBUG',
+        #     'handlers': ['file_for_sql'],
+        #     'propagate': False,
+        # },
+    }
+}

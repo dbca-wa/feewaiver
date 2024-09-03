@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import logout as auth_logout
@@ -15,6 +16,8 @@ from .models import EmailUser,EmailUserChangeLog,PrivateDocument
 import json
 
 # Example views, most of them are just template rendering
+
+logger = logging.getLogger(__name__)
 
 
 def home(request):

@@ -1,27 +1,13 @@
-import re
 import traceback
-import os
-
-import json
-
-import pytz
-from ledger.settings_base import TIME_ZONE, DATABASES
-from django.db.models import Q
 from django.db import transaction
 from django.core.exceptions import ValidationError
-from rest_framework import viewsets, serializers, status, views
+from rest_framework import viewsets, serializers, views
 from rest_framework.decorators import renderer_classes
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from ledger.accounts.models import EmailUser
-from datetime import datetime
 
-from django.http import HttpResponse
-from feewaiver import settings
-
-from django.urls import reverse
-from django.shortcuts import redirect, get_object_or_404
 from feewaiver.serializers import (
         ContactDetailsSerializer,
         FeeWaiverSerializer,
@@ -39,38 +25,32 @@ from feewaiver.serializers import (
         TemporaryDocumentCollectionSerializer,
 )
 from feewaiver.models import (
-        ContactDetails,
-        ContactDetailsDocument,
         FeeWaiver,
         FeeWaiverVisit,
-        FeeWaiverLogEntry,
         FeeWaiverUserAction,
         Participants,
         Park,
         CampGround,
 )
-from feewaiver.helpers import is_internal, is_feewaiver_admin
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
-from rest_framework.pagination import PageNumberPagination
+from feewaiver.helpers import is_internal
 from rest_framework_datatables.pagination import DatatablesPageNumberPagination
 from rest_framework_datatables.filters import DatatablesFilterBackend
 from rest_framework_datatables.renderers import DatatablesRenderer
 from feewaiver.process_document import (
         process_generic_document,
-        save_contact_details_document_obj,
         save_default_document_obj,
         )
 import logging
 from feewaiver.emails import (
         send_fee_waiver_received_notification,
         send_workflow_notification,
-        #send_approver_notification,
         send_approval_notification,
         )
 from feewaiver.main_decorators import basic_exception_handler
 from feewaiver.main_models import TemporaryDocumentCollection
 from feewaiver.process_document import save_document, cancel_document, delete_document
+
+
 logger = logging.getLogger(__name__)
 
 
