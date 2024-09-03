@@ -76,9 +76,9 @@ RUN touch /app/rand_hash
 RUN pip install --no-cache-dir -r requirements.txt && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
-COPY libgeos.py.patch /app/
-RUN patch /usr/local/lib/python3.9/dist-packages/django/contrib/gis/geos/libgeos.py /app/libgeos.py.patch && \
-    rm /app/libgeos.py.patch
+# COPY libgeos.py.patch /app/
+# RUN patch /usr/local/lib/python3.9/dist-packages/django/contrib/gis/geos/libgeos.py /app/libgeos.py.patch && \
+#    rm /app/libgeos.py.patch
 
 # Install the project (ensure that frontend projects have been built prior to this step).
 FROM python_libs_feewaiver as build_vue_feewaiver
@@ -95,7 +95,7 @@ RUN python manage_fw.py collectstatic --noinput
 
 FROM collectstatic_feewaiver as configure_feewaiver
 
-COPY .git ./
+# COPY .git ./
 COPY gunicorn.ini ./
 COPY timezone /etc/timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
