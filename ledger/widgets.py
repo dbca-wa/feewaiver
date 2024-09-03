@@ -8,15 +8,12 @@ import json
 from django.forms.utils import flatatt, to_current_timezone
 from django.utils.html import conditional_escape, format_html, html_safe
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 from django.forms import Media, MediaDefiningClass, Widget, CheckboxInput
 from django.utils.safestring import SafeText
 # from ledger.validationchecks import is_json
 
-from django.utils.encoding import (
-    #   force_str, force_text, python_2_unicode_compatible,
-      force_str, force_text,
-)
+from django.utils.encoding import force_str
 
 __all__ = (
     'ClearableMultipleFileInput', 'FileInput', 'RendererMixin', 'ChoiceFieldRenderer' 
@@ -42,7 +39,7 @@ class InputMultiFile(Widget):
         final_attrs = self.build_attrs(self.attrs, attrs)
         if value != '':
             # Only add the 'value' attribute if a value is non-empty.
-            final_attrs['value'] = force_text(self.format_value(value))
+            final_attrs['value'] = force_str(self.format_value(value))
         return format_html('<input{} >', flatatt(final_attrs))
 
 class FileInput(InputMultiFile):
@@ -59,9 +56,9 @@ class FileInput(InputMultiFile):
         return name not in files
 
 class AjaxFileUploader(FileInput):
-    initial_text = ugettext_lazy('Currently testing')
-    input_text = ugettext_lazy('Change')
-    clear_checkbox_label = ugettext_lazy('Clear')
+    initial_text = gettext_lazy('Currently testing')
+    input_text = gettext_lazy('Change')
+    clear_checkbox_label = gettext_lazy('Clear')
 
     template_with_initial = (
         '%(initial_text)s: <a href="%(initial_url)s">%(initial)s</a>'
