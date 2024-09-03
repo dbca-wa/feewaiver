@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 # from django.conf.urls import url, include
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from rest_framework import routers
 #from feewaiver import views, users_api, api
@@ -24,25 +24,25 @@ api_patterns = [
     #url(r'^api/profile$', users_api.GetProfile.as_view(), name='get-profile'),
     #url(r'^api/department_users$', users_api.DepartmentUserList.as_view(), name='department-users-list'),
     #url(r'^api/filtered_users$', users_api.UserListFilterView.as_view(), name='filtered_users'),
-    path(r'^api/',include(router.urls)),
+    re_path(r'^api/',include(router.urls)),
 ]
 
 # URL Patterns
 urlpatterns = [
-    path(r'^ledger/admin/', admin.site.urls, name='ledger_admin'),
-    path(r'', include(api_patterns)),
-    path(r'^$', views.FeeWaiverRoutingView.as_view(), name='home'),
-    path(r'^contact/', views.FeeWaiverContactView.as_view(), name='ds_contact'),
-    path(r'^admin_data/', views.FeeWaiverAdminDataView.as_view(), name='admin_data'),
-    path(r'^further_info/', views.FeeWaiverFurtherInformationView.as_view(), name='ds_further_info'),
-    path(r'^internal/', views.InternalView.as_view(), name='internal'),
-    path(r'^external/', views.ExternalView.as_view(), name='external'),
-    path(r'^account/$', views.ExternalView.as_view(), name='manage-account'),
-    path(r'^profiles/', views.ExternalView.as_view(), name='manage-profiles'),
-    path(r'^help/(?P<application_type>[^/]+)/(?P<help_type>[^/]+)/$', views.HelpView.as_view(), name='help'),
-    path(r'^mgt-commands/$', views.ManagementCommandsView.as_view(), name='mgt-commands'),
-    path(r'^internal/fee_waiver/(?P<feewaiver_pk>\d+)/$', views.InternalFeeWaiverView.as_view(), name='internal-feewaiver-detail'),
-    path(r'^history/fee_waiver/(?P<pk>\d+)/$', views.FeeWaiverHistoryCompareView.as_view(), name='feewaiver_history'),
+    re_path(r'^ledger/admin/', admin.site.urls, name='ledger_admin'),
+    re_path(r'', include(api_patterns)),
+    re_path(r'^$', views.FeeWaiverRoutingView.as_view(), name='home'),
+    re_path(r'^contact/', views.FeeWaiverContactView.as_view(), name='ds_contact'),
+    re_path(r'^admin_data/', views.FeeWaiverAdminDataView.as_view(), name='admin_data'),
+    re_path(r'^further_info/', views.FeeWaiverFurtherInformationView.as_view(), name='ds_further_info'),
+    re_path(r'^internal/', views.InternalView.as_view(), name='internal'),
+    re_path(r'^external/', views.ExternalView.as_view(), name='external'),
+    re_path(r'^account/$', views.ExternalView.as_view(), name='manage-account'),
+    re_path(r'^profiles/', views.ExternalView.as_view(), name='manage-profiles'),
+    re_path(r'^help/(?P<application_type>[^/]+)/(?P<help_type>[^/]+)/$', views.HelpView.as_view(), name='help'),
+    re_path(r'^mgt-commands/$', views.ManagementCommandsView.as_view(), name='mgt-commands'),
+    re_path(r'^internal/fee_waiver/(?P<feewaiver_pk>\d+)/$', views.InternalFeeWaiverView.as_view(), name='internal-feewaiver-detail'),
+    re_path(r'^history/fee_waiver/(?P<pk>\d+)/$', views.FeeWaiverHistoryCompareView.as_view(), name='feewaiver_history'),
 ]  + ledger_patterns
 
 if settings.DEBUG:  # Serve media locally in development.
@@ -51,6 +51,6 @@ if settings.DEBUG:  # Serve media locally in development.
 if settings.SHOW_DEBUG_TOOLBAR:
     import debug_toolbar
     urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
+        re_path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
 
