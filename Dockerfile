@@ -42,6 +42,7 @@ RUN apt-get update && \
     python3 \
     python3-dev \
     python3-pip \
+    python3-distutils \
     python3-setuptools \
     software-properties-common \
     ssh \
@@ -51,12 +52,12 @@ RUN apt-get update && \
     update-ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-RUN add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get update && \
-    apt-get install --no-install-recommends -y python3.9 python3.9-dev python3.9-distutils && \
-    ln -s /usr/bin/python3.9 /usr/bin/python && \
-    python3.9 -m pip install --upgrade pip && \
-    apt-get install -y rsyslog
+# RUN add-apt-repository ppa:deadsnakes/ppa && \
+#     apt-get update && \
+#     apt-get install --no-install-recommends -y python3.9 python3.9-dev python3.9-distutils && \
+#     ln -s /usr/bin/python3.9 /usr/bin/python && \
+#     python3.9 -m pip install --upgrade pip && \
+#     apt-get install -y rsyslog
 
 FROM apt_packages_feewaiver as node_feewaiver
 
