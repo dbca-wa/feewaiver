@@ -14,10 +14,10 @@ ENV DEBIAN_FRONTEND=noninteractive \
 FROM builder_base_feewaiver as apt_packages_feewaiver
 
 # Use Australian Mirrors
-RUN sed 's/archive.ubuntu.com/au.archive.ubuntu.com/g' /etc/apt/sources.list > /etc/apt/sourcesau.list && \
-    mv /etc/apt/sourcesau.list /etc/apt/sources.list
+# RUN sed 's/archive.ubuntu.com/au.archive.ubuntu.com/g' /etc/apt/sources.list > /etc/apt/sourcesau.list && \
+#    mv /etc/apt/sourcesau.list /etc/apt/sources.list
 
-RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
+RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install --no-install-recommends -y \
     binutils \
@@ -42,6 +42,7 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
     python3 \
     python3-dev \
     python3-pip \
+    python3-distutils \
     python3-setuptools \
     software-properties-common \
     ssh \
@@ -51,12 +52,12 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update && \
     update-ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-RUN add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get update && \
-    apt-get install --no-install-recommends -y python3.9 python3.9-dev python3.9-distutils && \
-    ln -s /usr/bin/python3.9 /usr/bin/python && \
-    python3.9 -m pip install --upgrade pip && \
-    apt-get install -y rsyslog
+# RUN add-apt-repository ppa:deadsnakes/ppa && \
+#     apt-get update && \
+#     apt-get install --no-install-recommends -y python3.9 python3.9-dev python3.9-distutils && \
+#     ln -s /usr/bin/python3.9 /usr/bin/python && \
+#     python3.9 -m pip install --upgrade pip && \
+#     apt-get install -y rsyslog
 
 FROM apt_packages_feewaiver as node_feewaiver
 
@@ -73,16 +74,18 @@ FROM node_feewaiver as python_libs_feewaiver
 WORKDIR /app
 COPY requirements.txt ./
 RUN touch /app/rand_hash
-RUN pip install --no-cache-dir -r requirements.txt && \
-    rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
+RUN pip install --no-cache-dir -r requirements.txt
+# && \
+#    rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
-COPY libgeos.py.patch /app/
-RUN patch /usr/local/lib/python3.9/dist-packages/django/contrib/gis/geos/libgeos.py /app/libgeos.py.patch && \
-    rm /app/libgeos.py.patch
+# COPY libgeos.py.patch /app/
+# RUN patch /usr/local/lib/python3.9/dist-packages/django/contrib/gis/geos/libgeos.py /app/libgeos.py.patch && \
+#    rm /app/libgeos.py.patch
 
 # Install the project (ensure that frontend projects have been built prior to this step).
 FROM python_libs_feewaiver as build_vue_feewaiver
 
+COPY ledger ./ledger
 COPY feewaiver ./feewaiver
 RUN cd /app/feewaiver/frontend/feewaiver; npm install && \
     cd /app/feewaiver/frontend/feewaiver; npm run build
@@ -91,11 +94,11 @@ FROM build_vue_feewaiver as collectstatic_feewaiver
 
 RUN touch /app/.env
 COPY manage_fw.py ./
-RUN python manage_fw.py collectstatic --noinput
+RUN python3 manage_fw.py collectstatic --noinput
 
 FROM collectstatic_feewaiver as configure_feewaiver
 
-COPY .git ./.git
+# COPY .git ./
 COPY gunicorn.ini ./
 COPY timezone /etc/timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
