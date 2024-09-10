@@ -70,7 +70,7 @@ def populate_countries(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('address', '0003_remove_useraddress_profile_address'),
+        # ('address', '0003_remove_useraddress_profile_address'),
         ('accounts', '0003_merge'),
     ]
 

@@ -176,7 +176,7 @@ HAYSTACK_CONNECTIONS = {
 }
 
 
-DATABASE_ROUTERS = ['ledger.payments.models.OracleFinanceDBRouter']
+# DATABASE_ROUTERS = ['ledger.payments.models.OracleFinanceDBRouter']
 DATABASE_APPS_MAPPING = {'oracle_finance': 'oracle_finance', }
 # Database
 DATABASES = {
