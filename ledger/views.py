@@ -6,7 +6,7 @@ from django.views.generic import TemplateView  #, ListView, DetailView, CreateVi
 # from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 
-from ledger.payments import models
+# from ledger.payments import models
 # from ledger.accounts import models as account_models
 # from ledger.accounts import helpers as account_helpers
 import json
