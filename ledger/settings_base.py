@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # ])
     # + [
     'ledger.accounts',   #  Defines custom user model, passwordless auth pipeline.
+    'ledger.address',
     # 'ledger.api',
     # 'ledger.licence',
     # 'ledger.payments',
