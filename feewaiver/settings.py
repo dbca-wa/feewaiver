@@ -3,6 +3,7 @@ from django.core.exceptions import ImproperlyConfigured
 import os
 import confy
 import decouple
+import json
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 confy.read_environment_file(BASE_DIR+"/.env")
