@@ -2,8 +2,11 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import oscar.models.fields
+# import oscar.models.fields
+from phonenumber_field.modelfields import PhoneNumberField
 from django.conf import settings
+
+from ledger.oscar_fields import UppercaseCharField
 
 
 class Migration(migrations.Migration):
@@ -44,9 +47,11 @@ class Migration(migrations.Migration):
                 ('line3', models.CharField(max_length=255, verbose_name='Third line of address', blank=True)),
                 ('line4', models.CharField(max_length=255, verbose_name='City', blank=True)),
                 ('state', models.CharField(max_length=255, verbose_name='State/County', blank=True)),
-                ('postcode', oscar.models.fields.UppercaseCharField(max_length=64, verbose_name='Post/Zip-code', blank=True)),
+                # ('postcode', oscar.models.fields.UppercaseCharField(max_length=64, verbose_name='Post/Zip-code', blank=True)),
+                ('postcode', UppercaseCharField(max_length=64, verbose_name='Post/Zip-code', blank=True)),
                 ('search_text', models.TextField(editable=False, verbose_name='Search text - used only for searching addresses')),
-                ('phone_number', oscar.models.fields.PhoneNumberField(verbose_name='Phone number', help_text='In case we need to call you about your order', blank=True)),
+                # ('phone_number', oscar.models.fields.PhoneNumberField(verbose_name='Phone number', help_text='In case we need to call you about your order', blank=True)),
+                ('phone_number', PhoneNumberField(verbose_name='Phone number', help_text='In case we need to call you about your order', blank=True)),
                 ('notes', models.TextField(verbose_name='Instructions', help_text='Tell us anything we should know when delivering your order.', blank=True)),
                 ('is_default_for_shipping', models.BooleanField(default=False, verbose_name='Default shipping address?')),
                 ('is_default_for_billing', models.BooleanField(default=False, verbose_name='Default billing address?')),
