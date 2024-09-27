@@ -2,6 +2,8 @@ from django.core.exceptions import ImproperlyConfigured
 
 import os
 import confy
+import decouple
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 confy.read_environment_file(BASE_DIR+"/.env")
 os.environ.setdefault("BASE_DIR", BASE_DIR)
@@ -200,3 +202,5 @@ LOGGING = {
         # },
     }
 }
+CSRF_TRUSTED_ORIGINS_STRING = decouple.config("CSRF_TRUSTED_ORIGINS", default='[]')
+CSRF_TRUSTED_ORIGINS = json.loads(str(CSRF_TRUSTED_ORIGINS_STRING))
