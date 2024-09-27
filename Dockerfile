@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1.2
 
 # Prepare the base environment.
-FROM ubuntu:22.04 as builder_base_feewaiver
+FROM ubuntu:24.04 as builder_base_feewaiver
 
 LABEL maintainer="asi@dbca.wa.gov.au"
 
@@ -42,15 +42,14 @@ RUN apt-get update && \
     python3 \
     python3-dev \
     python3-pip \
-    python3-distutils \
     python3-setuptools \
     software-properties-common \
     ssh \
     tzdata \
     vim \
-    wget && \
-    update-ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+    wget \
+    virtualenv 
+    # rm -rf /var/lib/apt/lists/*
 
 # RUN add-apt-repository ppa:deadsnakes/ppa && \
 #     apt-get update && \
@@ -67,52 +66,54 @@ RUN mkdir -p /etc/apt/keyrings && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
     | tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && \
-    apt-get install -y nodejs
+    apt-get install -y nodejs npm
+
+RUN groupadd -g 5000 oim 
+RUN useradd -g 5000 -u 5000 oim -s /bin/bash -d /app
+RUN mkdir /app 
+RUN chown -R oim.oim /app 
+
+COPY timezone /etc/timezone    
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+COPY startup.sh /
+RUN chmod 755 /startup.sh
+
+RUN wget https://raw.githubusercontent.com/dbca-wa/wagov_utils/main/wagov_utils/bin/default_script_installer.sh -O /tmp/default_script_installer.sh
+RUN chmod 755 /tmp/default_script_installer.sh
+RUN /tmp/default_script_installer.sh
 
 # Install Python libs from requirements.txt.
 FROM node_feewaiver as python_libs_feewaiver
 WORKDIR /app
+USER oim
+RUN virtualenv /app/venv
+ENV PATH=/app/venv/bin:$PATH
 COPY requirements.txt ./
 RUN touch /app/rand_hash
+RUN git config --global --add safe.directory /app
 RUN pip install --no-cache-dir -r requirements.txt
 # && \
 #    rm -rf /var/lib/{apt,dpkg,cache,log}/ /tmp/* /var/tmp/*
 
-# COPY libgeos.py.patch /app/
-# RUN patch /usr/local/lib/python3.9/dist-packages/django/contrib/gis/geos/libgeos.py /app/libgeos.py.patch && \
-#    rm /app/libgeos.py.patch
-
 # Install the project (ensure that frontend projects have been built prior to this step).
 FROM python_libs_feewaiver as build_vue_feewaiver
 
-COPY ledger ./ledger
-COPY feewaiver ./feewaiver
+COPY --chown=oim:oim ledger ./ledger
+COPY --chown=oim:oim feewaiver ./feewaiver
 RUN cd /app/feewaiver/frontend/feewaiver; npm install && \
     cd /app/feewaiver/frontend/feewaiver; npm run build
 
 FROM build_vue_feewaiver as collectstatic_feewaiver
 
 RUN touch /app/.env
-COPY manage_fw.py ./
+COPY --chown=oim:oim manage_fw.py ./
 RUN python3 manage_fw.py collectstatic --noinput
 
 FROM collectstatic_feewaiver as configure_feewaiver
 
 # COPY .git ./
-COPY gunicorn.ini ./
-COPY timezone /etc/timezone
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-    mkdir /app/tmp/ && \
-    chmod 777 /app/tmp/
-
-COPY cron /etc/cron.d/dockercron
-COPY startup.sh /
-
-# Configure cron (service is started in startup.sh)
-RUN chmod 0644 /etc/cron.d/dockercron && \
-    crontab /etc/cron.d/dockercron && \
-    touch /var/log/cron.log && \
-    chmod 755 /startup.sh
+COPY --chown=oim:oim gunicorn.ini ./
+COPY --chown=oim:oim python-cron ./
 
 # IPYTHONDIR - Will allow shell_plus (in Docker) to remember history between sessions
 RUN export IPYTHONDIR=/app/logs/.ipython/
