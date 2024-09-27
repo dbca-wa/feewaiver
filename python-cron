@@ -1,0 +1,2 @@
+# Syncing from IT Assets which has the latest information synced from webkiosk.
+0 8,10,12,14,16,18 * * * python /app/manage_fw.py sync_itassets_users > logs/sync_ad_users_itassets.log 2>&1
