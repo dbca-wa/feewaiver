@@ -20,7 +20,7 @@ datapackage==1.15.2
 # jsontableschema==0.10.1
 python-dateutil==2.6.1
 py4j==0.10.2.1
-djangorestframework==3.15.1
+djangorestframework~=3.15.2
 pycountry==17.1.8
 six>=1.16.0
 django-ical==1.4
