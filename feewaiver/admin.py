@@ -97,15 +97,20 @@ class ParticipantsAdmin(admin.ModelAdmin):
 
 @admin.register(Park)
 class ParkAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'district', 'get_email_list', 'entrance_fee',]
+    list_display = ['id', 'name', 'get_district', 'get_email_list', 'entrance_fee',]
     list_display_links = ['id', 'name',]
     list_filter = ['entrance_fee', 'district',]
     search_fields = ['id', 'name', 'email_list',]
     ordering = ('name',)
 
+    def get_district(self, obj):
+        if obj.district:
+            return mark_safe(f'<a href="/ledger/admin/feewaiver/district/{obj.district.id}/change/">{obj.district.name}</a>')
+        return '---'
+    get_district.short_description = 'District'
+
     def get_email_list(self, obj):
         return mark_safe('<br>'.join(obj.email_list.split(';')))
-
     get_email_list.short_description = 'Email List'
 
 
@@ -119,11 +124,17 @@ class RegionAdmin(admin.ModelAdmin):
 
 @admin.register(District)
 class DistrictAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'region']
+    list_display = ['id', 'name', 'get_region']
     list_display_links = ['id', 'name',]
     list_filter = ['region',]
     search_fields = ['id', 'name', 'region']
     ordering = ('name', 'region')
+
+    def get_region(self, obj):
+        if obj.region:
+            return mark_safe(f'<a href="/ledger/admin/feewaiver/region/{obj.region.id}/change/">{obj.region.name}</a>')
+        return '---'
+    get_region.short_description = 'Region'
 
 
 @admin.register(AssessorsGroup)
