@@ -124,10 +124,10 @@ if SESSION_COOKIE_DOMAIN:
 
 
 # Email settings
-ADMINS = ('asi@dpaw.wa.gov.au',)
+ADMINS = [('Admin', 'asi@dpaw.wa.gov.au'),]  # ADMINS must be a list of 2-tuples.
 EMAIL_HOST = env('EMAIL_HOST', 'email.host')
 EMAIL_PORT = env('EMAIL_PORT', 25)
-EMAIL_FROM = env('EMAIL_FROM', ADMINS[0])
+EMAIL_FROM = env('EMAIL_FROM', ADMINS[0][1])
 DEFAULT_FROM_EMAIL = EMAIL_FROM
 
 TEMPLATES = [
@@ -253,7 +253,6 @@ LOGGING = {
             'formatter': 'verbose',
             'maxBytes': 5242880
         },
-
         'ledger_bpoint': {
                'level': 'INFO',
                'class': 'logging.handlers.RotatingFileHandler',
@@ -261,8 +260,6 @@ LOGGING = {
                'formatter': 'verbose',
                'maxBytes': 5242880
          }
-
-
     },
     'loggers': {
         '': {
@@ -279,32 +276,6 @@ LOGGING = {
             'handlers': ['file'],
             'level': 'INFO'
         },
-        'wildlifelicensing': {
-            'handlers': ['file'],
-            'level': 'INFO'
-        },
-        'wildlifecompliance': {
-            'handlers': ['file'],
-            'level': 'INFO'
-        },
-#        'ledger_bpoint': { 
-#            'handlers': ['file'],
-#            'level': 'INFO',
-#        },
-#        'oscar.checkout': {
-#            'handlers': ['file'],
-#            'level': 'INFO',
-#
-#        }    
-        
-#        'oscar.checkout': {
-#            'handlers': ['file'],
-#            'level': 'INFO'
-#        },
-#        'bpoint_dpaw': {
-#            'handlers': ['file'],
-#            'level': 'INFO'
-#        }
     }
 }
 PAYMENT_LOGGING=env('PAYMENT_LOGGING','False')
