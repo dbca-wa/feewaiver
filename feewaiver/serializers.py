@@ -509,9 +509,9 @@ class FeeWaiverDTSerializer(serializers.ModelSerializer):
                 links +=  '<a href="{}" class="action-{}" data-decline="{}">Decline</a><br/>'.format(obj.id, obj.id, obj.id)
         # add Process/View
         if self.get_can_process(obj):
-            links += '<a class="process-view-{}" href=/internal/fee_waiver/{}>Process</a><br/>'.format(obj.id, obj.id);
+            links += '<a class="process-view-{}" href=/internal/fee_waiver/{}>Process</a><br/>'.format(obj.id, obj.id)
         else:
-            links += '<a class="process-view-{}" href=/internal/fee_waiver/{}>View</a><br/>'.format(obj.id, obj.id);
+            links += '<a class="process-view-{}" href=/internal/fee_waiver/{}>View</a><br/>'.format(obj.id, obj.id)
         return links
 
     def get_latest_feewaiver_document(self, obj):

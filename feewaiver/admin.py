@@ -8,6 +8,7 @@ from ledger.accounts.models import EmailUser
 from copy import deepcopy
 from feewaiver import forms
 from feewaiver.utils import to_local_tz
+from django.utils.safestring import mark_safe
 
 
 @admin.register(FeeWaiverWordTemplate)
@@ -77,6 +78,7 @@ class EmailUserAdmin(ledger_admin.EmailUserAdmin):
 @admin.register(FeeWaiver)
 class FeeWaiverAdmin(admin.ModelAdmin):
     list_display = ['id', 'lodgement_number', 'lodgement_date', 'fee_waiver_purpose', 'assigned_officer', 'finalised',]
+    list_display_links = ['id', 'lodgement_number',]
     list_filter = ['finalised',]
     search_fields = ['id', 'lodgement_number',]
 
@@ -95,16 +97,44 @@ class ParticipantsAdmin(admin.ModelAdmin):
 
 @admin.register(Park)
 class ParkAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'email_list', 'entrance_fee',]
+    list_display = ['id', 'name', 'get_district', 'get_email_list', 'entrance_fee',]
     list_display_links = ['id', 'name',]
-    list_filter = ['entrance_fee',]
+    list_filter = ['entrance_fee', 'district',]
     search_fields = ['id', 'name', 'email_list',]
     ordering = ('name',)
 
+    def get_district(self, obj):
+        if obj.district:
+            return mark_safe(f'<a href="/ledger/admin/feewaiver/district/{obj.district.id}/change/">{obj.district.name}</a>')
+        return '---'
+    get_district.short_description = 'District'
 
-#@admin.register(CampGround)
-#class CampGroundAdmin(admin.ModelAdmin):
- #   pass
+    def get_email_list(self, obj):
+        return mark_safe('<br>'.join(obj.email_list.split(';')))
+    get_email_list.short_description = 'Email List'
+
+
+@admin.register(Region)
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name',]
+    list_display_links = ['id', 'name',]
+    search_fields = ['id', 'name',]
+    ordering = ('name',)
+
+
+@admin.register(District)
+class DistrictAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'get_region']
+    list_display_links = ['id', 'name',]
+    list_filter = ['region',]
+    search_fields = ['id', 'name', 'region']
+    ordering = ('name', 'region')
+
+    def get_region(self, obj):
+        if obj.region:
+            return mark_safe(f'<a href="/ledger/admin/feewaiver/region/{obj.region.id}/change/">{obj.region.name}</a>')
+        return '---'
+    get_region.short_description = 'Region'
 
 
 @admin.register(AssessorsGroup)

@@ -124,10 +124,10 @@ if SESSION_COOKIE_DOMAIN:
 
 
 # Email settings
-ADMINS = ('asi@dpaw.wa.gov.au',)
+ADMINS = [('Admin', 'asi@dpaw.wa.gov.au'),]  # ADMINS must be a list of 2-tuples.
 EMAIL_HOST = env('EMAIL_HOST', 'email.host')
 EMAIL_PORT = env('EMAIL_PORT', 25)
-EMAIL_FROM = env('EMAIL_FROM', ADMINS[0])
+EMAIL_FROM = env('EMAIL_FROM', ADMINS[0][1])
 DEFAULT_FROM_EMAIL = EMAIL_FROM
 
 TEMPLATES = [
@@ -233,85 +233,6 @@ MEDIA_URL = '/media/'
 # Ensure that the logs directory exists:
 if not os.path.exists(os.path.join(BASE_DIR, 'logs')):
     os.mkdir(os.path.join(BASE_DIR, 'logs'))
-LOGGING = {
-    'version': 1,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': env('LOG_CONSOLE_LEVEL', 'INFO'),
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'ledger.log'),
-            'formatter': 'verbose',
-            'maxBytes': 5242880
-        },
-
-        'ledger_bpoint': {
-               'level': 'INFO',
-               'class': 'logging.handlers.RotatingFileHandler',
-               'filename': os.path.join(BASE_DIR, 'logs', 'ledger_bpoint.log'),
-               'formatter': 'verbose',
-               'maxBytes': 5242880
-         }
-
-
-    },
-    'loggers': {
-        '': {
-            'handlers': ['file', 'console'],
-            'level': env('LOG_CONSOLE_LEVEL', 'WARNING'),
-            'propagate': True
-        },
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'log': {
-            'handlers': ['file'],
-            'level': 'INFO'
-        },
-        'wildlifelicensing': {
-            'handlers': ['file'],
-            'level': 'INFO'
-        },
-        'wildlifecompliance': {
-            'handlers': ['file'],
-            'level': 'INFO'
-        },
-#        'ledger_bpoint': { 
-#            'handlers': ['file'],
-#            'level': 'INFO',
-#        },
-#        'oscar.checkout': {
-#            'handlers': ['file'],
-#            'level': 'INFO',
-#
-#        }    
-        
-#        'oscar.checkout': {
-#            'handlers': ['file'],
-#            'level': 'INFO'
-#        },
-#        'bpoint_dpaw': {
-#            'handlers': ['file'],
-#            'level': 'INFO'
-#        }
-    }
-}
-PAYMENT_LOGGING=env('PAYMENT_LOGGING','False')
-if PAYMENT_LOGGING == 'True' or PAYMENT_LOGGING is True:
-   LOGGING['loggers']['ledger_bpoint'] = { 'handlers': ['file'],'level': 'INFO', } 
-# LOGGING['loggers']['oscar.checkout'] = { 'handlers': ['file'],'level': 'INFO', } 
-   
 
 # django-dynamic-fields test generation settings
 DDF_FILL_NULLABLE_FIELDS = False
