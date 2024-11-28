@@ -43,6 +43,7 @@ class Park(models.Model):
     name = models.CharField(max_length=256, blank=True, default='')
     email_list = models.CharField(max_length=256, blank=True, null=True, help_text='email addresses should be separated by semi-colons')
     entrance_fee = models.BooleanField(default=False)
+    district = models.ForeignKey(District, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.name
