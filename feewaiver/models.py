@@ -24,6 +24,21 @@ class Participants(models.Model):
         ordering = ['name']
 
 
+class Region(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class District(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    region = models.ForeignKey(Region, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.name
+
+
 class Park(models.Model):
     name = models.CharField(max_length=256, blank=True, default='')
     email_list = models.CharField(max_length=256, blank=True, null=True, help_text='email addresses should be separated by semi-colons')
