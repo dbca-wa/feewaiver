@@ -800,8 +800,8 @@ class TemporaryDocumentCollectionViewSet(viewsets.ModelViewSet):
     # Designed for uploading comms_log files within "create" modals when no parent entity instance yet exists
     # response returned to compliance_file.vue
     def process_temp_document(self, request, *args, **kwargs):
-        print("process_temp_document")
-        print(request.data)
+        logger.info(f'process_temp_document: {request.data}')
+
         try:
             instance = self.get_object()
             action = request.data.get('action')
@@ -826,6 +826,6 @@ class TemporaryDocumentCollectionViewSet(viewsets.ModelViewSet):
             return Response({'filedata': returned_file_data})
 
         except Exception as e:
-            print(traceback.print_exc())
+            logger.error(traceback.print_exc())
             raise e
 

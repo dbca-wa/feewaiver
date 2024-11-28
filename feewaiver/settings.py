@@ -203,5 +203,8 @@ LOGGING = {
         # },
     }
 }
+PAYMENT_LOGGING=env('PAYMENT_LOGGING','False')
+if PAYMENT_LOGGING == 'True' or PAYMENT_LOGGING is True:
+   LOGGING['loggers']['ledger_bpoint'] = { 'handlers': ['file'],'level': 'INFO', } 
 CSRF_TRUSTED_ORIGINS_STRING = decouple.config("CSRF_TRUSTED_ORIGINS", default='[]')
 CSRF_TRUSTED_ORIGINS = json.loads(str(CSRF_TRUSTED_ORIGINS_STRING))
