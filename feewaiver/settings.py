@@ -208,3 +208,8 @@ if PAYMENT_LOGGING == 'True' or PAYMENT_LOGGING is True:
    LOGGING['loggers']['ledger_bpoint'] = { 'handlers': ['file'],'level': 'INFO', } 
 CSRF_TRUSTED_ORIGINS_STRING = decouple.config("CSRF_TRUSTED_ORIGINS", default='[]')
 CSRF_TRUSTED_ORIGINS = json.loads(str(CSRF_TRUSTED_ORIGINS_STRING))
+
+# This is needed so that the chmod is not called in django/core/files/storage.py
+# (_save method of FileSystemStorage class)
+# As it causes a permission exception when using azure network drives
+FILE_UPLOAD_PERMISSIONS = None
