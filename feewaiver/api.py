@@ -747,7 +747,7 @@ class TemporaryDocumentCollectionViewSet(viewsets.ModelViewSet):
 
                     return Response(serializer.data)
         except serializers.ValidationError:
-            print(traceback.print_exc())
+            logger.error(traceback.print_exc())
             raise
         except ValidationError as e:
             if hasattr(e, 'error_dict'):
@@ -755,7 +755,7 @@ class TemporaryDocumentCollectionViewSet(viewsets.ModelViewSet):
             else:
                 raise serializers.ValidationError(repr(e[0].encode('utf-8')))
         except Exception as e:
-            print(traceback.print_exc())
+            logger.error(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
     # @detail_route(methods=['POST'])
@@ -791,7 +791,7 @@ class TemporaryDocumentCollectionViewSet(viewsets.ModelViewSet):
             return Response({'filedata': returned_file_data})
 
         except Exception as e:
-            print(traceback.print_exc())
+            logger.error(traceback.print_exc())
             raise e
 
     # @detail_route(methods=['POST'])
