@@ -43,6 +43,7 @@ urlpatterns = [
     re_path(r'^mgt-commands/$', views.ManagementCommandsView.as_view(), name='mgt-commands'),
     re_path(r'^internal/fee_waiver/(?P<feewaiver_pk>\d+)/$', views.InternalFeeWaiverView.as_view(), name='internal-feewaiver-detail'),
     re_path(r'^history/fee_waiver/(?P<pk>\d+)/$', views.FeeWaiverHistoryCompareView.as_view(), name='feewaiver_history'),
+    path('private-media/<path:path>/', views.serve_private_file, name='serve_private_file'),
 ]  + ledger_patterns
 
 if settings.DEBUG:  # Serve media locally in development.

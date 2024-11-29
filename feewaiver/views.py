@@ -1,34 +1,24 @@
-from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.urls import reverse
+import os
+from django.http import Http404, FileResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from django.template.response import TemplateResponse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, FormView
-from django.views.generic.base import View, TemplateView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView
+from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
-from django.views.decorators.csrf import csrf_protect
-from django.core.exceptions import ValidationError
-from django.db import transaction
 from reversion_compare.views import HistoryCompareDetailView
-
-from datetime import datetime, timedelta
 
 from feewaiver.helpers import is_internal
 from feewaiver.forms import *
 from django.core.management import call_command
-import json
-from decimal import Decimal
 from feewaiver.serializers import (
         ParticipantsSerializer,
         ParkSerializer,
-        CampGroundSerializer,
 )
 from feewaiver.models import (
         FeeWaiverVisit,
         Participants,
         Park,
-        CampGround,
         FeeWaiver
 )
 
@@ -148,3 +138,10 @@ class FeeWaiverAdminDataView(ListView):
             })
         return response
 
+
+@login_required
+def serve_private_file(request, path):
+    full_path = os.path.join(settings.PRIVATE_MEDIA_ROOT, path)
+    if os.path.exists(full_path):
+        return FileResponse(open(full_path, 'rb'))
+    raise Http404("File not found")
