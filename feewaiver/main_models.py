@@ -5,7 +5,7 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_delete
 # from django.utils.encoding import python_2_unicode_compatible
-from django.core.exceptions import ValidationError
+from feewaiver.storage import PrivateMediaStorage
 from ledger.accounts.models import EmailUser  #, RevisionedMixin
 from django.contrib.postgres.fields.jsonb import JSONField
 from datetime import datetime
@@ -104,7 +104,11 @@ def update_feewaiver_word_filename(instance, filename):
 
 
 class FeeWaiverWordTemplate(models.Model):
-    _file = models.FileField(upload_to=update_feewaiver_word_filename, max_length=255)
+    _file = models.FileField(
+        storage=PrivateMediaStorage(),
+        upload_to=update_feewaiver_word_filename,
+        max_length=255
+    )
     uploaded_date = models.DateTimeField(auto_now_add=True, editable=False)
     description = models.TextField(blank=True,
                                    verbose_name='description', help_text='')
@@ -149,7 +153,10 @@ class TemporaryDocument(Document):
         TemporaryDocumentCollection,
         related_name='documents',
         on_delete=models.CASCADE)
-    _file = models.FileField(max_length=255)
+    _file = models.FileField(
+        storage=PrivateMediaStorage(),
+        max_length=255
+    )
 
     class Meta:
         app_label = 'feewaiver'

@@ -213,3 +213,11 @@ CSRF_TRUSTED_ORIGINS = json.loads(str(CSRF_TRUSTED_ORIGINS_STRING))
 # (_save method of FileSystemStorage class)
 # As it causes a permission exception when using azure network drives
 FILE_UPLOAD_PERMISSIONS = None
+
+# Define the private media root and URL
+PRIVATE_MEDIA_ROOT = os.path.join(BASE_DIR, 'private-media')
+PRIVATE_MEDIA_URL = '/private-media/'
+# Ensure the private media directory exists
+if not os.path.exists(PRIVATE_MEDIA_ROOT):
+    os.makedirs(PRIVATE_MEDIA_ROOT)
+DEFAULT_FILE_STORAGE = 'feewaiver.storage.PrivateMediaStorage'
