@@ -2,8 +2,7 @@ from django.core.files.storage import default_storage
 import os
 from django.core.files.base import ContentFile
 import traceback
-from feewaiver.main_models import TemporaryDocument, EmailUser
-from django.conf import settings
+from feewaiver.main_models import EmailUser
 from feewaiver.models import FeeWaiverUserAction
 from django.contrib import auth
 

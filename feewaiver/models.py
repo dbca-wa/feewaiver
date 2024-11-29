@@ -1,5 +1,6 @@
 from django.db import models
 from feewaiver.main_models import CommunicationsLogEntry, UserAction, Document
+from feewaiver.storage import PrivateMediaStorage
 from ledger.accounts.models import EmailUser, RevisionedMixin
 from django.contrib.postgres.fields import ArrayField
 from feewaiver.exceptions import FeeWaiverNotAuthorized
@@ -268,7 +269,11 @@ class FeeWaiver(RevisionedMixin):
 
 class FeeWaiverDocument(Document):
     feewaiver = models.ForeignKey(FeeWaiver,related_name='documents', blank=True, null=True, on_delete=models.SET_NULL)
-    _file = models.FileField(upload_to=update_feewaiver_doc_filename, max_length=255)
+    _file = models.FileField(
+        storage=PrivateMediaStorage(),
+        upload_to=update_feewaiver_doc_filename,
+        max_length=255
+    )
 
     class Meta:
         app_label = 'feewaiver'
@@ -318,7 +323,11 @@ class FeeWaiverVisit(RevisionedMixin):
 
 class ContactDetailsDocument(Document):
     contact_details = models.ForeignKey(ContactDetails,related_name='documents', blank=True, null=True, on_delete=models.SET_NULL)
-    _file = models.FileField(null=True, max_length=255)
+    _file = models.FileField(
+        storage=PrivateMediaStorage(),
+        null=True,
+        max_length=255
+    )
     can_delete = models.BooleanField(default=True) # after initial submit prevent document from being deleted
 
     def delete(self):
@@ -339,7 +348,11 @@ class FeeWaiverLogEntry(CommunicationsLogEntry):
 
 class FeeWaiverLogDocument(Document):
     log_entry = models.ForeignKey(FeeWaiverLogEntry,related_name='documents', null=True, on_delete=models.SET_NULL)
-    _file = models.FileField(null=True, max_length=255)
+    _file = models.FileField(
+        storage=PrivateMediaStorage(),
+        null=True,
+        max_length=255
+    )
 
     class Meta:
         app_label = 'feewaiver'
