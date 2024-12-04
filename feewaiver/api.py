@@ -290,10 +290,15 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 instance = self.get_object()
-                request.data['fee_waiver'] = u'{}'.format(instance.id)
-                serializer = FeeWaiverLogEntrySerializer(data=request.data)
+                # request.data['fee_waiver'] = u'{}'.format(instance.id)
+                # serializer = FeeWaiverLogEntrySerializer(data=request.data)
+                data = request.data.copy()
+                data['fee_waiver'] = instance.id
+                serializer = FeeWaiverLogEntrySerializer(data=data)
                 serializer.is_valid(raise_exception=True)
                 comms = serializer.save()
+                logger.info(f'Comms log: [{comms}] has been created for FeeWaiver: [{instance}] by user: [{request.user}]')
+
                 # Save the files
                 for f in request.FILES:
                     document = comms.documents.create()
