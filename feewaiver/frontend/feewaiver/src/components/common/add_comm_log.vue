@@ -170,7 +170,6 @@ export default {
             }
         },
         uploadFile(target, file_obj){
-            console.log('uploadFile')
             let vm = this;
             let _file = null;
             var input = $('.'+target)[0];
@@ -186,25 +185,27 @@ export default {
             file_obj.name = _file.name;
         },
         removeFile(index){
-            let length = this.files.length;
-            $('.file-row-'+index).remove();
+            console.log({index})
+
+            // let length = this.files.length;
+            // $('.file-row-'+index).remove();
             this.files.splice(index,1);
-            this.$nextTick(() => {
-                length == 1 ? this.attachAnother() : '';
-            });
+            // this.$nextTick(() => {
+            //     length == 1 ? this.attachAnother() : '';
+            // });
         },
         attachAnother(){
+            console.log('in attach another')
+
             this.files.push({
                 'file': null,
                 'name': ''
             })
         },
         cancel:function () {
-            console.log('cancel')
             this.close()
         },
         close:function () {
-            console.log('close')
             let vm = this;
             vm.isModalOpen = false;
             vm.comms = {};
@@ -213,14 +214,10 @@ export default {
             vm.validation_form.resetForm();
             let file_length = vm.files.length;
 
-
             // Reset all file input fields
             for (let i = 0; i < file_length; i++) {
                 if (vm.$refs['fileInput-' + i]) {
-                    console.log('resetting file input: ' + i);
                     vm.$refs['fileInput-' + i].value = '';
-                } else {
-                    console.log('file input not found: ' + i);
                 }
             }
 
@@ -231,10 +228,6 @@ export default {
             }
 
             vm.files = [];
-            console.log('vm.files.length: ' + vm.files.length)
-            console.log('vm.files: ' + vm.files)
-
-            // vm.attachAnother();
 
             // Update modalKey to force re-render of modal
             vm.updateModalKey();
@@ -244,15 +237,6 @@ export default {
             let vm = this;
             vm.errors = false;
             let comms = new FormData(vm.form); 
-                // Collect file data
-            console.log('vm.files.length: ' + vm.files.length)
-            console.log('vm.files: ' + vm.files)
-
-            for (let i = 0; i < vm.files.length; i++) {
-                if (vm.files[i].file) {
-                    comms.append('files[]', vm.files[i].file);
-                }
-            }
 
             vm.addingComms = true;
             vm.$http.post(vm.url, comms,{
