@@ -185,18 +185,9 @@ export default {
             file_obj.name = _file.name;
         },
         removeFile(index){
-            console.log({index})
-
-            // let length = this.files.length;
-            // $('.file-row-'+index).remove();
             this.files.splice(index,1);
-            // this.$nextTick(() => {
-            //     length == 1 ? this.attachAnother() : '';
-            // });
         },
         attachAnother(){
-            console.log('in attach another')
-
             this.files.push({
                 'file': null,
                 'name': ''
