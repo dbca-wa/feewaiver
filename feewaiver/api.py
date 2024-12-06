@@ -290,27 +290,34 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 instance = self.get_object()
-                request.data['fee_waiver'] = u'{}'.format(instance.id)
-                serializer = FeeWaiverLogEntrySerializer(data=request.data)
+
+                # Create a mutable copy of the non-file data
+                data = request.data.dict()
+                data['fee_waiver'] = instance.id
+
+                serializer = FeeWaiverLogEntrySerializer(data=data)
                 serializer.is_valid(raise_exception=True)
                 comms = serializer.save()
+                logger.info(f'Comms log: [{comms}] has been created for FeeWaiver: [{instance}] by user: [{request.user}]')
+
                 # Save the files
                 for f in request.FILES:
                     document = comms.documents.create()
                     document.name = str(request.FILES[f])
                     document._file = request.FILES[f]
                     document.save()
+                    logger.info(f'Comms log document(file): [{document}] has been created for Comms log: [{comms}]')
                 # End Save Documents
 
                 return Response(serializer.data)
         except serializers.ValidationError:
-            print(traceback.print_exc())
+            logger.error(traceback.print_exc())
             raise
         except ValidationError as e:
-            print(traceback.print_exc())
+            logger.error(traceback.print_exc())
             raise serializers.ValidationError(repr(e.error_dict))
         except Exception as e:
-            print(traceback.print_exc())
+            logger.error(traceback.print_exc())
             raise serializers.ValidationError(str(e))
 
 

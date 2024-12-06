@@ -431,6 +431,7 @@ export default {
             }
         },
         addComm(){
+            // this.$refs.add_comm.modalKey = true;
             this.$refs.add_comm.isModalOpen = true;
         }
     },

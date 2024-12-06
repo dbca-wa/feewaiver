@@ -1,5 +1,6 @@
 <template lang="html">
     <div id="AddComms">
+        <!-- <modal :key="modalKey" transition="modal fade" @ok="ok()" @cancel="cancel()" title="Communication log - Add entry" large> -->
         <modal transition="modal fade" @ok="ok()" @cancel="cancel()" title="Communication log - Add entry" large>
             <div class="container-fluid">
                 <div class="row">
@@ -71,10 +72,10 @@
                                             <div :class="'row top-buffer file-row-'+i">
                                                 <div class="col-sm-4">
                                                     <span v-if="f.file == null" class="btn btn-info btn-file pull-left">
-                                                        Attach File <input type="file" :name="'file-upload-'+i" :class="'file-upload-'+i" @change="uploadFile('file-upload-'+i,f)"/>
+                                                        Attach File <input type="file" :name="'file-upload-'+i" :class="'file-upload-'+i" @change="uploadFile('file-upload-'+i,f)" :ref="'fileInput-' + i"/>
                                                     </span>
                                                     <span v-else class="btn btn-info btn-file pull-left">
-                                                        Update File <input type="file" :name="'file-upload-'+i" :class="'file-upload-'+i" @change="uploadFile('file-upload-'+i,f)"/>
+                                                        Update File <input type="file" :name="'file-upload-'+i" :class="'file-upload-'+i" @change="uploadFile('file-upload-'+i,f)" :ref="'fileInput-' + i"/>
                                                     </span>
                                                 </div>
                                                 <div class="col-sm-4">
@@ -139,12 +140,14 @@ export default {
                 keepInvalid:true,
                 allowInputToggle:true
             },
-            files: [
-                {
-                    'file': null,
-                    'name': ''
-                }
-            ]
+            // files: [
+            //     {
+            //         'file': null,
+            //         'name': ''
+            //     }
+            // ],
+            files: [],
+            modalKey: Math.random().toString(36).substring(2, 9)
         }
     },
     computed: {
@@ -157,13 +160,16 @@ export default {
         }
     },
     methods:{
+        updateModalKey: function() {
+            this.modalKey = Math.random().toString(36).substring(2, 9);
+        },
         ok:function () {
             let vm =this;
             if($(vm.form).valid()){
                 vm.sendData();
             }
         },
-        uploadFile(target,file_obj){
+        uploadFile(target, file_obj){
             let vm = this;
             let _file = null;
             var input = $('.'+target)[0];
@@ -179,12 +185,7 @@ export default {
             file_obj.name = _file.name;
         },
         removeFile(index){
-            let length = this.files.length;
-            $('.file-row-'+index).remove();
             this.files.splice(index,1);
-            this.$nextTick(() => {
-                length == 1 ? this.attachAnother() : '';
-            });
         },
         attachAnother(){
             this.files.push({
@@ -197,26 +198,39 @@ export default {
         },
         close:function () {
             let vm = this;
-            this.isModalOpen = false;
-            this.comms = {};
-            this.errors = false;
+            vm.isModalOpen = false;
+            vm.comms = {};
+            vm.errors = false;
             $('.has-error').removeClass('has-error');
-            this.validation_form.resetForm();
+            vm.validation_form.resetForm();
             let file_length = vm.files.length;
-            this.files = [];
-            for (var i = 0; i < file_length;i++){
+
+            // Reset all file input fields
+            for (let i = 0; i < file_length; i++) {
+                if (vm.$refs['fileInput-' + i]) {
+                    vm.$refs['fileInput-' + i].value = '';
+                }
+            }
+
+            for (var i = 0; i < file_length; i++){
                 vm.$nextTick(() => {
                     $('.file-row-'+i).remove();
                 });
             }
-            this.attachAnother();
+
+            vm.files = [];
+
+            // Update modalKey to force re-render of modal
+            vm.updateModalKey();
+            vm.form = document.forms.commsForm;
         },
         sendData:function(){
             let vm = this;
             vm.errors = false;
             let comms = new FormData(vm.form); 
+
             vm.addingComms = true;
-            vm.$http.post(vm.url,comms,{
+            vm.$http.post(vm.url, comms,{
                 }).then((response)=>{
                     vm.addingComms = false;
                     vm.close();
@@ -226,7 +240,6 @@ export default {
                     vm.addingComms = false;
                     vm.errorString = helpers.apiVueResourceError(error);
                 });
-            
         },
         addFormValidations: function() {
             let vm = this;
