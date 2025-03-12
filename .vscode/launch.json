@@ -20,7 +20,7 @@
         {
             "type": "chrome",
             "request": "launch",
-            "env": { "PORT": "9073" },
+            "env": { "PORT": "8080" },
             "name": "Node: Chrome",
             "url": "http://localhost:9071",
             "webRoot": "${workspaceFolder}/feewaiver/frontend/feewaiver/",
