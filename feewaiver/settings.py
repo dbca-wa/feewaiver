@@ -159,7 +159,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
-
+DEFAULT_LOGGING["loggers"]["django"]["handlers"] = ["console"]
 LOGGING = {
     "version": 1,
     'formatters': {
@@ -221,3 +221,7 @@ PRIVATE_MEDIA_URL = '/private-media/'
 if not os.path.exists(PRIVATE_MEDIA_ROOT):
     os.makedirs(PRIVATE_MEDIA_ROOT)
 DEFAULT_FILE_STORAGE = 'feewaiver.storage.PrivateMediaStorage'
+
+# from pprint import pprint
+# print("\n=== LOGGING Configuration ===\n")
+# pprint(LOGGING, indent=2, width=80)
