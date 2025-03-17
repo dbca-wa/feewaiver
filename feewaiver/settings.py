@@ -160,7 +160,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
-DEFAULT_LOGGING["loggers"]["django"]["handlers"] = ["console"]
+
+DEFAULT_LOGGING["loggers"]["django"]["handlers"] = ["console"]  # Remove mail_admins handler, original value: ["console", "mail_admins"]
+
 LOGGING = {
     "version": 1,
     'formatters': {
