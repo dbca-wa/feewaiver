@@ -1,4 +1,5 @@
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.log import DEFAULT_LOGGING
 
 import os
 import confy
@@ -159,6 +160,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
+
+DEFAULT_LOGGING["loggers"]["django"]["handlers"] = ["console"]  # Remove mail_admins handler, original value: ["console", "mail_admins"]
 
 LOGGING = {
     "version": 1,
