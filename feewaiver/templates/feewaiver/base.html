@@ -145,8 +145,7 @@
         {% block modals %}
         {% endblock %}
         {% if not dev %}
-            <script type="text/javascript" src="{% static 'feewaiver_vue/js/manifest.js' %}?v={{GIT_COMMIT_HASH}}"></script>
-            <script type="text/javascript" src="{% static 'feewaiver_vue/js/vendor.js' %}?v={{GIT_COMMIT_HASH}}"></script>
+            <script type="text/javascript" src="{% static 'feewaiver_vue/js/chunk-vendors.js' %}?v={{GIT_COMMIT_HASH}}"></script>
             {% if app_build_url %}
                 <script type="text/javascript" src="{{ app_build_url }}"></script>
             {% else %}
