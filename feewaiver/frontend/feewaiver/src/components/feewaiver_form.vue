@@ -194,6 +194,7 @@
     require("select2");
     import VisitSection from "./feewaiver_visit.vue"
     import FileField from '@/components/forms/filefield_immediate.vue'
+    import Swal from 'sweetalert2';
 
     export default {
         name: 'FeeWaiverForm',
@@ -415,10 +416,10 @@
                     let swalTitle = "Submit Request";
                     let swalText = "Are you sure you want to submit this request?";
                     await this.updatePayload();
-                    await swal({
+                    await Swal.fire({
                         title: swalTitle,
                         text: swalText,
-                        type: "question",
+                        icon: "question",
                         showCancelButton: true,
                         confirmButtonText: 'Submit'
                     });
@@ -436,10 +437,10 @@
                             // remove the {} from the data string with slice
                             swalText = error.data[0].slice(1,-1);
                         }
-                        await swal({
+                        await Swal.fire({
                             title: swalTitle,
                             text: swalText,
-                            type: "error",
+                            icon: "error",
                             //showCancelButton: true,
                             confirmButtonText: 'Ok'
                         });
@@ -493,7 +494,7 @@
                 let url = `/api/feewaivers/${this.feeWaiverId}/assessor_save/`;
                 const feeWaiverRes = await this.$http.post(url, this.payload);
                 if (confirmSave) {
-                    swal(
+                    Swal.fire(
                         'Saved',
                         'Fee Waiver has been saved',
                         'success'
