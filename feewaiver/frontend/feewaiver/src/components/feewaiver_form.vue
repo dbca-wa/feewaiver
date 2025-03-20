@@ -16,8 +16,8 @@
             </strong>
         </div>
         <FormSection :formCollapse="false" label="Contact Details" Index="contact_details" :noChevron="!isInternal">
-            <div class="col-md-12">
-                <div class="form-group">
+            <!-- <div class="col-md-12"> -->
+                <!-- <div class="form-group"> -->
                     <div class="row">
                     <label for="" class="col-sm-2 control-label">Organisation</label>
                     <div class="col-sm-4">
@@ -28,16 +28,16 @@
                         <input :disabled="readonly" required type="text" class="form-control" name="contact_name" placeholder="" v-model="contactDetails.contact_name">
                     </div>
                     </div>
-                </div>
-                <div class="form-group">
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
                     <div class="row">
                     <label for="" class="col-sm-2 control-label">Postal Address</label>
                     <div class="col-sm-4">
                         <input :disabled="readonly" required type="text" class="form-control" name="postal_address" placeholder="" v-model="contactDetails.postal_address">
                     </div>
                     </div>
-                </div>
-                <div class="form-group">
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
                     <div class="row">
                     <label for="suburb" class="col-sm-2 control-label">Suburb</label>
                     <div class="col-sm-4">
@@ -52,16 +52,16 @@
                         <input :disabled="readonly" required type="text" class="form-control" name="postcode" placeholder="" v-model="contactDetails.postcode">
                     </div>
                     </div>
-                </div>
-                <div class="form-group">
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
                     <div class="row">
                     <label for="phone" class="col-sm-2 control-label">Phone</label>
                     <div class="col-sm-4">
                     <input :disabled="readonly" required type="text" class="form-control" name="phone" placeholder="" v-model="contactDetails.phone">
                     </div>
                     </div>
-                </div>
-                <div class="form-group">
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
                     <div class="row">
                         <label for="email" class="col-sm-2 control-label">Email</label>
                         <div class="col-sm-4">
@@ -73,8 +73,8 @@
                         <input :disabled="readonly" required type="email" class="form-control" name="email_confirmation" placeholder="" v-model="contactDetails.email_confirmation" id="email_confirmation">
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
                     <div class="row">
                         <label for="email" class="col-sm-2 control-label">CC Email (if applicable)</label>
                         <div class="col-sm-4">
@@ -82,8 +82,8 @@
                             <span class="error" aria-live="polite"></span>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
                     <div class="row">
                         <label class="col-sm-4 control-label">Participants</label>
                         <div class="col-sm-6">
@@ -93,16 +93,16 @@
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
                     <div class="row">
                       <label class="col-sm-4 control-label">Provide a brief explanation of your organisation</label>
                       <div class="col-sm-8">
                           <textarea :disabled="readonly" required class="form-control" v-model="contactDetails.organisation_description"/>
                       </div>
                     </div>
-                </div>
-                <div class="form-group">
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
                     <div class="row">
                       <label class="col-sm-4 control-label">Attach any other documentation you want to provide</label>
                       <div class="col-sm-8">
@@ -119,8 +119,8 @@
                           />
                       </div>
                     </div>
-                </div>
-            </div>
+                <!-- </div> -->
+            <!-- </div> -->
         </FormSection>
         <div v-for="visit in visits" >
             <VisitSection 
@@ -188,10 +188,11 @@
     import { api_endpoints, helpers }from '@/utils/hooks'
     import FormSection from "@/components/forms/section_toggle.vue"
     import 'bootstrap/dist/css/bootstrap.css';
+    import 'bootstrap/dist/js/bootstrap.bundle.min.js';
     import 'eonasdan-bootstrap-datetimepicker';
-    require("select2/dist/css/select2.min.css");
-    require("select2-bootstrap-theme/dist/select2-bootstrap.min.css");
-    require("select2");
+    // require("select2/dist/css/select2.min.css");
+    // require("select2-bootstrap-theme/dist/select2-bootstrap.min.css");
+    // require("select2");
     import VisitSection from "./feewaiver_visit.vue"
     import FileField from '@/components/forms/filefield_immediate.vue'
     import Swal from 'sweetalert2';

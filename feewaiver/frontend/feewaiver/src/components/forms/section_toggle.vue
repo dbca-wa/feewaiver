@@ -46,10 +46,10 @@ export default {
             } else {
                 if (this.treeHeight) {
                     this.panel_chevron_class = "glyphicon glyphicon-chevron-up pull-right";
-                    return "panel-body collapse in flex-container";
+                    return "panel-body collapse show flex-container";
                 } else {
                     this.panel_chevron_class = "glyphicon glyphicon-chevron-up pull-right";
-                    return "panel-body collapse in";
+                    return "panel-body collapse show";
                 }
             }
         },
