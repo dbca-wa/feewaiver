@@ -190,9 +190,6 @@
     import 'bootstrap/dist/css/bootstrap.css';
     import 'bootstrap/dist/js/bootstrap.bundle.min.js';
     import 'eonasdan-bootstrap-datetimepicker';
-    // require("select2/dist/css/select2.min.css");
-    // require("select2-bootstrap-theme/dist/select2-bootstrap.min.css");
-    // require("select2");
     import VisitSection from "./feewaiver_visit.vue"
     import FileField from '@/components/forms/filefield_immediate.vue'
     import Swal from 'sweetalert2';
