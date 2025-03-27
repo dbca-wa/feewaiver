@@ -13,7 +13,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Date/Time:</strong></td>
-                                <td><strong> {{feeWaiver.lodgement_date|formatDate}}</strong></td>
+                                <td><strong> {{formatDate(feeWaiver.lodgement_date)}}</strong></td>
                             </tr>
                         </table>
                         <router-link :to="{name:'external-feewaiver-form'}" style="margin-top:15px;" class="btn btn-primary">Lodge another request</router-link>
@@ -28,18 +28,15 @@
     </div>
 </template>
 <script>
-import Vue from 'vue'
-import {
-  api_endpoints,
-  helpers
-}
-from '@/utils/hooks'
-//import utils from './utils'
+
+import moment from 'moment';
+
 export default {
   data: function() {
     let vm = this;
     return {
         "feeWaiver": {},
+        "dataLoaded": false
     }
   },
   components: {
@@ -47,26 +44,54 @@ export default {
   computed: {
   },
   methods: {
+    formatDate(data) {
+        return data ? moment(data).format('DD/MM/YYYY HH:mm:ss') : '';
+    }
   },
-  filters:{
-        formatDate: function(data){
-            return data ? moment(data).format('DD/MM/YYYY HH:mm:ss'): '';
-        }
-  },
+//   filters:{
+//         formatDate: function(data){
+//             return data ? moment(data).format('DD/MM/YYYY HH:mm:ss'): '';
+//         }
+//   },
   mounted: function() {
       this.$nextTick(() => {
-          if (!Object.keys(this.feeWaiver).length) {
+          if (this.dataLoaded && !Object.keys(this.feeWaiver).length) {
               this.$router.push({
                   name: 'external-feewaiver-form',
               });
           }
       });
   },
-  beforeRouteEnter: function(to, from, next) {
-    next(vm => {
-        vm.feeWaiver = Object.assign({}, to.params.fee_waiver);
-    })
-  }
+//   beforeRouteEnter: function(to, from, next) {
+//     next(vm => {
+//         // vm.feeWaiver = Object.assign({}, to.params.fee_waiver);
+//         const router = useRouter();
+//         const feeWaiverData = router.currentRoute.value.state.fee_waiver;
+//         vm.feeWaiver = Object.assign({}, feeWaiverData);
+//     })
+//   }
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            // if (history.state && history.state.state && history.state.state.fee_waiver) {
+            //     vm.feeWaiver = Object.assign({}, history.state.state.fee_waiver);
+            // }
+                  // Try to get data from history state
+            if (history.state && history.state.state && history.state.state.fee_waiver) {
+                vm.feeWaiver = Object.assign({}, history.state.state.fee_waiver);
+            }
+            
+            // Mark that we attempted to load data
+            vm.dataLoaded = true;
+            
+            // If no data was found and we're not coming from the form page,
+            // redirect to the form page
+            if (!Object.keys(vm.feeWaiver).length && from.name !== 'external-feewaiver-form') {
+                vm.$router.push({
+                name: 'external-feewaiver-form',
+                });
+            }
+        });
+    }
 }
 </script>
 

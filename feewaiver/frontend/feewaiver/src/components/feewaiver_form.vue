@@ -422,11 +422,12 @@
                     });
                     try {
                         const returnedFeeWaiver = await this.$http.post(api_endpoints.feewaivers,this.payload);
+                        
                         this.$router.push({
                             name: 'submit_feewaiver',
-                            params: { fee_waiver: returnedFeeWaiver.data}
+                            // params: { fee_waiver: returnedFeeWaiver.data}
+                            state: { fee_waiver: returnedFeeWaiver.data }
                         });
-
                     } catch (error) {
                         let swalTitle = "Error";
                         let swalText = error.data[0];
