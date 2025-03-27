@@ -424,7 +424,7 @@
                         const returnedFeeWaiver = await this.$http.post(api_endpoints.feewaivers,this.payload);
                         this.$router.push({
                             name: 'submit_feewaiver',
-                            params: { fee_waiver: returnedFeeWaiver.body}
+                            params: { fee_waiver: returnedFeeWaiver.data}
                         });
 
                     } catch (error) {
@@ -502,13 +502,14 @@
             fetchAdminData: async function() {
                 this.participantGroupList = [];
                 const response = await this.$http.get(api_endpoints.admin_data);
-                for (let group of response.body.participants_list) {
+
+                for (let group of response.data.participants_list) {
                     this.participantGroupList.push(group)
                 }
-                for (let group of response.body.parks_list) {
+                for (let group of response.data.parks_list) {
                     this.parksList.push(group)
                 }
-                for (let choice of response.body.camping_choices) {
+                for (let choice of response.data.camping_choices) {
                     this.campingChoices.push(choice)
                 }
             },
@@ -516,17 +517,17 @@
                 const url = api_endpoints.feewaivers + this.feeWaiverId + '/feewaiver_contactdetails_pack/';
 
                 const returnVal = await this.$http.get(url);
-                this.feeWaiver.id = returnVal.body.fee_waiver.id;
-                this.feeWaiver.lodgement_number = returnVal.body.fee_waiver.lodgement_number;
-                this.feeWaiver.fee_waiver_purpose = returnVal.body.fee_waiver.fee_waiver_purpose;
-                this.feeWaiver.comments_to_applicant = returnVal.body.fee_waiver.comments_to_applicant;
-                this.feeWaiver.assigned_officer = returnVal.body.fee_waiver.assigned_officer;
-                this.feeWaiver.assigned_officer_id = returnVal.body.fee_waiver.assigned_officer_id;
-                this.feeWaiver.can_process = returnVal.body.fee_waiver.can_process;
+                this.feeWaiver.id = returnVal.data.fee_waiver.id;
+                this.feeWaiver.lodgement_number = returnVal.data.fee_waiver.lodgement_number;
+                this.feeWaiver.fee_waiver_purpose = returnVal.data.fee_waiver.fee_waiver_purpose;
+                this.feeWaiver.comments_to_applicant = returnVal.data.fee_waiver.comments_to_applicant;
+                this.feeWaiver.assigned_officer = returnVal.data.fee_waiver.assigned_officer;
+                this.feeWaiver.assigned_officer_id = returnVal.data.fee_waiver.assigned_officer_id;
+                this.feeWaiver.can_process = returnVal.data.fee_waiver.can_process;
                 // visits should be empty if reading from backend
                 this.visits = []
                 //this.visitIdx = -1;
-                for (let retrievedVisit of returnVal.body.fee_waiver.visits) {
+                for (let retrievedVisit of returnVal.data.fee_waiver.visits) {
                     let visit = Object.assign({}, retrievedVisit);
                     // we are now saving the index to db
                     visit.date_to = moment(visit.date_to, 'YYYY-MM-DD').format('DD/MM/YYYY');
@@ -538,7 +539,7 @@
                 this.visits.sort(function(a, b) {
                     return a.index - b.index
                 });
-                this.contactDetails = Object.assign({}, returnVal.body.contact_details);
+                this.contactDetails = Object.assign({}, returnVal.data.contact_details);
                 // TODO: try to improve this
                 if (this.contactDetails.participants_code) {
                     this.contactDetails.participants_id = this.contactDetails.participants_code;
