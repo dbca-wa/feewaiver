@@ -6,7 +6,7 @@ django-extensions==3.2.3
 git+https://github.com/dbca-wa/dbca-utils.git#egg=dbca-utils
 coverage==4.3.1
 coveralls==1.1
-django_bootstrap3==23.6
+django-bootstrap5==25.1
 django-braces>=1.8.1
 django-datatables-view==1.13.0
 django-reversion==5.1.0

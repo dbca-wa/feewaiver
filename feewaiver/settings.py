@@ -50,7 +50,8 @@ SHOW_ROOT_API = env('SHOW_ROOT_API', False)
 
 INSTALLED_APPS += [
     'reversion_compare',
-    'bootstrap3',
+    # 'bootstrap3',
+    'django_bootstrap5',
     'feewaiver',
     'taggit',
     'rest_framework',

@@ -3,14 +3,14 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <div class="row">
-                            <button v-if="visit.index > 0 && !isInternal" class="btn btn-primary pull-right" style="margin-top:5px;" @click.prevent="removeVisit()">Remove Visit</button>
+                            <button v-if="visit.index > 0 && !isInternal" class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="removeVisit()">Remove Visit</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-10">
                     <div class="form-group">
                         <div class="row">
-                            <label for="visit_description" class="col-sm-4 control-label" >Provide the details and purpose of your visit</label>
+                            <label for="visit_description" class="col-sm-4 form-label" >Provide the details and purpose of your visit</label>
                             <div class="col-sm-8">
                                 <textarea 
                                     :disabled="readonly" 
@@ -27,7 +27,7 @@
                 <div class="col-sm-10">
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-4 control-label">Park/s with entry fees you intend to visit</label>
+                            <label class="col-sm-4 form-label">Park/s with entry fees you intend to visit</label>
                             <div :id="'parks_parent_' + visit.index" class="col-sm-6 parkclass">
                                 <select :disabled="readonly" :id="'parks_' + visit.index" class="form-control" multiple="multiple">
                                     <option v-for="park in paidParks" :value="park.id">{{park.name}}</option>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-4 control-label">Are there other parks not listed above you intend to camp at?</label>
+                            <label class="col-sm-4 form-label">Are there other parks not listed above you intend to camp at?</label>
                             <div class="col-sm-6 campgroundclass">
                                 <select :disabled="readonly" :id="'free_parks_' + visit.index" class="form-control" multiple="multiple">
                                 </select>
@@ -68,7 +68,7 @@
                     </div>
                     <!--div class="form-group">
                         <div class="row">
-                            <label class="col-sm-4 control-label">Campground/s</label>
+                            <label class="col-sm-4 form-label">Campground/s</label>
                             <div :id="'campgrounds_parent_' + visit.index" class="col-sm-6 campgroundclass">
                                 <select :disabled="readonly" required :id="'campgrounds_' + visit.index" class="form-control" multiple="multiple">
                                 </select>
@@ -79,7 +79,7 @@
                 <div class="col-sm-10">
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-4 control-label">Date from</label>
+                            <label class="col-sm-4 form-label">Date from</label>
                             <div class="col-sm-4">
                                 <div class="input-group date" >
                                         <input 
@@ -100,7 +100,7 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-sm-4 control-label">Date to</label>
+                            <label class="col-sm-4 form-label">Date to</label>
                             <div class="col-sm-4">
                                 <div class="input-group date" >
                                         <input 
@@ -121,7 +121,7 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <label for="number_of_vehicles" class="col-sm-4 control-label">Number of vehicles used for visit</label>
+                            <label for="number_of_vehicles" class="col-sm-4 form-label">Number of vehicles used for visit</label>
                             <div class="col-sm-4">
                                 <input :disabled="readonly" required type="number" class="form-control" name="number_of_vehicles" min="0" step="1" v-model="visit.number_of_vehicles">
                             </div>
@@ -129,7 +129,7 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <label for="number_of_participants" class="col-sm-4 control-label">Number of participants</label>
+                            <label for="number_of_participants" class="col-sm-4 form-label">Number of participants</label>
                             <div class="col-sm-4">
                                 <input :disabled="readonly" required type="number" class="form-control" name="number_of_participants" min="0" step="1" v-model="visit.number_of_participants">
                             </div>
@@ -137,7 +137,7 @@
                     </div>
                     <div class="form-group">
                         <div class="row" >
-                            <label class="col-sm-4 control-label">Age of participants</label>
+                            <label class="col-sm-4 form-label">Age of participants</label>
                             <div class="col-sm-8">
                             <p>
                                 <input :ref="'age_of_participants_' + visit.index" :disabled="readonly" type="checkbox" :id="'15_' + visit.index" value="15" v-model="visit.age_of_participants_array">
@@ -157,7 +157,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="isInternal" class="pull-right">
+                    <div v-if="isInternal" class="float-end">
                         <label>Issue?</label>
                         <input :disabled="readonly" type="checkbox" :id="'visit_issue_' + visit.index" :value="true" v-model="visit.issued" @change.prevent="recalcVisits">
                     </div>

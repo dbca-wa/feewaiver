@@ -101,7 +101,7 @@ module.exports = {
         result = '<span>' + truncated + '</span>',
         popTemplate = _.template('<a href="#" ' +
             'role="button" ' +
-            'data-toggle="popover" ' +
+            'data-bs-toggle="popover" ' +
             'data-trigger="'+trigger+'" ' +
             'data-placement="top auto"' +
             'data-html="true" ' +
@@ -115,7 +115,7 @@ module.exports = {
         return result;
     },
     dtPopoverCellFn: function(cell){
-        $(cell).find('[data-toggle="popover"]')
+        $(cell).find('[data-bs-toggle="popover"]')
             .popover()
             .on('click', function (e) {
                 e.preventDefault();
