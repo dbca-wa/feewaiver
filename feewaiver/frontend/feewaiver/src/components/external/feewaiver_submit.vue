@@ -50,11 +50,6 @@ export default {
         return data ? moment(data).format('DD/MM/YYYY HH:mm:ss') : '';
     }
   },
-//   filters:{
-//         formatDate: function(data){
-//             return data ? moment(data).format('DD/MM/YYYY HH:mm:ss'): '';
-//         }
-//   },
   mounted: function() {
       this.$nextTick(() => {
           if (this.dataLoaded && !Object.keys(this.feeWaiver).length) {
@@ -64,14 +59,6 @@ export default {
           }
       });
   },
-//   beforeRouteEnter: function(to, from, next) {
-//     next(vm => {
-//         // vm.feeWaiver = Object.assign({}, to.params.fee_waiver);
-//         const router = useRouter();
-//         const feeWaiverData = router.currentRoute.value.state.fee_waiver;
-//         vm.feeWaiver = Object.assign({}, feeWaiverData);
-//     })
-//   }
     beforeRouteEnter(to, from, next) {
         next(vm => {
             // Try to get data from history state
