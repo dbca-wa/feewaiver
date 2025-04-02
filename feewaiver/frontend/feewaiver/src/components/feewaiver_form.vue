@@ -4,128 +4,119 @@
     </div>
     <div v-else :class="containingClass">
     <form id="feewaiver-form" @submit.prevent="submit">
-        <div v-if="!isInternal" class="card border headerbox">
+        <div v-if="!isInternal" class="card border headerbox mb-3">
             <strong>
                 <p>Welcome to the entry fee waiver request form. Entry fee waivers may be provided to certain groups undertaking organised outings in <a href='https://parks.dpaw.wa.gov.au/know/park-entry-fees' target='_blank'>parks with entry fees</a> managed by the Department of Biodiversity Conservation and Attractions (DBCA).</p>
                 <p>Please fill out the details in the form below and submit to the Department. You will be notified of the outcome of your request by email. You may also apply for a camping fee waiver by selecting yes to camping during your visit. If the park you are camping at does not have park entry fees, it can be selected once you have selected yes to camping. Any applicable camping fee reduction or waiver will be applied by the department when processing your request.</p>
                 <p>You can add multiple visits to the same fee waiver request by clicking add another visit prior to submitting.</p>
             </strong>
         </div>
-        <FormSection :formCollapse="false" label="Contact Details" Index="contact_details" :noChevron="!isInternal">
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        <span class="input-group-text">Organisation</span>
+        <FormSection :formCollapse="false" label="Contact Details" Index="contact_details" :noChevron="!isInternal" :customClass="'mb-3'">
+            <!-- <div class="col-md-12"> -->
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                    <label for="" class="col-sm-2 form-label">Organisation</label>
+                    <div class="col-sm-4">
                         <input :disabled="readonly" required type="text" class="form-control" name="organisation" placeholder="" v-model="contactDetails.organisation">
                     </div>
-                </div>
-
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        <span class="input-group-text">Contact Name</span>
+                    <label for="" class="col-sm-2 form-label">Contact Name</label>
+                    <div class="col-sm-4">
                         <input :disabled="readonly" required type="text" class="form-control" name="contact_name" placeholder="" v-model="contactDetails.contact_name">
                     </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="input-group">
-                        <span class="input-group-text">Postal Address</span>
+                    </div>
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                    <label for="" class="col-sm-2 form-label">Postal Address</label>
+                    <div class="col-sm-4">
                         <input :disabled="readonly" required type="text" class="form-control" name="postal_address" placeholder="" v-model="contactDetails.postal_address">
                     </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        <span class="input-group-text">Suburb</span>
+                    </div>
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                    <label for="suburb" class="col-sm-2 form-label">Suburb</label>
+                    <div class="col-sm-4">
                         <input :disabled="readonly" required type="text" class="form-control" name="suburb" placeholder="" v-model="contactDetails.suburb">
                     </div>
-                </div>
-
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        <span class="input-group-text">State</span>
+                    <label for="state" class="col-sm-1 form-label">State</label>
+                    <div class="col-sm-2">
                         <input :disabled="readonly" required type="text" class="form-control" name="state" placeholder="" v-model="contactDetails.state">
                     </div>
-                </div>
-
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        <span class="input-group-text">Postcode</span>
+                    <label for="postcode" class="col-sm-1 form-label">Postcode</label>
+                    <div class="col-sm-2">
                         <input :disabled="readonly" required type="text" class="form-control" name="postcode" placeholder="" v-model="contactDetails.postcode">
                     </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        <span class="input-group-text">Phone</span>
-                        <input :disabled="readonly" required type="text" class="form-control" name="phone" placeholder="" v-model="contactDetails.phone">
                     </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        <span class="input-group-text">Email</span>
-                        <input :disabled="readonly" required type="email" class="form-control" name="email" placeholder="" v-model="contactDetails.email" id="contact_details_email">
-                        <span class="error" aria-live="polite"></span>
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                    <label for="phone" class="col-sm-2 form-label">Phone</label>
+                    <div class="col-sm-4">
+                    <input :disabled="readonly" required type="text" class="form-control" name="phone" placeholder="" v-model="contactDetails.phone">
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        <span class="input-group-text">Confirm Email</span>
+                    </div>
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                        <label for="email" class="col-sm-2 form-label">Email</label>
+                        <div class="col-sm-4">
+                            <input :disabled="readonly" required type="email" class="form-control" name="email" placeholder="" v-model="contactDetails.email" id="contact_details_email">
+                            <span class="error" aria-live="polite"></span>
+                        </div>
+                        <label for="email_confirmation" class="col-sm-2 form-label">Confirm Email</label>
+                        <div class="col-sm-4">
                         <input :disabled="readonly" required type="email" class="form-control" name="email_confirmation" placeholder="" v-model="contactDetails.email_confirmation" id="email_confirmation">
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <label for="email" class="col-sm-2 form-label">CC Email (if applicable)</label>
-                <div class="col-sm-4">
-                    <input :disabled="readonly" type="email" class="form-control" name="email" placeholder="" v-model="contactDetails.cc_email" id="contact_details_cc_email">
-                    <span class="error" aria-live="polite"></span>
-                </div>
-            </div>
-
-            <div class="row">
-                <label class="col-sm-4 form-label">Participants</label>
-                <div class="col-sm-6">
-                    <select :disabled="readonly" required ref="participants" class="form-control" v-model="contactDetails.participants_id">
-                        <option value=""></option>
-                        <option v-for="group in participantGroupList" :value="group.id">{{group.name}}</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row">
-                <label class="col-sm-4 form-label">Provide a brief explanation of your organisation</label>
-                <div class="col-sm-8">
-                    <textarea :disabled="readonly" required class="form-control" v-model="contactDetails.organisation_description"/>
-                </div>
-            </div>
-
-            <div class="row">
-                <label class="col-sm-4 form-label">Attach any other documentation you want to provide</label>
-                <div class="col-sm-8">
-                    <FileField
-                        class="input_file_wrapper"
-                        ref="contact_details_documents"
-                        name="contact-details-documents"
-                        :isRepeatable="true"
-                        :documentActionUrl="documentActionUrl"
-                        :replace_button_by_text="true"
-                        @update-temp-doc-coll-id="updateTempDocCollId"
-                        :key="documentActionUrl"
-                        :readonly="readonly"
-                    />
-                </div>
-            </div>
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                        <label for="email" class="col-sm-2 form-label">CC Email (if applicable)</label>
+                        <div class="col-sm-4">
+                            <input :disabled="readonly" type="email" class="form-control" name="email" placeholder="" v-model="contactDetails.cc_email" id="contact_details_cc_email">
+                            <span class="error" aria-live="polite"></span>
+                        </div>
+                    </div>
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                        <label class="col-sm-4 form-label">Participants</label>
+                        <div class="col-sm-6">
+                            <select :disabled="readonly" required ref="participants" class="form-control" v-model="contactDetails.participants_id">
+                                <option value=""></option>
+                                <option v-for="group in participantGroupList" :value="group.id">{{group.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                      <label class="col-sm-4 form-label">Provide a brief explanation of your organisation</label>
+                      <div class="col-sm-8">
+                          <textarea :disabled="readonly" required class="form-control" v-model="contactDetails.organisation_description"/>
+                      </div>
+                    </div>
+                <!-- </div> -->
+                <!-- <div class="form-group"> -->
+                    <div class="row">
+                      <label class="col-sm-4 form-label">Attach any other documentation you want to provide</label>
+                      <div class="col-sm-8">
+                          <FileField
+                              class="input_file_wrapper"
+                              ref="contact_details_documents"
+                              name="contact-details-documents"
+                              :isRepeatable="true"
+                              :documentActionUrl="documentActionUrl"
+                              :replace_button_by_text="true"
+                              @update-temp-doc-coll-id="updateTempDocCollId"
+                              :key="documentActionUrl"
+                              :readonly="readonly"
+                          />
+                      </div>
+                    </div>
+                <!-- </div> -->
+            <!-- </div> -->
         </FormSection>
         <div v-for="visit in visits" >
             <VisitSection 
@@ -160,25 +151,21 @@
         </div>
         <div>
             <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
-            <div class="row" style="margin-bottom: 50px">
-              <div v-if="feeWaiverId && canProcess" class="navbar navbar-fixed-bottom" style="background-color: #f5f5f5;">
-                <div class="navbar-inner">
+            <div class="row mb-5">
+              <div v-if="feeWaiverId && canProcess" class="fixed-bottom bg-light py-2">
                     <div class="container">
-                      <p class="float-end">
+                      <p class="d-flex justify-content-end">
                         <button class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="save()">Save Changes</button>
                       </p>
                     </div>
-                </div>
               </div>
-              <div v-else-if="!feeWaiverId" class="navbar navbar-fixed-bottom" style="background-color: #f5f5f5;">
-                <div class="navbar-inner">
+              <div v-else-if="!feeWaiverId" class="fixed-bottom bg-light py-2">
                     <div class="container">
-                      <p class="float-end">
+                      <p class="d-flex justify-content-end gap-2">
                         <input type="button" @click.prevent="addVisit" class="btn btn-primary" value="Add another visit"/>
                         <button :title="submitDisabledText" :disabled="submitDisabled" class="btn btn-primary" type="submit">Submit</button>
                       </p>
                     </div>
-                </div>
               </div>
             </div>
 

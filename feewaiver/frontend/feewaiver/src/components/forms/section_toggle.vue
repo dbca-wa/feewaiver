@@ -1,17 +1,17 @@
 <template lang="html">
-    <div class="card" >
-      <div v-if="!hideHeader" class="card-header">
-        <h3 class="card-title">{{label}} 
-            <a :href="'#'+section_id" class="panelClicker" :id="custom_id" data-bs-toggle="collapse" expanded="true" :aria-controls="section_id">
-                <span v-if="!noChevron" :class="panel_chevron_class"></span>
-            </a>
-        </h3>
-      </div>
-      <div :class="panel_collapse_class" :id="section_id">
-        <div class="card-body">
-          <slot></slot>
+    <div :class="['card', customClass]">
+        <div v-if="!hideHeader" class="card-header">
+            <h3 class="card-title">{{label}} 
+                <a :href="'#'+section_id" class="panelClicker" :id="custom_id" data-bs-toggle="collapse" expanded="true" :aria-controls="section_id">
+                    <span v-if="!noChevron" :class="panel_chevron_class"></span>
+                </a>
+            </h3>
         </div>
-      </div>
+        <div :class="panel_collapse_class" :id="section_id">
+            <div class="card-body">
+            <slot></slot>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -29,6 +29,10 @@ export default {
         noChevron: {
             default: false,
         },
+        customClass: {
+            type: [String, Object, Array],
+            default: ""
+        }
     },
     data:function () {
         return {
@@ -85,7 +89,7 @@ export default {
 </script>
 
 <style lang="css">
-    h3.panel-title{
+    h3.card-title{
         font-weight: bold;
         font-size: 25px;
         padding:20px;

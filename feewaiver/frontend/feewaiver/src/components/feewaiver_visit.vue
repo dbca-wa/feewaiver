@@ -1,5 +1,5 @@
 <template lang="html">
-            <FormSection :formCollapse="false" :label="label" :Index="'index_' + visit.index" :noChevron="!isInternal" >
+            <FormSection :formCollapse="false" :label="label" :Index="'index_' + visit.index" :noChevron="!isInternal" :customClass="'mb-3'">
                 <div class="col-sm-12">
                     <div class="form-group">
                         <div class="row">

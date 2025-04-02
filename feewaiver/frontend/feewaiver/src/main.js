@@ -76,3 +76,8 @@ app.use(router)
 
 // Vue 3 uses a different mounting approach
 app.mount('#app')
+
+router.afterEach((to) => {
+  console.log('Route changed to:', to.path);
+  console.log('Route component:', to.matched[0]?.components?.default);
+});

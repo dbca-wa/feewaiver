@@ -49,9 +49,9 @@
             <div class="container-fluid">
                 <div class="row">
                     {% if is_internal_login %}
-                    <nav class="navbar navbar-default">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
                         <div class="container">
-                            <div class="navbar-header">
+                            <!-- <div class="navbar-header">
                                 <a type="button" class="navbar-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#navbar" aria-expanded="false" aria-controls="navbar">
                                     <span class="sr-only">Toggle navigation</span>
                                     <span class="icon-bar"></span>
@@ -59,49 +59,60 @@
                                     <span class="icon-bar"></span>
                                 </a>
                                 <a class="navbar-brand" href="{% url 'home' %}"><div style="inline"><img src="{% static 'feewaiver/img/dpaw_small.png' %}">Home</div></a>
-                            </div>
+                            </div> -->
+
+                            <a class="navbar-brand" href="{% url 'home' %}">
+                                <div class="d-inline-flex align-items-center">
+                                    <img src="{% static 'feewaiver/img/dpaw_small.png' %}" alt="Logo">
+                                    <span class="ms-2">Home</span>
+                                </div>
+                            </a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
                             <div id="navbar" class="navbar-collapse collapse">
                                 <ul class="nav navbar-nav ms-auto">
                                     {% if request.user.is_authenticated %}
-                                        <li>
-                                            <a>
-                                            Welcome
-                                            <strong>
-                                                {% if request.user.first_name %}
-                                                    {{ request.user.get_short_name }}
-                                                {% elif request.user.last_name %}
-                                                    {{ request.user.last_name }}
-                                                {% else %}
-                                                    {{ request.user.email }}
-                                                {% endif %}
-                                            </strong>
+                                        <li class="nav-item">
+                                            <a class="nav-link">
+                                                Welcome
+                                                <strong>
+                                                    {% if request.user.first_name %}
+                                                        {{ request.user.get_short_name }}
+                                                    {% elif request.user.last_name %}
+                                                        {{ request.user.last_name }}
+                                                    {% else %}
+                                                        {{ request.user.email }}
+                                                    {% endif %}
+                                                </strong>
                                             </a>
                                         </li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <li class="nav-item dropdown">
+                                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                                 Options
                                                 <span class="caret"></span>
                                             </a>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                                 {% if is_feewaiver_admin_user or request.user.is_superuser %}
-                                                    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                                                    <li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin</a></li>
                                                 {% endif %}
                                                 {% if show_tests and request.user.is_superuser %}
-                                                    <li><a href="{% url 'test-emails' %}">Test Emails</a></li>
+                                                    <li><a class="dropdown-item" href="{% url 'test-emails' %}">Test Emails</a></li>
                                                 {% endif %}
                                                 {% for org in request.user.feewaiver_organisations.all %}
                                                     {% for org_contact in org.contacts.all%}
                                                         {% if org_contact.email == request.user.email %}
                                                             {% if org_contact.user_status == 'active' %}
                                                                 {% if org_contact.is_admin or org_contact.check_consultant %}
-                                                                    <li><a href="/external/organisations/manage/{{org.id}}">Manage {{ org.organisation.name}} </a></li>
+                                                                    <li><a class="dropdown-item" href="/external/organisations/manage/{{org.id}}">Manage {{ org.organisation.name}} </a></li>
                                                                 {% endif %}
                                                             {% endif %}
                                                         {% endif %}
                                                     {% endfor %}
                                                 {% endfor %}
-                                                <li role="separator" class="divider"></li>
-                                                <li><a href="{% url 'accounts:logout' %}?next=/">Logout</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="{% url 'accounts:logout' %}?next=/">Logout</a></li>
                                             </ul>
                                         </li>
                                     {% endif %}
@@ -123,6 +134,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
+                        this is a test line.
                         {% bootstrap_messages %}
                     </div>
                 </div>
@@ -135,8 +147,10 @@
 		    </div>
         {% endif %}
 
+        base.html 1
         {% block content %}
         {% endblock %}
+        base.html 2
 
         {% block modals %}
         {% endblock %}

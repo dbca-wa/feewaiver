@@ -1,5 +1,7 @@
 <template id="proposal_dashboard">
+    dashboard.vue 1
     <div class="container">
+        dashboard.vue 2
         <FormSection :formCollapse="false" label="Fee Waiver Requests" Index="fee_waiver_requests">
                     <div class="row">
                         <div class="col-md-3">
