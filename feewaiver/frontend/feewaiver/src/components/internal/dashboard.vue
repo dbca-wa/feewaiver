@@ -1,42 +1,40 @@
 <template id="proposal_dashboard">
-    dashboard.vue 1
     <div class="container">
-        dashboard.vue 2
         <FormSection :formCollapse="false" label="Fee Waiver Requests" Index="fee_waiver_requests">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">Lodged From</label>
-                            <div class="input-group date" ref="feewaiverDateFromPicker">
-                                <input type="text" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedFrom">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="">Lodged To</label>
-                            <div class="input-group date" ref="feewaiverDateToPicker">
-                                <input type="text" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedTo">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="">Status</label>
-                                <select class="form-control" v-model="filterFeeWaiverStatus">
-                                    <option value="All">All</option>
-                                    <option v-for="s in feewaiver_status" :value="s">{{s}}</option>
-                                </select>
-                            </div>
-                        </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="">Lodged From</label>
+                    <div class="input-group date" ref="feewaiverDateFromPicker">
+                        <input type="text" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedFrom">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12" style="margin-top:25px;">
-                            <datatable ref="feewaiver_datatable" :id="datatable_id" :dtOptions="feewaiver_options" :dtHeaders="feewaiver_headers"/>
-                        </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="">Lodged To</label>
+                    <div class="input-group date" ref="feewaiverDateToPicker">
+                        <input type="text" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedTo">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
                     </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="">Status</label>
+                        <select class="form-control" v-model="filterFeeWaiverStatus">
+                            <option value="All">All</option>
+                            <option v-for="s in feewaiver_status" :value="s">{{s}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="margin-top:25px;">
+                    <datatable ref="feewaiver_datatable" :id="datatable_id" :dtOptions="feewaiver_options" :dtHeaders="feewaiver_headers"/>
+                </div>
+            </div>
         </FormSection>
         </div>
 </template>
@@ -269,7 +267,7 @@ export default {
             let vm = this;
 
             vm.$http.get(api_endpoints.filter_list).then((response) => {
-                vm.feewaiver_status = response.body.feewaiver_status_choices;
+                vm.feewaiver_status = response.data.feewaiver_status_choices;
             },(error) => {
             })
         },

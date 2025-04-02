@@ -1,41 +1,3 @@
-// // The Vue build version to load with the `import` command
-// // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-// import Vue from 'vue'
-// import resource from 'vue-resource'
-// import App from './App'
-// import router from './router'
-// import helpers from '@/utils/helpers'
-// import api_endpoints from './api'
-// require( '../node_modules/bootstrap/dist/css/bootstrap.css' );
-// //require('../node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css')
-// require( '../node_modules/font-awesome/css/font-awesome.min.css' )
-
-// Vue.config.devtools = true;
-// Vue.config.productionTip = false
-// Vue.use( resource );
-
-// // Add CSRF Token to every request
-// Vue.http.interceptors.push( function ( request, next ) {
-//   // modify headers
-//   if ( request.url != api_endpoints.countries ) {
-//     request.headers.set( 'X-CSRFToken', helpers.getCookie( 'csrftoken' ) );
-//   }
-
-//   // continue to next interceptor
-//   next();
-// } );
-
-
-// /* eslint-disable no-new */
-// new Vue( {
-//   el: '#app',
-//   router,
-//   template: '<App/>',
-//   components: {
-//     App
-//   }
-// } )
-
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import { createApp } from 'vue'
@@ -43,19 +5,29 @@ import App from './App'
 import router from './router'
 import helpers from '@/utils/helpers'
 import api_endpoints from './api'
-
-// Style imports
-import '../node_modules/bootstrap/dist/css/bootstrap.css'
-//import '../node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
-import '../node_modules/font-awesome/css/font-awesome.min.css'
-
-// Vue 3 uses createApp to instantiate the application
-const app = createApp(App)
-
 // vue-resource is not officially supported in Vue 3
 // We need to use an alternative like axios or implement a custom plugin
 // This example implements axios as a replacement
 import axios from 'axios'
+
+import $ from 'jquery'
+window.$ = window.jQuery = $  // Import jQuery and make it globally available
+
+// Datatables and its plugins
+import 'datatables.net'
+import 'datatables.net-bs5'
+import 'datatables.net-responsive'
+import 'datatables.net-buttons'
+import 'datatables.net-buttons-bs5'
+
+// Style imports
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
+import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css'
+// import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'
+import '../node_modules/font-awesome/css/font-awesome.min.css'
+
+// Vue 3 uses createApp to instantiate the application
+const app = createApp(App)
 
 // Global configuration
 app.config.devtools = true
