@@ -114,7 +114,7 @@ import { api_endpoints, helpers } from '@/utils/hooks'
 import FeeWaiverForm from '../feewaiver_form.vue'
 import Vue from 'vue'
 import AssessmentWorkflow from './assessment_modal.vue'
-
+import axios from 'axios'
 
 export default {
     name: 'Assessment',
@@ -233,8 +233,8 @@ export default {
           let feeWaiverRes = await this.parentSave(false)
           if (feeWaiverRes.ok) {
               try {
-                  let res = await Vue.http.post(post_url, payload);
-                  if (res.ok) {    
+                  let res = await axios.post(post_url, payload);
+                  if (res.status === 200) {    
                       this.$router.push({
                           name: 'fee-waiver-dash',
                       });
@@ -271,23 +271,23 @@ export default {
         */
         assignRequestUser: async function(){
             await this.$nextTick();
-            const res = await this.$http.get(helpers.add_endpoint_json('/api/feewaivers',(this.feeWaiver.id+'/assign_request_user')))
-            this.feeWaiver = res.body;
+            const res = await axios.get(helpers.add_endpoint_json('/api/feewaivers',(this.feeWaiver.id+'/assign_request_user')))
+            this.feeWaiver = res.data;
             await this.$nextTick();
             this.updateAssignedOfficerSelect();
         },
         assignTo: async function() {
             await this.$nextTick();
             const data = {'assigned_officer_id': this.feeWaiver.assigned_officer_id};
-            const res = await this.$http.post(helpers.add_endpoint_json('/api/feewaivers',(this.feeWaiver.id+'/assign_to')),data);
-            this.feeWaiver = res.body;
+            const res = await axios.post(helpers.add_endpoint_json('/api/feewaivers',(this.feeWaiver.id+'/assign_to')),data);
+            this.feeWaiver = res.data;
             await this.$nextTick();
             this.updateAssignedOfficerSelect();
         },
         unAssign: async function() {
             await this.$nextTick();
-            const res = await this.$http.get(helpers.add_endpoint_json('/api/feewaivers',(this.feeWaiver.id+'/unassign')))
-            this.feeWaiver = res.body;
+            const res = await axios.get(helpers.add_endpoint_json('/api/feewaivers',(this.feeWaiver.id+'/unassign')))
+            this.feeWaiver = res.data;
             await this.$nextTick();
             this.updateAssignedOfficerSelect();
         },
@@ -376,8 +376,8 @@ export default {
     },
     created: async function() {
         await this.$nextTick();
-        const res = await Vue.http.get(`/api/feewaivers/${this.feeWaiverId}.json`)
-        this.feeWaiver = res.body;
+        const res = await axios.get(`/api/feewaivers/${this.feeWaiverId}.json`)
+        this.feeWaiver = res.data;
         await this.$nextTick();
         this.initialiseAssignedOfficerSelect()
     },
