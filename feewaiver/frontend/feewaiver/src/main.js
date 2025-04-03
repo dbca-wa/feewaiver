@@ -13,7 +13,6 @@ import axios from 'axios'
 // Import jQuery 
 import $ from 'jquery'
 window.$ = window.jQuery = $  // Import jQuery and make it globally available
-
 import 'jquery-validation'
 
 // Datatables and its plugins
@@ -28,8 +27,6 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css'
 import '../node_modules/font-awesome/css/font-awesome.min.css'
 
-
-
 // Vue 3 uses createApp to instantiate the application
 const app = createApp(App)
 
@@ -37,8 +34,9 @@ const app = createApp(App)
 app.config.devtools = true
 app.config.productionTip = false
 
-// Make axios available globally as a replacement for vue-resource
+// Make axios available globally as a replacement for vue-resource, but ideally using axios in each file is the recommended approach
 app.config.globalProperties.$http = axios
+
 // Add interceptor to include CSRF token in all requests
 axios.interceptors.request.use(function(config) {
   if (config.url !== api_endpoints.countries) {

@@ -43,7 +43,7 @@
                     <button type="button" disabled class="btn btn-default" @click="ok"><i class="fa fa-spinner fa-spin"></i> Processing</button>
                 </div>
                 <div v-else>
-                    <button type="button" class="btn btn-default" @click="ok" >Ok</button>
+                    <button type="button" class="btn btn-default" @click="ok">Ok</button>
                     <button type="button" class="btn btn-default" @click="cancel">Cancel</button>
                 </div>
             </div>
@@ -130,9 +130,15 @@ export default {
           this.workflow_type ? payload.append('workflow_type', this.workflow_type) : null;
           this.modalTitle ? payload.append('email_subject', this.modalTitle) : null;
           let feeWaiverRes = await this.$parent.parentSave(false)
-          if (feeWaiverRes.ok) {
+
+          console.log({feeWaiverRes})
+
+          if (feeWaiverRes.status === 200) {
               try {
                   let res = await axios.post(post_url, payload);
+
+                  console.log({res})
+
                   if (res.status === 200) {    
                       this.$router.push({
                           name: 'fee-waiver-dash',

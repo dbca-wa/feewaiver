@@ -231,7 +231,7 @@ export default {
           let post_url = '/api/feewaivers/' + this.feeWaiver.id + '/final_approval/'
           let payload = {"approval_type": approval_type}
           let feeWaiverRes = await this.parentSave(false)
-          if (feeWaiverRes.ok) {
+          if (feeWaiverRes.status === 200) {
               try {
                   let res = await axios.post(post_url, payload);
                   if (res.status === 200) {    

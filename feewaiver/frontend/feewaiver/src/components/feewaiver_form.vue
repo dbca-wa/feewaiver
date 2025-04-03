@@ -184,6 +184,7 @@
     import VisitSection from "./feewaiver_visit.vue"
     import FileField from '@/components/forms/filefield_immediate.vue'
     import Swal from 'sweetalert2';
+    import axios from 'axios';
 
     export default {
         name: 'FeeWaiverForm',
@@ -482,7 +483,11 @@
             save: async function(confirmSave=true) {
                 await this.updatePayload()
                 let url = `/api/feewaivers/${this.feeWaiverId}/assessor_save/`;
-                const feeWaiverRes = await this.$http.post(url, this.payload);
+                const feeWaiverRes = await axios.post(url, this.payload);
+
+                console.log({confirmSave})
+                console.log({feeWaiverRes})
+
                 if (confirmSave) {
                     Swal.fire(
                         'Saved',
