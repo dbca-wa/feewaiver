@@ -57,6 +57,7 @@ import { api_endpoints, helpers, cache_helper } from "@/utils/hooks";
 require("select2/dist/css/select2.min.css");
 require("select2-bootstrap-theme/dist/select2-bootstrap.min.css");
 import FileField from '@/components/forms/filefield_immediate.vue'
+import axios from "axios";
 
 export default {
     name: "AssessmentWorkflow",
@@ -131,8 +132,8 @@ export default {
           let feeWaiverRes = await this.$parent.parentSave(false)
           if (feeWaiverRes.ok) {
               try {
-                  let res = await Vue.http.post(post_url, payload);
-                  if (res.ok) {    
+                  let res = await axios.post(post_url, payload);
+                  if (res.status === 200) {    
                       this.$router.push({
                           name: 'fee-waiver-dash',
                       });

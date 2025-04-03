@@ -48,6 +48,8 @@ import {
     api_endpoints,
     helpers
 }from '@/utils/hooks'
+import axios from 'axios'
+
 export default {
     name: 'FeeWaiverDash',
     props: {
@@ -290,8 +292,8 @@ export default {
             processingTable.replaceWith("<div><i class='fa fa-2x fa-spinner fa-spin'></i></div>");
             processView.replaceWith("");
             let post_url = '/api/feewaivers/' + id + '/final_approval/'
-            let res = await Vue.http.post(post_url, {'approval_type': approvalType});
-            if (res.ok) {
+            let res = await axios.post(post_url, {'approval_type': approvalType});
+            if (res.status === 200) {
                 // this should also be await?
                 await this.refreshFromResponse();
             }
