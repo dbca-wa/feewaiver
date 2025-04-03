@@ -1,113 +1,82 @@
 <template lang="html">
     <div v-if="feeWaiver" class="container" id="internalAssessment">
-      <div class="row">
-        <!--h3>Entry Fee Waiver Request: {{ feeWaiver.lodgement_number }}</h3-->
-        <h3>{{ assessmentTitle }}</h3>
-        <div class="col-md-3">
-            <CommsLogs :comms_url="comms_url" :logs_url="logs_url" :comms_add_url="comms_add_url" :disable_add_entry="false"/>
+        <div class="row">
+            <h3>{{ assessmentTitle }}</h3>
+            <div class="col-md-3">
+                <CommsLogs :comms_url="comms_url" :logs_url="logs_url" :comms_add_url="comms_add_url" :disable_add_entry="false"/>
 
-            <div class="row">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+                <div class="card">
+                    <div class="card-header">
                         Workflow
                     </div>
-                    <div class="panel-body panel-collapse">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <strong>Status</strong><br/>
-                                {{ feeWaiver.processing_status }}
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="separator"></div>
-                            </div>
+                    <div class="card-body">
+                        <strong>Status</strong><br/>
+                        {{ feeWaiver.processing_status }}
+                        <div class="separator"></div>
 
-                            <div class="col-sm-12 top-buffer-s">
-                                <strong>Currently assigned to</strong><br/>
-                                <div class="form-group">
-                                    <template>
-                                        <select ref="assigned_officer" :disabled="!canAssign" class="form-control" v-model="feeWaiver.assigned_officer_id">
-                                            <option :value="null"></option>
-                                            <option v-for="member in feeWaiver.action_group" :value="member.id">{{member.first_name}} {{member.last_name}}</option>
-                                        </select>
-                                        <a v-if="canAssign && feeWaiver.assigned_officer != feeWaiver.current_officer.id" @click.prevent="assignRequestUser()" class="actionBtn float-end">Assign to me</a>
-                                    </template>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-12 top-buffer-s" v-if="!isFinalised && canProcess">
-                                <div v-if="show_spinner"><i class='fa fa-5x fa-spinner fa-spin'></i></div>
-                                <div v-else>
-                                <template v-if="canProcessAssessor">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <strong>Action</strong><br/>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <button style="width:80%;" class="btn btn-primary" :disabled="allVisitsUnchecked" @click.prevent="workflowAction('propose_issue')">Propose Issue Fee Waiver</button><br/>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="allVisitsUnchecked" @click.prevent="workflowAction('propose_concession')">Propose Issue Concession</button><br/>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="false" @click.prevent="workflowAction('propose_decline')">Propose Decline</button><br/>
-                                        </div>
-                                    </div>
-                                </template>
-                                <template v-if="canProcessApprover">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="false" @click.prevent="workflowAction('return_to_assessor')">Return to Assessor</button><br/>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="allVisitsUnchecked" @click.prevent="finalApproval('issue')">Issue Fee Waiver</button><br/>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="allVisitsUnchecked" @click.prevent="finalApproval('issue_concession')">Issue Concession</button><br/>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="false" @click.prevent="finalApproval('decline')">Decline</button><br/>
-                                        </div>
-                                    </div>
-                                </template>
-                                </div>
+                        <strong>Currently assigned to</strong><br/>
+                        <div class="mb-3">
+                            <select
+                                ref="assigned_officer"
+                                :disabled="!canAssign"
+                                class="form-select"
+                                v-model="feeWaiver.assigned_officer_id">
+                                <option :value="null"></option>
+                                <option
+                                    v-for="member in feeWaiver.action_group"
+                                    :key="member.id"
+                                    :value="member.id">
+                                    {{ member.first_name }} {{ member.last_name }}
+                                </option>
+                            </select>
+                            <div class="mt-2" v-if="canAssign && feeWaiver.assigned_officer != feeWaiver.current_officer.id">
+                                <button @click.prevent="assignRequestUser()" class="btn btn-link p-0 float-end">
+                                    Assign to me
+                                </button>
                             </div>
                         </div>
+
+                        <template v-if="!isFinalised && canProcess">
+                            <div v-if="show_spinner"><i class='fa fa-5x fa-spinner fa-spin'></i></div>
+                            <div v-else>
+                            <template v-if="canProcessAssessor">
+                                <strong>Action</strong><br/>
+                                <button style="width:80%;" class="btn btn-primary" :disabled="allVisitsUnchecked" @click.prevent="workflowAction('propose_issue')">Propose Issue Fee Waiver</button><br/>
+                                <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="allVisitsUnchecked" @click.prevent="workflowAction('propose_concession')">Propose Issue Concession</button><br/>
+                                <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="false" @click.prevent="workflowAction('propose_decline')">Propose Decline</button><br/>
+                            </template>
+                            <template v-if="canProcessApprover">
+                                <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="false" @click.prevent="workflowAction('return_to_assessor')">Return to Assessor</button><br/>
+                                <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="allVisitsUnchecked" @click.prevent="finalApproval('issue')">Issue Fee Waiver</button><br/>
+                                <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="allVisitsUnchecked" @click.prevent="finalApproval('issue_concession')">Issue Concession</button><br/>
+                                <button style="width:80%;" class="btn btn-primary top-buffer-s" :disabled="false" @click.prevent="finalApproval('decline')">Decline</button><br/>
+                            </template>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-8">
-            <div v-if="feeWaiverId" class="row">
-                <FeeWaiverForm 
-                :feeWaiverId="feeWaiverId"
-                 ref="fee_waiver_form"
-                :key="feeWaiverId"
-                 :isInternal="true"
-                 :canProcess="canProcess"
-                 :isFinalised="isFinalised"
-                 @all-visits-unchecked="updateVisits"
-                />
+
+            <div class="col-md-9">
+                <div v-if="feeWaiverId" class="row">
+                    <FeeWaiverForm 
+                    :feeWaiverId="feeWaiverId"
+                    ref="fee_waiver_form"
+                    :key="feeWaiverId"
+                    :isInternal="true"
+                    :canProcess="canProcess"
+                    :isFinalised="isFinalised"
+                    @all-visits-unchecked="updateVisits"
+                    />
+                </div>
             </div>
-        </div>
         </div>
         <div v-if="workflowActionType">
             <AssessmentWorkflow ref="assessment_workflow" :feeWaiver="feeWaiver" :workflow_type="workflowActionType" :key="'workflow_action_' + workflowActionType"/>
         </div>
     </div>
 </template>
+
 <script>
 import CommsLogs from '@common-utils/comms_logs.vue'
 import { api_endpoints, helpers } from '@/utils/hooks'
@@ -252,23 +221,6 @@ export default {
             $(vm.$refs.assigned_officer).val(vm.feeWaiver.assigned_officer_id);
             $(vm.$refs.assigned_officer).trigger('change');
         },
-        /*
-        assignRequestUser: function(){
-            let vm = this;
-            vm.$http.get(helpers.add_endpoint_json('/api/feewaivers',(vm.feeWaiver.id+'/assign_request_user')))
-            .then((response) => {
-                vm.feeWaiver = response.body;
-                //vm.updateAssignedOfficerSelect();
-            }, (error) => {
-                //vm.updateAssignedOfficerSelect();
-                swal(
-                    'Proposal Error',
-                    helpers.apiVueResourceError(error),
-                    'error'
-                )
-            });
-        },
-        */
         assignRequestUser: async function(){
             await this.$nextTick();
             const res = await axios.get(helpers.add_endpoint_json('/api/feewaivers',(this.feeWaiver.id+'/assign_request_user')))
@@ -291,44 +243,6 @@ export default {
             await this.$nextTick();
             this.updateAssignedOfficerSelect();
         },
-        /*
-        assignTo: function(){
-            let vm = this;
-            let unassign = true;
-            let data = {};
-            unassign = vm.feeWaiver.assigned_officer != null ? false: true;
-            data = {'assigned_officer_id': vm.feeWaiver.assigned_officer};
-            if (!unassign){
-                vm.$http.post(helpers.add_endpoint_json('/api/feewaivers',(vm.feeWaiver.id+'/assign_to')),JSON.stringify(data),{
-                    emulateJSON:true
-                }).then((response) => {
-                    vm.feeWaiver = response.body;
-                    //vm.updateAssignedOfficerSelect();
-                }, (error) => {
-                    //vm.updateAssignedOfficerSelect();
-                    swal(
-                        'Proposal Error',
-                        helpers.apiVueResourceError(error),
-                        'error'
-                    )
-                });
-            }
-            else{
-                vm.$http.get(helpers.add_endpoint_json('/api/feewaivers',(vm.feeWaiver.id+'/unassign')))
-                .then((response) => {
-                    vm.feeWaiver = response.body;
-                    //vm.updateAssignedOfficerSelect();
-                }, (error) => {
-                    //vm.updateAssignedOfficerSelect();
-                    swal(
-                        'Proposal Error',
-                        helpers.apiVueResourceError(error),
-                        'error'
-                    )
-                });
-            }
-        },
-        */
         parentSave: async function() {
             const feeWaiverRes = await this.$refs.fee_waiver_form.save(false);
             return feeWaiverRes;
@@ -371,8 +285,6 @@ export default {
             });
             //});
         },
-
-
     },
     created: async function() {
         await this.$nextTick();
@@ -381,20 +293,6 @@ export default {
         await this.$nextTick();
         this.initialiseAssignedOfficerSelect()
     },
-    /*
-    updated: function(){
-        this.$nextTick(() => {
-            this.initialiseAssignedOfficerSelect()
-        });
-    },
-    mounted: async function() {
-        await this.$nextTick();
-        //this.$nextTick(() => {
-        //this.initialiseAssignedOfficerSelect()
-        //this.updateAssignedOfficerSelect()
-        //});
-    },
-    */
     beforeRouteEnter: function(to, from, next) {
         next(vm => {
             vm.feeWaiverId = to.params.fee_waiver_id;
@@ -402,6 +300,7 @@ export default {
     }
 }
 </script>
+
 <style scoped>
 .top-buffer-s {
     margin-top: 10px;
