@@ -1,36 +1,28 @@
 <template>
-    <div class="row">
-        <div class="card">
-            <div class="card-header">
-                Logs
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <strong>Communications</strong><br/>
-                        <div class="row">
-                            <div class="col-sm-5">
-                                <a tabindex="2" ref="showCommsBtn" class="actionBtn">Show</a>
-                            </div>
-                            <template v-if="!disable_add_entry">
-                                <div class="col-sm-1">
-                                    <span>|</span>
-                                </div> 
-                                <div class="col-sm-5">
-                                    <a ref="addCommsBtn" @click="addComm()" class="actionBtn float-end">Add Entry</a>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 top-buffer-s">
-                        <strong>Actions</strong><br/>
-                        <a tabindex="2" ref="showActionBtn" class="actionBtn">Show</a>
-                    </div>
-                </div>
-            </div>
+    <div class="card mb-3">
+        <div class="card-header">
+            Logs
         </div>
-        <AddCommLog ref="add_comm" :url="comms_add_url"/>
+        <div class="card-body">
+            <strong>Communications</strong><br/>
+            <div class="row">
+                <div class="col-sm-5">
+                    <a tabindex="2" ref="showCommsBtn" class="actionBtn">Show</a>
+                </div>
+                <template v-if="!disable_add_entry">
+                    <div class="col-sm-1">
+                        <span>|</span>
+                    </div> 
+                    <div class="col-sm-5">
+                        <a ref="addCommsBtn" @click="addComm()" class="actionBtn float-end">Add Entry</a>
+                    </div>
+                </template>
+            </div>
+            <strong>Actions</strong><br/>
+            <a tabindex="2" ref="showActionBtn" class="actionBtn">Show</a>
+        </div>
     </div>
+    <AddCommLog ref="add_comm" :url="comms_add_url"/>
 </template>
 
 <script>
