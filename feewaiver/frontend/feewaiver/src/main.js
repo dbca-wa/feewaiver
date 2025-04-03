@@ -10,8 +10,11 @@ import api_endpoints from './api'
 // This example implements axios as a replacement
 import axios from 'axios'
 
+// Import jQuery 
 import $ from 'jquery'
 window.$ = window.jQuery = $  // Import jQuery and make it globally available
+
+import 'jquery-validation'
 
 // Datatables and its plugins
 import 'datatables.net'
@@ -23,8 +26,9 @@ import 'datatables.net-buttons-bs5'
 // Style imports
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css'
-// import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'
 import '../node_modules/font-awesome/css/font-awesome.min.css'
+
+
 
 // Vue 3 uses createApp to instantiate the application
 const app = createApp(App)
