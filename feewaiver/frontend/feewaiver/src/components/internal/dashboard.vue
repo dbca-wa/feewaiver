@@ -3,29 +3,29 @@
         <FormSection :formCollapse="false" label="Fee Waiver Requests" Index="fee_waiver_requests">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="">Lodged From</label>
-                    <div class="input-group date" ref="feewaiverDateFromPicker">
-                        <input type="text" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedFrom">
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                    <label class="form-label" for="lodged-from">Lodged From</label>
+                    <div class="input-group mb-3" ref="feewaiverDateFromPicker">
+                        <input type="text" id="lodged-from" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedFrom">
+                        <span class="input-group-text">
+                            <i class="fa fa-calendar"></i>
                         </span>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label for="">Lodged To</label>
-                    <div class="input-group date" ref="feewaiverDateToPicker">
-                        <input type="text" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedTo">
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                    <label class="form-label" for="lodged-to">Lodged To</label>
+                    <div class="input-group mb-3" ref="feewaiverDateToPicker">
+                        <input type="text" id="lodged-to" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedTo">
+                        <span class="input-group-text">
+                            <i class="fa fa-calendar"></i>
                         </span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="">Status</label>
-                        <select class="form-control" v-model="filterFeeWaiverStatus">
+                        <label class="form-label" for="status-filter">Status</label>
+                        <select id="status-filter" class="form-select" v-model="filterFeeWaiverStatus">
                             <option value="All">All</option>
-                            <option v-for="s in feewaiver_status" :value="s">{{s}}</option>
+                            <option v-for="(s, index) in feewaiver_status" :key="index" :value="s">{{s}}</option>
                         </select>
                     </div>
                 </div>
@@ -97,7 +97,10 @@ export default {
                     }
 
                 },
-                dom: 'lBfrtip',
+                // dom: 'lBfrtip',
+                "dom":  "<'d-flex'<'me-auto'l>fB>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'d-flex'<'me-auto'i>p>",
                 buttons:[
                     {
                         extend: 'excel',

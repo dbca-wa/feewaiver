@@ -4,7 +4,7 @@
         {
             "label": "node: serve",
             "path": "/feewaiver/frontend/feewaiver",
-            "options": {"env": {"PORT": "9073"}},
+            "options": {"env": {"PORT": "8080"}},
             "type": "npm",
             "script": "start",
             "isBackground": true,
