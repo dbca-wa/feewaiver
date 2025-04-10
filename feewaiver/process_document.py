@@ -1,10 +1,12 @@
-from django.core.files.storage import default_storage 
 import os
 from django.core.files.base import ContentFile
 import traceback
 from feewaiver.main_models import EmailUser
 from feewaiver.models import FeeWaiverUserAction
 from django.contrib import auth
+from feewaiver.storage import PrivateMediaStorage
+
+private_storage = PrivateMediaStorage()
 
 
 def process_generic_document(request, instance, document_type=None, *args, **kwargs):
@@ -97,7 +99,7 @@ def save_document(request, instance, comms_instance, document_type, input_name=N
 
         document = comms_instance.documents.get_or_create(
             name=filename)[0]
-        path = default_storage.save(
+        path = private_storage.save(
             '{}/{}/communications/{}/documents/{}'.format(
                 instance._meta.model_name, instance.id, comms_instance.id, filename), ContentFile(
                 _file.read()))
@@ -112,7 +114,8 @@ def save_document(request, instance, comms_instance, document_type, input_name=N
 
         document = instance.documents.get_or_create(
             name=filename)[0]
-        path = default_storage.save(
+        
+        path = private_storage.save(
             '{}/{}/documents/{}'.format(
                 instance._meta.model_name, instance.id, filename), ContentFile(
                 _file.read()))
@@ -134,7 +137,7 @@ def save_document(request, instance, comms_instance, document_type, input_name=N
 def save_comms_log_document_obj(instance, comms_instance, temp_document):
     document = comms_instance.documents.get_or_create(
         name=temp_document.name)[0]
-    path = default_storage.save(
+    path = private_storage.save(
         '{}/{}/communications/{}/documents/{}'.format(
             instance._meta.model_name, 
             instance.id, 
@@ -147,27 +150,12 @@ def save_comms_log_document_obj(instance, comms_instance, temp_document):
     document._file = path
     document.save()
 
-# For transferring files from temp doc objs to comms_log objs
-def save_contact_details_document_obj(instance, contact_details, temp_document):
-    document = contact_details.documents.get_or_create(
-        name=temp_document.name)[0]
-    path = default_storage.save(
-        '{}/{}/{}/documents/{}'.format(
-            instance._meta.model_name, 
-            instance.id, 
-            temp_document.name
-            ),
-            temp_document._file
-        )
-
-    document._file = path
-    document.save()
 
 # For transferring files from temp doc objs to default doc objs
 def save_default_document_obj(instance, temp_document):
     document = instance.documents.get_or_create(
         name=temp_document.name)[0]
-    path = default_storage.save(
+    path = private_storage.save(
         '{}/{}/documents/{}'.format(
             instance._meta.model_name, 
             instance.id, 
