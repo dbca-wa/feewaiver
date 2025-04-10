@@ -36,13 +36,33 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <div class="row">
-                              <label class="col-sm-4">Are you intending to camp during your visit?</label>
-                                <input :disabled="readonly" class="col-sm-1" :id="'yes_' + visit.index" type="radio" v-model="visit.camping_requested" v-bind:value="true">
-                                <label class="col-sm-1" for="yes">Yes</label>
-                                <input :disabled="readonly" class="col-sm-1" :id="'no_' + visit.index" type="radio" v-model="visit.camping_requested" v-bind:value="false">
-                                <label class="col-sm-1" for="no">No</label>
+                            <label class="col-sm-4 col-form-label">Are you intending to camp during your visit?</label>
+                            <div class="col-sm-8">
+                                <div class="form-check form-check-inline">
+                                    <input 
+                                        :disabled="readonly" 
+                                        class="form-check-input" 
+                                        :id="'yes_' + visit.index" 
+                                        type="radio" 
+                                        v-model="visit.camping_requested" 
+                                        :value="true"
+                                    >
+                                    <label class="form-check-label" :for="'yes_' + visit.index">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input 
+                                        :disabled="readonly" 
+                                        class="form-check-input" 
+                                        :id="'no_' + visit.index" 
+                                        type="radio" 
+                                        v-model="visit.camping_requested" 
+                                        :value="false"
+                                    >
+                                    <label class="form-check-label" :for="'no_' + visit.index">No</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
