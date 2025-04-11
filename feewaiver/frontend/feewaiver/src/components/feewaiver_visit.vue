@@ -1,239 +1,210 @@
 <template lang="html">
-            <FormSection :formCollapse="false" :label="label" :Index="'index_' + visit.index" :noChevron="!isInternal" :customClass="'mb-3'">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <div class="row">
-                            <button v-if="visit.index > 0 && !isInternal" class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="removeVisit()">Remove Visit</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-10">
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="visit_description" class="col-sm-4 form-label" >Provide the details and purpose of your visit</label>
-                            <div class="col-sm-8">
-                                <textarea 
-                                    :disabled="readonly" 
-                                    required 
-                                    class="form-control" 
-                                    name="visit_description" 
-                                    v-model="visit.description"
-                                    :id="'visit_description_' + visit.index"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-10">
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-4 form-label">Park/s with entry fees you intend to visit</label>
-                            <div :id="'parks_parent_' + visit.index" class="col-sm-6 parkclass">
-                                <select :disabled="readonly" :id="'parks_' + visit.index" class="form-control" multiple="multiple">
-                                    <option v-for="park in paidParks" :value="park.id">{{park.name}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+    <FormSection :formCollapse="false" :label="label" :Index="'index_' + visit.index" :noChevron="!isInternal" :customClass="'mb-3'">
+        <div class="row">
+            <button v-if="visit.index > 0 && !isInternal" class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="removeVisit()">Remove Visit</button>
+        </div>
 
-                    <div class="form-group mb-3">
-                        <div class="row">
-                            <label class="col-sm-4 col-form-label">Are you intending to camp during your visit?</label>
-                            <div class="col-sm-8">
-                                <div class="form-check form-check-inline">
-                                    <input 
-                                        :disabled="readonly" 
-                                        class="form-check-input" 
-                                        :id="'yes_' + visit.index" 
-                                        type="radio" 
-                                        v-model="visit.camping_requested" 
-                                        :value="true"
-                                    >
-                                    <label class="form-check-label" :for="'yes_' + visit.index">Yes</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input 
-                                        :disabled="readonly" 
-                                        class="form-check-input" 
-                                        :id="'no_' + visit.index" 
-                                        type="radio" 
-                                        v-model="visit.camping_requested" 
-                                        :value="false"
-                                    >
-                                    <label class="form-check-label" :for="'no_' + visit.index">No</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="visit.camping_requested" class="col-sm-10">
-                    <div v-if="isInternal" :key="feeWaiverId" class="form-group">
-                        <div class="row">
-                            <label class="col-sm-4">Applicable camping waiver</label>
-                                <div class="col-sm-8">
-                                    <select :disabled="!canProcess" class="form-control" v-model="visit.camping_assessment">
-                                        <option v-for="choice in campingChoices" :value="Object.keys(choice)[0]">{{Object.values(choice)[0]}}</option>
-                                    </select>
-                                </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-4 form-label">Are there other parks not listed above you intend to camp at?</label>
-                            <div class="col-sm-6 campgroundclass">
-                                <select :disabled="readonly" :id="'free_parks_' + visit.index" class="form-control" multiple="multiple">
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <!--div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-4 form-label">Campground/s</label>
-                            <div :id="'campgrounds_parent_' + visit.index" class="col-sm-6 campgroundclass">
-                                <select :disabled="readonly" required :id="'campgrounds_' + visit.index" class="form-control" multiple="multiple">
-                                </select>
-                            </div>
-                        </div>
-                    </div-->
-                </div>
-                <div class="col-sm-10">
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-4 form-label">Date from</label>
-                            <div class="col-sm-4">
-                                <div class="input-group date" >
-                                        <input 
-                                            :disabled="readonly" 
-                                            required 
-                                            type="text" 
-                                            class="form-control" 
-                                            placeholder="DD/MM/YYYY" 
-                                            v-model="visit.date_from" 
-                                            :id="'dateFromPicker_' + visit.index"
-                                        />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-4 form-label">Date to</label>
-                            <div class="col-sm-4">
-                                <div class="input-group date" >
-                                        <input 
-                                            :disabled="readonly" 
-                                            required 
-                                            type="text" 
-                                            class="form-control" 
-                                            placeholder="DD/MM/YYYY" 
-                                            v-model="visit.date_to" 
-                                            :id="'dateToPicker_' + visit.index"
-                                            />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="number_of_vehicles" class="col-sm-4 form-label">Number of vehicles used for visit</label>
-                            <div class="col-sm-4">
-                                <input :disabled="readonly" required type="number" class="form-control" name="number_of_vehicles" min="0" step="1" v-model="visit.number_of_vehicles">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="number_of_participants" class="col-sm-4 form-label">Number of participants</label>
-                            <div class="col-sm-4">
-                                <input :disabled="readonly" required type="number" class="form-control" name="number_of_participants" min="0" step="1" v-model="visit.number_of_participants">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <div class="row">
-                            <label class="col-sm-4 col-form-label">Age of participants</label>
-                            <div class="col-sm-8">
-                                <div class="d-flex flex-wrap gap-1">
-                                    <div class="form-check">
-                                        <input 
-                                            :ref="'age_of_participants_' + visit.index" 
-                                            :disabled="readonly" 
-                                            class="form-check-input" 
-                                            type="checkbox" 
-                                            :id="'15_' + visit.index" 
-                                            value="15" 
-                                            v-model="visit.age_of_participants_array"
-                                        >
-                                        <label class="form-check-label" :for="'15_' + visit.index">Under 15 yrs</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input 
-                                            :disabled="readonly" 
-                                            class="form-check-input" 
-                                            type="checkbox" 
-                                            :id="'24_' + visit.index" 
-                                            value="24" 
-                                            v-model="visit.age_of_participants_array"
-                                        >
-                                        <label class="form-check-label" :for="'24_' + visit.index">15-24 yrs</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input 
-                                            :disabled="readonly" 
-                                            class="form-check-input" 
-                                            type="checkbox" 
-                                            :id="'25_' + visit.index" 
-                                            value="25" 
-                                            v-model="visit.age_of_participants_array"
-                                        >
-                                        <label class="form-check-label" :for="'25_' + visit.index">25-39 yrs</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input 
-                                            :disabled="readonly" 
-                                            class="form-check-input" 
-                                            type="checkbox" 
-                                            :id="'40_' + visit.index" 
-                                            value="40" 
-                                            v-model="visit.age_of_participants_array"
-                                        >
-                                        <label class="form-check-label" :for="'40_' + visit.index">40-59 yrs</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input 
-                                            :disabled="readonly" 
-                                            class="form-check-input" 
-                                            type="checkbox" 
-                                            :id="'60_' + visit.index" 
-                                            value="60" 
-                                            v-model="visit.age_of_participants_array"
-                                        >
-                                        <label class="form-check-label" :for="'60_' + visit.index">60 yrs and over</label>
-                                    </div>
-                                </div>
-                                <div v-if="ageOfParticipantsErrorText" class="text-danger mt-2">
-                                    <span aria-live="polite">{{ ageOfParticipantsErrorText }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-if="isInternal" class="float-end">
-                        <label>Issue?</label>
-                        <input :disabled="readonly" type="checkbox" :id="'visit_issue_' + visit.index" :value="true" v-model="visit.issued" @change.prevent="recalcVisits">
-                    </div>
-                </div>
-            </FormSection>
+        <div class="row mb-2">
+            <label for="visit_description" class="col-sm-4 col-form-label" >Provide the details and purpose of your visit</label>
+            <div class="col-sm-8">
+                <textarea 
+                    :disabled="readonly" 
+                    required 
+                    class="form-control" 
+                    name="visit_description" 
+                    v-model="visit.description"
+                    :id="'visit_description_' + visit.index"
+                />
+            </div>
+        </div>
 
+        <div class="row mb-2">
+            <label for="parks" class="col-sm-4 col-form-label">Park/s with entry fees you intend to visit</label>
+            <div :id="'parks_parent_' + visit.index" class="col-sm-6 parkclass">
+                <select :disabled="readonly" :id="'parks_' + visit.index" class="form-select" multiple="multiple">
+                    <option v-for="park in paidParks" :key="park.id" :value="park.id">{{park.name}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-sm-4 col-form-label">Are you intending to camp during your visit?</label>
+            <div class="col-sm-8">
+                <div class="form-check form-check-inline">
+                    <input 
+                        :disabled="readonly" 
+                        class="form-check-input" 
+                        :id="'yes_' + visit.index" 
+                        type="radio" 
+                        v-model="visit.camping_requested" 
+                        :value="true"
+                    >
+                    <label class="form-check-label" :for="'yes_' + visit.index">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input 
+                        :disabled="readonly" 
+                        class="form-check-input" 
+                        :id="'no_' + visit.index" 
+                        type="radio" 
+                        v-model="visit.camping_requested" 
+                        :value="false"
+                    >
+                    <label class="form-check-label" :for="'no_' + visit.index">No</label>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="visit.camping_requested" class="col-sm-10">
+            <div v-if="isInternal" :key="feeWaiverId" class="form-group mb-3">
+                <div class="row">
+                    <label for="camping_assessment" class="col-sm-4 col-form-label">Applicable camping waiver</label>
+                        <div class="col-sm-8">
+                            <select :disabled="!canProcess" class="form-select" id="camping_assessment" v-model="visit.camping_assessment">
+                                <option v-for="choice in campingChoices" :key="Object.keys(choice)[0]" :value="Object.keys(choice)[0]">{{Object.values(choice)[0]}}</option>
+                            </select>
+                        </div>
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <div class="row">
+                    <label for="free_parks" class="col-sm-4 col-form-label">Are there other parks not listed above you intend to camp at?</label>
+                    <div class="col-sm-6 campgroundclass">
+                        <select :disabled="readonly" :id="'free_parks_' + visit.index" class="form-select" multiple="multiple">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-sm-4 col-form-label">Date from</label>
+            <div class="col-sm-4">
+                <div class="input-group date" >
+                    <input 
+                        :disabled="readonly" 
+                        required 
+                        type="text" 
+                        class="form-control" 
+                        placeholder="DD/MM/YYYY" 
+                        v-model="visit.date_from" 
+                        :id="'dateFromPicker_' + visit.index"
+                    />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-sm-4 col-form-label">Date to</label>
+            <div class="col-sm-4">
+                <div class="input-group date" >
+                    <input 
+                        :disabled="readonly" 
+                        required 
+                        type="text" 
+                        class="form-control" 
+                        placeholder="DD/MM/YYYY" 
+                        v-model="visit.date_to" 
+                        :id="'dateToPicker_' + visit.index"
+                        />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label for="number_of_vehicles" class="col-sm-4 col-form-label">Number of vehicles used for visit</label>
+            <div class="col-sm-1">
+                <input :disabled="readonly" required type="number" class="form-control" name="number_of_vehicles" min="0" step="1" v-model="visit.number_of_vehicles">
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label for="number_of_participants" class="col-sm-4 col-form-label">Number of participants</label>
+            <div class="col-sm-1">
+                <input :disabled="readonly" required type="number" class="form-control" name="number_of_participants" min="0" step="1" v-model="visit.number_of_participants">
+            </div>
+        </div>
+
+        <div class="row">
+            <label class="col-sm-4 col-form-label">Age of participants</label>
+            <div class="col-sm-8">
+                <div class="d-flex flex-wrap gap-1">
+                    <div class="form-check">
+                        <input 
+                            :ref="'age_of_participants_' + visit.index" 
+                            :disabled="readonly" 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            :id="'15_' + visit.index" 
+                            value="15" 
+                            v-model="visit.age_of_participants_array"
+                        >
+                        <label class="form-check-label" :for="'15_' + visit.index">Under 15 yrs</label>
+                    </div>
+                    <div class="form-check">
+                        <input 
+                            :disabled="readonly" 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            :id="'24_' + visit.index" 
+                            value="24" 
+                            v-model="visit.age_of_participants_array"
+                        >
+                        <label class="form-check-label" :for="'24_' + visit.index">15-24 yrs</label>
+                    </div>
+                    <div class="form-check">
+                        <input 
+                            :disabled="readonly" 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            :id="'25_' + visit.index" 
+                            value="25" 
+                            v-model="visit.age_of_participants_array"
+                        >
+                        <label class="form-check-label" :for="'25_' + visit.index">25-39 yrs</label>
+                    </div>
+                    <div class="form-check">
+                        <input 
+                            :disabled="readonly" 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            :id="'40_' + visit.index" 
+                            value="40" 
+                            v-model="visit.age_of_participants_array"
+                        >
+                        <label class="form-check-label" :for="'40_' + visit.index">40-59 yrs</label>
+                    </div>
+                    <div class="form-check">
+                        <input 
+                            :disabled="readonly" 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            :id="'60_' + visit.index" 
+                            value="60" 
+                            v-model="visit.age_of_participants_array"
+                        >
+                        <label class="form-check-label" :for="'60_' + visit.index">60 yrs and over</label>
+                    </div>
+                </div>
+                <div v-if="ageOfParticipantsErrorText" class="text-danger mt-2">
+                    <span aria-live="polite">{{ ageOfParticipantsErrorText }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="isInternal" class="float-end">
+            <label>Issue?</label>
+            <input :disabled="readonly" type="checkbox" :id="'visit_issue_' + visit.index" :value="true" v-model="visit.issued" @change.prevent="recalcVisits">
+        </div>
+    </FormSection>
 </template>
 
 <script>
-
     import { api_endpoints, helpers }from '@/utils/hooks'
     import FormSection from "@/components/forms/section_toggle.vue"
     import 'bootstrap/dist/css/bootstrap.css';
