@@ -169,12 +169,16 @@ export default {
             }
         },
         uploadFile(target, file_obj){
+            let vm = this;
             let _file = null;
             var input = $('.'+target)[0];
             if (input.files && input.files[0]) {
-                const file = input.files[0];
-                file_obj.file = file;
-                file_obj.name = file.name;
+                var reader = new FileReader();
+                reader.readAsDataURL(input.files[0]); 
+                reader.onload = function(e) {
+                    _file = e.target.result;
+                };
+                _file = input.files[0];
             }
             file_obj.file = _file;
             file_obj.name = _file.name;
