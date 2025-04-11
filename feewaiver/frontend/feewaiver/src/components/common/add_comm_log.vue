@@ -1,6 +1,5 @@
 <template lang="html">
     <div id="AddComms">
-        <!-- <modal :key="modalKey" transition="modal fade" @ok="ok()" @cancel="cancel()" title="Communication log - Add entry" large> -->
         <modal transition="modal fade" @ok="ok()" @cancel="cancel()" title="Communication log - Add entry" large>
             <div class="container-fluid">
                 <div class="row">
@@ -170,16 +169,12 @@ export default {
             }
         },
         uploadFile(target, file_obj){
-            let vm = this;
             let _file = null;
             var input = $('.'+target)[0];
             if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.readAsDataURL(input.files[0]); 
-                reader.onload = function(e) {
-                    _file = e.target.result;
-                };
-                _file = input.files[0];
+                const file = input.files[0];
+                file_obj.file = file;
+                file_obj.name = file.name;
             }
             file_obj.file = _file;
             file_obj.name = _file.name;
@@ -228,6 +223,13 @@ export default {
             let vm = this;
             vm.errors = false;
             let comms = new FormData(vm.form); 
+
+            vm.files.forEach((fileObj, index) => {
+                if (fileObj.file) {
+                    comms.append('file-' + index, fileObj.file, fileObj.name);
+                }
+            });
+            comms.append('num_files', vm.files.length);
 
             vm.addingComms = true;
             vm.$http.post(vm.url, comms,{
