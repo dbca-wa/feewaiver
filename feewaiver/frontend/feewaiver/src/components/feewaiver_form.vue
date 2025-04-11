@@ -3,175 +3,165 @@
         <i class='fa fa-5x fa-spinner fa-spin'></i>
     </div>
     <div v-else :class="containingClass">
-    <form id="feewaiver-form" @submit.prevent="submit">
-        <div v-if="!isInternal" class="card border headerbox mb-3">
-            <strong>
-                <p>Welcome to the entry fee waiver request form. Entry fee waivers may be provided to certain groups undertaking organised outings in <a href='https://parks.dpaw.wa.gov.au/know/park-entry-fees' target='_blank'>parks with entry fees</a> managed by the Department of Biodiversity Conservation and Attractions (DBCA).</p>
-                <p>Please fill out the details in the form below and submit to the Department. You will be notified of the outcome of your request by email. You may also apply for a camping fee waiver by selecting yes to camping during your visit. If the park you are camping at does not have park entry fees, it can be selected once you have selected yes to camping. Any applicable camping fee reduction or waiver will be applied by the department when processing your request.</p>
-                <p>You can add multiple visits to the same fee waiver request by clicking add another visit prior to submitting.</p>
-            </strong>
-        </div>
-        <FormSection :formCollapse="false" label="Contact Details" Index="contact_details" :noChevron="!isInternal" :customClass="'mb-3'">
-            <!-- <div class="col-md-12"> -->
-                <!-- <div class="form-group"> -->
-                    <div class="row">
-                    <label for="" class="col-sm-2 form-label">Organisation</label>
+        <form id="feewaiver-form" @submit.prevent="submit">
+            <div v-if="!isInternal" class="card border headerbox mb-3">
+                <strong>
+                    <p>Welcome to the entry fee waiver request form. Entry fee waivers may be provided to certain groups undertaking organised outings in <a href='https://parks.dpaw.wa.gov.au/know/park-entry-fees' target='_blank'>parks with entry fees</a> managed by the Department of Biodiversity Conservation and Attractions (DBCA).</p>
+                    <p>Please fill out the details in the form below and submit to the Department. You will be notified of the outcome of your request by email. You may also apply for a camping fee waiver by selecting yes to camping during your visit. If the park you are camping at does not have park entry fees, it can be selected once you have selected yes to camping. Any applicable camping fee reduction or waiver will be applied by the department when processing your request.</p>
+                    <p>You can add multiple visits to the same fee waiver request by clicking add another visit prior to submitting.</p>
+                </strong>
+            </div>
+            <FormSection :formCollapse="false" label="Contact Details" Index="contact_details" :noChevron="!isInternal" :customClass="'mb-3'">
+                <div class="row mb-2">
+                    <label for="organisation" class="col-sm-2 col-form-label">Organisation</label>
                     <div class="col-sm-4">
-                        <input :disabled="readonly" required type="text" class="form-control" name="organisation" placeholder="" v-model="contactDetails.organisation">
+                        <input :disabled="readonly" required type="text" class="form-control" id="organisation" name="organisation" placeholder="" v-model="contactDetails.organisation">
                     </div>
-                    <label for="" class="col-sm-2 form-label">Contact Name</label>
+                    <label for="contact_name" class="col-sm-2 col-form-label">Contact Name</label>
                     <div class="col-sm-4">
-                        <input :disabled="readonly" required type="text" class="form-control" name="contact_name" placeholder="" v-model="contactDetails.contact_name">
+                        <input :disabled="readonly" required type="text" class="form-control" id="contact_name" name="contact_name" placeholder="" v-model="contactDetails.contact_name">
                     </div>
-                    </div>
-                <!-- </div> -->
-                <!-- <div class="form-group"> -->
-                    <div class="row">
-                    <label for="" class="col-sm-2 form-label">Postal Address</label>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="postal_address" class="col-sm-2 col-form-label">Postal Address</label>
                     <div class="col-sm-4">
-                        <input :disabled="readonly" required type="text" class="form-control" name="postal_address" placeholder="" v-model="contactDetails.postal_address">
+                        <input :disabled="readonly" required type="text" class="form-control" id="postal_address" name="postal_address" placeholder="" v-model="contactDetails.postal_address">
                     </div>
-                    </div>
-                <!-- </div> -->
-                <!-- <div class="form-group"> -->
-                    <div class="row">
-                    <label for="suburb" class="col-sm-2 form-label">Suburb</label>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="suburb" class="col-sm-2 col-form-label">Suburb</label>
                     <div class="col-sm-4">
-                        <input :disabled="readonly" required type="text" class="form-control" name="suburb" placeholder="" v-model="contactDetails.suburb">
+                        <input :disabled="readonly" required type="text" class="form-control" id="suburb" name="suburb" placeholder="" v-model="contactDetails.suburb">
                     </div>
-                    <label for="state" class="col-sm-1 form-label">State</label>
+                    <label for="state" class="col-sm-1 col-form-label">State</label>
                     <div class="col-sm-2">
-                        <input :disabled="readonly" required type="text" class="form-control" name="state" placeholder="" v-model="contactDetails.state">
+                        <input :disabled="readonly" required type="text" class="form-control" id="state" name="state" placeholder="" v-model="contactDetails.state">
                     </div>
-                    <label for="postcode" class="col-sm-1 form-label">Postcode</label>
+                    <label for="postcode" class="col-sm-1 col-form-label">Postcode</label>
                     <div class="col-sm-2">
-                        <input :disabled="readonly" required type="text" class="form-control" name="postcode" placeholder="" v-model="contactDetails.postcode">
+                        <input :disabled="readonly" required type="text" class="form-control" id="postcode" name="postcode" placeholder="" v-model="contactDetails.postcode">
                     </div>
-                    </div>
-                <!-- </div> -->
-                <!-- <div class="form-group"> -->
-                    <div class="row">
-                    <label for="phone" class="col-sm-2 form-label">Phone</label>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="phone" class="col-sm-2 col-form-label">Phone</label>
                     <div class="col-sm-4">
-                    <input :disabled="readonly" required type="text" class="form-control" name="phone" placeholder="" v-model="contactDetails.phone">
+                        <input :disabled="readonly" required type="text" class="form-control" id="phone" name="phone" placeholder="" v-model="contactDetails.phone">
                     </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="contact_details_email" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-4">
+                        <input :disabled="readonly" required type="email" class="form-control" name="email" placeholder="" v-model="contactDetails.email" id="contact_details_email">
+                        <span class="error" aria-live="polite"></span>
                     </div>
-                <!-- </div> -->
-                <!-- <div class="form-group"> -->
-                    <div class="row">
-                        <label for="email" class="col-sm-2 form-label">Email</label>
-                        <div class="col-sm-4">
-                            <input :disabled="readonly" required type="email" class="form-control" name="email" placeholder="" v-model="contactDetails.email" id="contact_details_email">
-                            <span class="error" aria-live="polite"></span>
-                        </div>
-                        <label for="email_confirmation" class="col-sm-2 form-label">Confirm Email</label>
-                        <div class="col-sm-4">
+                    <label for="email_confirmation" class="col-sm-2 col-form-label">Confirm Email</label>
+                    <div class="col-sm-4">
                         <input :disabled="readonly" required type="email" class="form-control" name="email_confirmation" placeholder="" v-model="contactDetails.email_confirmation" id="email_confirmation">
-                        </div>
                     </div>
-                <!-- </div> -->
-                <!-- <div class="form-group"> -->
-                    <div class="row">
-                        <label for="email" class="col-sm-2 form-label">CC Email (if applicable)</label>
-                        <div class="col-sm-4">
-                            <input :disabled="readonly" type="email" class="form-control" name="email" placeholder="" v-model="contactDetails.cc_email" id="contact_details_cc_email">
-                            <span class="error" aria-live="polite"></span>
-                        </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="contact_details_cc_email" class="col-sm-2 col-form-label">CC Email (if applicable)</label>
+                    <div class="col-sm-4">
+                        <input :disabled="readonly" type="email" class="form-control" name="email" placeholder="" v-model="contactDetails.cc_email" id="contact_details_cc_email">
+                        <span class="error" aria-live="polite"></span>
                     </div>
-                <!-- </div> -->
-                <!-- <div class="form-group"> -->
-                    <div class="row">
-                        <label class="col-sm-4 form-label">Participants</label>
-                        <div class="col-sm-6">
-                            <select :disabled="readonly" required ref="participants" class="form-control" v-model="contactDetails.participants_id">
-                                <option value=""></option>
-                                <option v-for="group in participantGroupList" :value="group.id">{{group.name}}</option>
-                            </select>
-                        </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label for="participants" class="col-sm-4 col-form-label">Participants</label>
+                    <div class="col-sm-6">
+                        <select :disabled="readonly" required id="participants" ref="participants" class="form-select" v-model="contactDetails.participants_id">
+                            <option value=""></option>
+                            <option v-for="group in participantGroupList" :key="group.id" :value="group.id">{{group.name}}</option>
+                        </select>
                     </div>
-                <!-- </div> -->
-                <!-- <div class="form-group"> -->
-                    <div class="row">
-                      <label class="col-sm-4 form-label">Provide a brief explanation of your organisation</label>
-                      <div class="col-sm-8">
-                          <textarea :disabled="readonly" required class="form-control" v-model="contactDetails.organisation_description"/>
-                      </div>
+                </div>
+
+                <div class="row mb-2">
+                    <label class="col-sm-4 col-form-label">Provide a brief explanation of your organisation</label>
+                    <div class="col-sm-8">
+                        <textarea :disabled="readonly" required class="form-control" v-model="contactDetails.organisation_description"/>
                     </div>
-                <!-- </div> -->
-                <!-- <div class="form-group"> -->
-                    <div class="row">
-                      <label class="col-sm-4 form-label">Attach any other documentation you want to provide</label>
-                      <div class="col-sm-8">
-                          <FileField
-                              class="input_file_wrapper"
-                              ref="contact_details_documents"
-                              name="contact-details-documents"
-                              :isRepeatable="true"
-                              :documentActionUrl="documentActionUrl"
-                              :replace_button_by_text="true"
-                              @update-temp-doc-coll-id="updateTempDocCollId"
-                              :key="documentActionUrl"
-                              :readonly="readonly"
-                          />
-                      </div>
-                    </div>
-                <!-- </div> -->
-            <!-- </div> -->
-        </FormSection>
-        <div v-for="visit in visits" >
-            <VisitSection 
-            :key="'visit' + visit.index + '_' + uuid"
-            :formCollapse="false" 
-            :label="'Visit ' + (visit.index + 1)"
-            :Index="'index_' + visit.index"
-            :ref="'visit_' + visit.index"
-            :id="'visit_' + visit.index"
-            :visit="visit"
-            :participantGroupList="participantGroupList"
-            :parksList="parksList"
-            :campingChoices="campingChoices"
-            :feeWaiverId="feeWaiverId"
-            :canProcess="canProcess"
-            :isInternal="isInternal"
-            :readonly="readonly"
-             @recalc-visits-flag="recalcVisitsFlag"
-            />
-        </div>
-        <div v-if="isInternal">
-            <FormSection :formCollapse="false" label="Comments to applicant" :Index="'comments_to_applicant' + feeWaiverId">
-                <div class="form-group">
-                    <div class="row">
-                      <label class="col-sm-4 form-label">Comments</label>
-                      <div class="col-sm-8">
-                          <textarea :disabled="readonly" class="form-control" v-model="feeWaiver.comments_to_applicant"/>
-                      </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-4 col-form-label">Attach any other documentation you want to provide</label>
+                    <div class="col-sm-8">
+                        <FileField
+                            class="input_file_wrapper"
+                            ref="contact_details_documents"
+                            name="contact-details-documents"
+                            :isRepeatable="true"
+                            :documentActionUrl="documentActionUrl"
+                            :replace_button_by_text="true"
+                            @update-temp-doc-coll-id="updateTempDocCollId"
+                            :key="documentActionUrl"
+                            :readonly="readonly"
+                        />
                     </div>
                 </div>
             </FormSection>
-        </div>
-        <div>
-            <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
-            <div class="row mb-5">
-              <div v-if="feeWaiverId && canProcess" class="fixed-bottom bg-light py-2">
-                    <div class="container">
-                      <p class="d-flex justify-content-end">
-                        <button class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="save()">Save Changes</button>
-                      </p>
-                    </div>
-              </div>
-              <div v-else-if="!feeWaiverId" class="fixed-bottom bg-light py-2">
-                    <div class="container">
-                      <p class="d-flex justify-content-end gap-2">
-                        <input type="button" @click.prevent="addVisit" class="btn btn-primary" value="Add another visit"/>
-                        <button :title="submitDisabledText" :disabled="submitDisabled" class="btn btn-primary" type="submit">Submit</button>
-                      </p>
-                    </div>
-              </div>
+
+            <div v-for="visit in visits" >
+                <VisitSection 
+                    :key="'visit' + visit.index + '_' + uuid"
+                    :formCollapse="false" 
+                    :label="'Visit ' + (visit.index + 1)"
+                    :Index="'index_' + visit.index"
+                    :ref="'visit_' + visit.index"
+                    :id="'visit_' + visit.index"
+                    :visit="visit"
+                    :participantGroupList="participantGroupList"
+                    :parksList="parksList"
+                    :campingChoices="campingChoices"
+                    :feeWaiverId="feeWaiverId"
+                    :canProcess="canProcess"
+                    :isInternal="isInternal"
+                    :readonly="readonly"
+                    @recalc-visits-flag="recalcVisitsFlag"
+                />
             </div>
 
-        </div>
+            <div v-if="isInternal">
+                <FormSection :formCollapse="false" label="Comments to applicant" :Index="'comments_to_applicant' + feeWaiverId">
+                    <div class="form-group">
+                        <div class="row">
+                        <label class="col-sm-4 col-form-label">Comments</label>
+                        <div class="col-sm-8">
+                            <textarea :disabled="readonly" class="form-control" v-model="feeWaiver.comments_to_applicant"/>
+                        </div>
+                        </div>
+                    </div>
+                </FormSection>
+            </div>
 
-    </form>
+            <div>
+                <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
+                <div class="row mb-5">
+                    <div v-if="feeWaiverId && canProcess" class="fixed-bottom bg-light py-2">
+                            <div class="container">
+                            <p class="d-flex justify-content-end">
+                                <button class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="save()">Save Changes</button>
+                            </p>
+                            </div>
+                    </div>
+                    <div v-else-if="!feeWaiverId" class="fixed-bottom bg-light py-2">
+                        <div class="container">
+                            <p class="d-flex justify-content-end gap-2">
+                                <input type="button" @click.prevent="addVisit" class="btn btn-primary" value="Add another visit"/>
+                                <button :title="submitDisabledText" :disabled="submitDisabled" class="btn btn-primary" type="submit">Submit</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
     </div>
 </template>
 

@@ -324,7 +324,6 @@ export default {
             let commsLogId = 'comms-log-table' + vm_uid;
             let popover_name = 'popover-' + this._uid + '-comms';
             
-            // Bootstrap 5 の Popover 初期化
             const popoverInstance = new bootstrap.Popover(this.$refs.showCommsBtn, {
                 content: function() {
                     return ` 
@@ -340,11 +339,9 @@ export default {
                 template: `<div class="popover ${popover_name}" role="tooltip"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>`,
             });
             
-            // イベントリスナーをセットアップ
             this.$refs.showCommsBtn.addEventListener('inserted.bs.popover', function () {
                 table = $('#' + commsLogId).DataTable(datatable_options);
 
-                // テーブル描画時のポップオーバー初期化
                 table.on('draw.dt', function () {
                     const $tablePopovers = $(this).find('[data-bs-toggle="popover"]');
                     if ($tablePopovers.length > 0) {
@@ -352,7 +349,6 @@ export default {
                             new bootstrap.Popover(this);
                         });
                         
-                        // クリックイベントの防止
                         $tablePopovers.on('click', function (e) {
                             e.preventDefault();
                             return true;   
@@ -361,7 +357,6 @@ export default {
                 });
             });
             
-            // ポップオーバー位置調整イベント
             this.$refs.showCommsBtn.addEventListener('shown.bs.popover', function () {
                 var el = ref;
                 var popoverEl = document.querySelector('.' + popover_name);
@@ -386,7 +381,6 @@ export default {
             let actionLogId = 'actions-log-table' + vm_uid;
             let popover_name = 'popover-' + this._uid + '-logs';
             
-            // Bootstrap 5 の Popover 初期化
             const popoverInstance = new bootstrap.Popover(this.$refs.showActionBtn, {
                 content: function() {
                     return ` 
@@ -411,12 +405,10 @@ export default {
                 template: `<div class="popover ${popover_name}" role="tooltip"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>`,
             });
             
-            // イベントリスナーをセットアップ
             this.$refs.showActionBtn.addEventListener('inserted.bs.popover', function () {
                 table = $('#' + actionLogId).DataTable(datatable_options);
             });
             
-            // ポップオーバー位置調整イベント
             this.$refs.showActionBtn.addEventListener('shown.bs.popover', function () {
                 var el = ref;
                 var popoverEl = document.querySelector('.' + popover_name);
@@ -448,7 +440,6 @@ export default {
             this.$refs.add_comm.isModalOpen = true;
         },
         
-        // ヘルパーメソッドとして追加
         commaToNewline(value) {
             return value ? value.replace(/,\s*/g, '<br />') : '';
         }
