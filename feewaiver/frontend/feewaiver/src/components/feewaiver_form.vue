@@ -168,9 +168,11 @@
 <script>
     import { api_endpoints, helpers }from '@/utils/hooks'
     import FormSection from "@/components/forms/section_toggle.vue"
-    import 'bootstrap/dist/css/bootstrap.css';
-    import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-    import 'eonasdan-bootstrap-datetimepicker';
+    import 'bootstrap/dist/css/bootstrap.css'
+    import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+    import '@popperjs/core/dist/umd/popper.min.js'
+    import '@eonasdan/tempus-dominus/dist/js/tempus-dominus.min.js'
+    import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
     import VisitSection from "./feewaiver_visit.vue"
     import FileField from '@/components/forms/filefield_immediate.vue'
     import Swal from 'sweetalert2';

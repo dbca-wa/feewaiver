@@ -90,7 +90,7 @@
                         :id="'dateFromPicker_' + visit.index"
                     />
                     <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
+                        <span class="fa fa-calendar"></span>
                     </span>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                         :id="'dateToPicker_' + visit.index"
                         />
                     <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
+                        <span class="fa fa-calendar"></span>
                     </span>
                 </div>
             </div>
@@ -205,15 +205,14 @@
 </template>
 
 <script>
-    import { api_endpoints, helpers }from '@/utils/hooks'
     import FormSection from "@/components/forms/section_toggle.vue"
-    import 'bootstrap/dist/css/bootstrap.css';
-    require("moment");
-    require("select2/dist/css/select2.min.css");
-    require("select2-bootstrap-theme/dist/select2-bootstrap.min.css");
-    import select2 from "select2/dist/js/select2.full.js";
-    require('eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
-    require('eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+    import 'bootstrap/dist/css/bootstrap.css'
+    import "moment"
+    import "select2/dist/css/select2.min.css"
+    import "select2-bootstrap-theme/dist/select2-bootstrap.min.css"
+    import '@popperjs/core/dist/umd/popper.min.js'
+    import '@eonasdan/tempus-dominus/dist/js/tempus-dominus.min.js'
+    import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
 
     export default {
         name: 'FeeWaiverVisit',

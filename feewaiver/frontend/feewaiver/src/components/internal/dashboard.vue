@@ -5,19 +5,19 @@
                 <div class="col-md-3">
                     <label class="form-label" for="lodged-from">Lodged From</label>
                     <div class="input-group mb-3" ref="feewaiverDateFromPicker">
-                        <input type="text" id="lodged-from" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedFrom">
-                        <span class="input-group-text">
+                        <!-- <input type="text" id="lodged-from" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedFrom"> -->
+                        <!-- <span class="input-group-text">
                             <i class="fa fa-calendar"></i>
-                        </span>
+                        </span> -->
                     </div>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label" for="lodged-to">Lodged To</label>
                     <div class="input-group mb-3" ref="feewaiverDateToPicker">
                         <input type="text" id="lodged-to" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedTo">
-                        <span class="input-group-text">
+                        <!-- <span class="input-group-text">
                             <i class="fa fa-calendar"></i>
-                        </span>
+                        </span> -->
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -30,6 +30,19 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="datetimepicker1" class="pt-2 pr-2">Lodged From：</label>
+                    <div class="input-group date mb-3" id="datetimepicker1" data-target-input="nearest">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                        <div class="input-group-text" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                            <i class="fa-regular fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-lg-12" style="margin-top:25px;">
                     <datatable ref="feewaiver_datatable" :id="datatable_id" :dtOptions="feewaiver_options" :dtHeaders="feewaiver_headers"/>
@@ -49,6 +62,9 @@ import {
     helpers
 }from '@/utils/hooks'
 import axios from 'axios'
+import '@popperjs/core/dist/umd/popper.min.js'
+import { TempusDominus } from '@eonasdan/tempus-dominus'
+import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
 
 export default {
     name: 'FeeWaiverDash',
@@ -307,48 +323,62 @@ export default {
         },
         addEventListeners: async function(){
             let vm = this;
+            const picker = new TempusDominus(document.getElementById('datetimepicker1'), {
+                localization: {
+                    format: 'dd/MM/yyyy',
+                    close: 'Close'
+                },
+                display: {
+                    components: {
+                        clock: false
+                    },
+                    buttons: {
+                        close: true
+                    }
+                }
+            });
             // Initialise Proposal Date Filters
-            $(vm.$refs.feewaiverDateToPicker).datetimepicker(vm.datepickerOptions);
-            $(vm.$refs.feewaiverDateToPicker).on('dp.change', function(e){
-                if ($(vm.$refs.feewaiverDateToPicker).data('DateTimePicker').date()) {
-                    vm.filterFeeWaiverLodgedTo =  e.date.format('DD/MM/YYYY');
-                }
-                else if ($(vm.$refs.feewaiverDateToPicker).data('date') === "") {
-                    vm.filterFeeWaiverLodgedTo = "";
-                }
-             });
-            $(vm.$refs.feewaiverDateFromPicker).datetimepicker(vm.datepickerOptions);
-            $(vm.$refs.feewaiverDateFromPicker).on('dp.change',function (e) {
-                if ($(vm.$refs.feewaiverDateFromPicker).data('DateTimePicker').date()) {
-                    vm.filterFeeWaiverLodgedFrom = e.date.format('DD/MM/YYYY');
-                    $(vm.$refs.feewaiverDateToPicker).data("DateTimePicker").minDate(e.date);
-                }
-                else if ($(vm.$refs.feewaiverDateFromPicker).data('date') === "") {
-                    vm.filterFeeWaiverLodgedFrom = "";
-                }
-            });
-            let table = vm.$refs.feewaiver_datatable.vmDataTable
-            table.on('responsive-display.dt', function () {
-                var tablePopover = $(this).find('[data-bs-toggle="popover"]');
-                if (tablePopover.length > 0) {
-                    tablePopover.popover();
-                    // the next line prevents from scrolling up to the top after clicking on the popover.
-                    $(tablePopover).on('click', function (e) {
-                        e.preventDefault();
-                        return true;   
-                    });
-                }
-            }).on('draw.dt', function () {
-                var tablePopover = $(this).find('[data-bs-toggle="popover"]');
-                if (tablePopover.length > 0) {
-                    tablePopover.popover();
-                    // the next line prevents from scrolling up to the top after clicking on the popover.
-                    $(tablePopover).on('click', function (e) {
-                        e.preventDefault();
-                        return true;
-                    });
-                }
-            });
+            // $(vm.$refs.feewaiverDateToPicker).datetimepicker(vm.datepickerOptions);
+            // $(vm.$refs.feewaiverDateToPicker).on('dp.change', function(e){
+            //     if ($(vm.$refs.feewaiverDateToPicker).data('DateTimePicker').date()) {
+            //         vm.filterFeeWaiverLodgedTo =  e.date.format('DD/MM/YYYY');
+            //     }
+            //     else if ($(vm.$refs.feewaiverDateToPicker).data('date') === "") {
+            //         vm.filterFeeWaiverLodgedTo = "";
+            //     }
+            //  });
+            // $(vm.$refs.feewaiverDateFromPicker).datetimepicker(vm.datepickerOptions);
+            // $(vm.$refs.feewaiverDateFromPicker).on('dp.change',function (e) {
+            //     if ($(vm.$refs.feewaiverDateFromPicker).data('DateTimePicker').date()) {
+            //         vm.filterFeeWaiverLodgedFrom = e.date.format('DD/MM/YYYY');
+            //         $(vm.$refs.feewaiverDateToPicker).data("DateTimePicker").minDate(e.date);
+            //     }
+            //     else if ($(vm.$refs.feewaiverDateFromPicker).data('date') === "") {
+            //         vm.filterFeeWaiverLodgedFrom = "";
+            //     }
+            // });
+            // let table = vm.$refs.feewaiver_datatable.vmDataTable
+            // table.on('responsive-display.dt', function () {
+            //     var tablePopover = $(this).find('[data-bs-toggle="popover"]');
+            //     if (tablePopover.length > 0) {
+            //         tablePopover.popover();
+            //         // the next line prevents from scrolling up to the top after clicking on the popover.
+            //         $(tablePopover).on('click', function (e) {
+            //             e.preventDefault();
+            //             return true;   
+            //         });
+            //     }
+            // }).on('draw.dt', function () {
+            //     var tablePopover = $(this).find('[data-bs-toggle="popover"]');
+            //     if (tablePopover.length > 0) {
+            //         tablePopover.popover();
+            //         // the next line prevents from scrolling up to the top after clicking on the popover.
+            //         $(tablePopover).on('click', function (e) {
+            //             e.preventDefault();
+            //             return true;
+            //         });
+            //     }
+            // });
 
             vm.addActionShortcutEventListeners();
         },
