@@ -327,7 +327,7 @@ export default {
             const popoverInstance = new bootstrap.Popover(this.$refs.showCommsBtn, {
                 content: function() {
                     return ` 
-                    <table id="${commsLogId}" class="hover table table-striped table-bordered dt-responsive " cellspacing="0" width="100%">
+                    <table id="${commsLogId}" class="hover table table-striped table-bordered border dt-responsive " cellspacing="0" width="100%">
                     </table>`
                 },
                 sanitize: false,
@@ -384,7 +384,7 @@ export default {
             const popoverInstance = new bootstrap.Popover(this.$refs.showActionBtn, {
                 content: function() {
                     return ` 
-                    <table id="${actionLogId}" class="hover table table-striped table-bordered dt-responsive" cellspacing="0" width="100%">
+                    <table id="${actionLogId}" class="hover table table-striped table-bordered border dt-responsive" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>Who</th>
