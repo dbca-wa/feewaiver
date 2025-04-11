@@ -29,8 +29,8 @@
 
         <div class="row mb-2">
             <label class="col-sm-4 col-form-label">Are you intending to camp during your visit?</label>
-            <div class="col-sm-8">
-                <div class="form-check form-check-inline">
+            <div class="col-sm-8 d-flex align-items-center">
+                <div class="form-check form-check-inline mb-0">
                     <input 
                         :disabled="readonly" 
                         class="form-check-input" 
@@ -41,7 +41,7 @@
                     >
                     <label class="form-check-label" :for="'yes_' + visit.index">Yes</label>
                 </div>
-                <div class="form-check form-check-inline">
+                <div class="form-check form-check-inline mb-0">
                     <input 
                         :disabled="readonly" 
                         class="form-check-input" 
@@ -133,7 +133,7 @@
         <div class="row">
             <label class="col-sm-4 col-form-label">Age of participants</label>
             <div class="col-sm-8">
-                <div class="d-flex flex-wrap gap-1">
+                <div class="d-flex flex-wrap justify-content-between">
                     <div class="form-check">
                         <input 
                             :ref="'age_of_participants_' + visit.index" 
@@ -416,72 +416,70 @@
               let el_fr_date = $('#dateFromPicker_' + vm.visit.index);
               let el_to_date = $('#dateToPicker_' + vm.visit.index);
 
-              // "From" field
-              el_fr_date.datetimepicker({
-                format: "DD/MM/YYYY",
-                //format: 'LT',
-                minDate: "now",
-                showClear: true,
-                //allowInputToggle: true,
-              });
-              el_fr_date.on("dp.change", function(e) {
-                if (el_fr_date.data("DateTimePicker").date()) {
-                  vm.visit.date_from = e.date.format("DD/MM/YYYY");
-                  el_to_date.data("DateTimePicker").minDate(e.date);
-                } else if (el_fr_date.data("date") === "") {
-                  vm.visit.date_from = "";
-                }
-              });
-
-              // "To" field
-              el_to_date.datetimepicker({
-                format: "DD/MM/YYYY",
-                //format: 'LT',
-                //minDate: "now",
-                //minDate: el_fr_date,
-                showClear: true,
-                //allowInputToggle: true,
-              });
-              el_to_date.on("dp.change", function(e) {
-                if (el_to_date.data("DateTimePicker").date()) {
-                  vm.visit.date_to = e.date.format("DD/MM/YYYY");
-                } else if (el_to_date.data("date") === "") {
-                  vm.visit.date_to = "";
-                }
-              });
-              $('.input-group').css('z-index', 20);
-              // Parks
-              let parkLabel = 'parks_' + vm.visit.index;
-              let parkParentLabel = 'parks_parent_' + vm.visit.index;
-              let el_parks = $('#' + parkLabel);
-                el_parks.select2({
-                    //placeholder: "parks",
+              // 遅延させてDOMが完全に描画されてから初期化
+              setTimeout(() => {
+                // "From" field
+                el_fr_date.datetimepicker({
+                  format: "DD/MM/YYYY",
+                  minDate: "now",
+                  showClear: true,
+                  widgetPositioning: {
+                      horizontal: 'auto',
+                      vertical: 'bottom'
+                  },
+                  widgetParent: el_fr_date.parent()
                 });
-              el_parks.on('select2:select', function(e) {
-                  let val = e.params.data;
-                  if (!vm.visit.selected_park_ids.includes(val.id)) {
-                      vm.visit.selected_park_ids.push(val.id);
+                el_fr_date.on("dp.change", function(e) {
+                  if (el_fr_date.data("DateTimePicker") && el_fr_date.data("DateTimePicker").date()) {
+                    vm.visit.date_from = e.date.format("DD/MM/YYYY");
+                    el_to_date.data("DateTimePicker").minDate(e.date);
+                  } else if (el_fr_date.data("date") === "") {
+                    vm.visit.date_from = "";
                   }
-              }).
-              on("select2:unselect",function (e) {
-                  let val = e.params.data;
-                  if (vm.visit.selected_park_ids.includes(val.id)) {
-                      let index = vm.visit.selected_park_ids.indexOf(val.id);
-                      vm.visit.selected_park_ids.splice(index, 1);
-                      // remove associated campgrounds
-                      //vm.selectableCampGrounds
-                      /*
-                      for (let campGround of vm.campGroundsList) {
-                          if (campGround.park_id == val.id) {
-                              let index = vm.visit.selected_campground_ids.indexOf(campGround.id.toString());
-                              vm.visit.selected_campground_ids.splice(index, 1);
-                          }
-                      }
-                      */
-                  }
-              });
-              $('.parkclass').css('z-index', 10);
+                });
 
+                // "To" field
+                el_to_date.datetimepicker({
+                  format: "DD/MM/YYYY",
+                  showClear: true,
+                  widgetPositioning: {
+                      horizontal: 'auto',
+                      vertical: 'bottom'
+                  },
+                  widgetParent: el_to_date.parent()
+                });
+                el_to_date.on("dp.change", function(e) {
+                  if (el_to_date.data("DateTimePicker") && el_to_date.data("DateTimePicker").date()) {
+                    vm.visit.date_to = e.date.format("DD/MM/YYYY");
+                  } else if (el_to_date.data("date") === "") {
+                    vm.visit.date_to = "";
+                  }
+                });
+                
+                $('.input-group').css('z-index', 20);
+                
+                // Parks
+                let parkLabel = 'parks_' + vm.visit.index;
+                let parkParentLabel = 'parks_parent_' + vm.visit.index;
+                let el_parks = $('#' + parkLabel);
+                  el_parks.select2({
+                      //placeholder: "parks",
+                  });
+                el_parks.on('select2:select', function(e) {
+                    let val = e.params.data;
+                    if (!vm.visit.selected_park_ids.includes(val.id)) {
+                        vm.visit.selected_park_ids.push(val.id);
+                    }
+                }).
+                on("select2:unselect",function (e) {
+                    let val = e.params.data;
+                    if (vm.visit.selected_park_ids.includes(val.id)) {
+                        let index = vm.visit.selected_park_ids.indexOf(val.id);
+                        vm.visit.selected_park_ids.splice(index, 1);
+                    }
+                });
+                $('.parkclass').css('z-index', 10);
+              }, 100);
             },
             addFreeParksEventListener: function(internal) {
                 let vm = this;
