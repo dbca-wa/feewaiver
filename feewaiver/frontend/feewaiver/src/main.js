@@ -25,6 +25,7 @@ import 'datatables.net-buttons-bs5'
 // Style imports
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css'
+import '@fortawesome/fontawesome-free/css/fontawesome.css'
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css'
 
 // Vue 3 uses createApp to instantiate the application
