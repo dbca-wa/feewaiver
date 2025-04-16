@@ -171,8 +171,8 @@
     import 'bootstrap/dist/css/bootstrap.css'
     import 'bootstrap/dist/js/bootstrap.bundle.min.js'
     import '@popperjs/core/dist/umd/popper.min.js'
-    import '@eonasdan/tempus-dominus/dist/js/tempus-dominus.min.js'
-    import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
+    // import '@eonasdan/tempus-dominus/dist/js/tempus-dominus.min.js'
+    // import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
     import VisitSection from "./feewaiver_visit.vue"
     import FileField from '@/components/forms/filefield_immediate.vue'
     import Swal from 'sweetalert2';
@@ -300,6 +300,7 @@
                 this.$emit('all-visits-unchecked', allVisitsUnchecked);
             },
             updateTempDocCollId: function(id) {
+                console.log('in updateTempDocCollId')
                 this.temporary_document_collection_id = id.temp_doc_id;
             },
             addVisit: async function () {
@@ -414,6 +415,7 @@
                             state: { fee_waiver: returnedFeeWaiver.data }
                         });
                     } catch (error) {
+                        console.log({error})
                         let swalTitle = "Error";
                         let swalText = error.data[0];
                         if (error.data[0].slice(0,1) === '"{') {

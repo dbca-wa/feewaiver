@@ -126,12 +126,15 @@ def save_document(request, instance, comms_instance, document_type, input_name=N
         # log document action
         request_user = auth.get_user(request)
         if type(request_user) is EmailUser:
-            instance.fee_waiver.log_user_action(
-                FeeWaiverUserAction.ACTION_SAVE_DOCUMENT.format(
-                    instance.fee_waiver.lodgement_number, 
-                    document.name, 
-                    request.user.get_full_name()),
-                request)
+            try:
+                instance.fee_waiver.log_user_action(
+                    FeeWaiverUserAction.ACTION_SAVE_DOCUMENT.format(
+                        instance.fee_waiver.lodgement_number, 
+                        document.name, 
+                        request.user.get_full_name()),
+                    request)
+            except Exception as e:
+                print(traceback.print_exc())
 
 # For transferring files from temp doc objs to comms_log objs
 def save_comms_log_document_obj(instance, comms_instance, temp_document):

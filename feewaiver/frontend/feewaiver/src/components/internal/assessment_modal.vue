@@ -54,7 +54,7 @@ import Vue from "vue";
 import modal from '@vue-utils/bootstrap-modal.vue';
 import { api_endpoints, helpers, cache_helper } from "@/utils/hooks";
 require("select2/dist/css/select2.min.css");
-require("select2-bootstrap-theme/dist/select2-bootstrap.min.css");
+// require("select2-bootstrap-theme/dist/select2-bootstrap.min.css");
 import FileField from '@/components/forms/filefield_immediate.vue'
 import axios from "axios";
 
