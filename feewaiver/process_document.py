@@ -1,4 +1,5 @@
 import os
+import logging
 from django.core.files.base import ContentFile
 import traceback
 from feewaiver.main_models import EmailUser
@@ -7,6 +8,7 @@ from django.contrib import auth
 from feewaiver.storage import PrivateMediaStorage
 
 private_storage = PrivateMediaStorage()
+logger = logging.getLogger(__name__)
 
 
 def process_generic_document(request, instance, document_type=None, *args, **kwargs):
@@ -134,7 +136,7 @@ def save_document(request, instance, comms_instance, document_type, input_name=N
                         request.user.get_full_name()),
                     request)
             except Exception as e:
-                print(traceback.print_exc())
+                logger.error(f'Error logging document action: {e}')
 
 # For transferring files from temp doc objs to comms_log objs
 def save_comms_log_document_obj(instance, comms_instance, temp_document):
