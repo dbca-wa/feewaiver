@@ -11,5 +11,5 @@
 		   "--hostname","feewaiver-dev"
 		   ],
 	"forwardPorts": [9171,9172,9173,9174,9175],
-	"initializeCommand" : "${localEnv:HOME}/docker-scripts-dev/windows_vbox/postgres_docker_load.sh"
+	"initializeCommand" : "${localEnv:HOME}/docker-scripts-dev/windows_vbox/postgres_docker_load_2404.sh"
 }

@@ -1,6 +1,5 @@
 <template lang="html">
     <div id="AddComms">
-        <!-- <modal :key="modalKey" transition="modal fade" @ok="ok()" @cancel="cancel()" title="Communication log - Add entry" large> -->
         <modal transition="modal fade" @ok="ok()" @cancel="cancel()" title="Communication log - Add entry" large>
             <div class="container-fluid">
                 <div class="row">
@@ -10,7 +9,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <label class="control-label pull-left"  for="Name">To</label>
+                                        <label class="form-label pull-left"  for="Name">To</label>
                                     </div>
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control" name="to" v-model="comms.to">
@@ -20,7 +19,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <label class="control-label pull-left"  for="Name">From</label>
+                                        <label class="form-label pull-left"  for="Name">From</label>
                                     </div>
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control" name="fromm" v-model="comms.fromm">
@@ -30,7 +29,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <label class="control-label pull-left"  for="Name">Type</label>
+                                        <label class="form-label pull-left"  for="Name">Type</label>
                                     </div>
                                     <div class="col-sm-4">
                                         <select class="form-control" name="type" v-model="comms.type">
@@ -45,7 +44,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <label class="control-label pull-left"  for="Name">Subject/Description</label>
+                                        <label class="form-label pull-left"  for="Name">Subject/Description</label>
                                     </div>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="subject" style="width:70%;" v-model="comms.subject">
@@ -55,7 +54,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <label class="control-label pull-left"  for="Name">Text</label>
+                                        <label class="form-label pull-left"  for="Name">Text</label>
                                     </div>
                                     <div class="col-sm-9">
                                         <textarea name="text" class="form-control" style="width:70%;" v-model="comms.text"></textarea>
@@ -65,7 +64,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-3">
-                                        <label class="control-label pull-left"  for="Name">Attachments</label>
+                                        <label class="form-label pull-left"  for="Name">Attachments</label>
                                     </div>
                                     <div class="col-sm-9">
                                         <template v-for="(f,i) in files">
@@ -228,6 +227,13 @@ export default {
             let vm = this;
             vm.errors = false;
             let comms = new FormData(vm.form); 
+
+            vm.files.forEach((fileObj, index) => {
+                if (fileObj.file) {
+                    comms.append('file-' + index, fileObj.file, fileObj.name);
+                }
+            });
+            comms.append('num_files', vm.files.length);
 
             vm.addingComms = true;
             vm.$http.post(vm.url, comms,{

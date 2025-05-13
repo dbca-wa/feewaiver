@@ -36,6 +36,8 @@ import {
 }
 from '@/utils/hooks';
 import Vue from 'vue';
+import axios from 'axios';
+
 export default {
     name: "FileField",
     props:{
@@ -164,9 +166,9 @@ export default {
                 }
                 formData.append('input_name', this.name);
                 formData.append('csrfmiddlewaretoken', this.csrf_token);
-                let res = await Vue.http.post(this.document_action_url, formData)
-                this.documents = res.body.filedata;
-                this.commsLogId = res.body.comms_instance_id;
+                let res = await axios.post(this.document_action_url, formData)
+                this.documents = res.data.filedata;
+                this.commsLogId = res.data.comms_instance_id;
             }
             this.show_spinner = false;
 
@@ -184,9 +186,9 @@ export default {
             formData.append('document_id', file.id);
             formData.append('csrfmiddlewaretoken', this.csrf_token);
             if (this.document_action_url) {
-                let res = await Vue.http.post(this.document_action_url, formData)
-                this.documents = res.body.filedata;
-                this.commsLogId = res.body.comms_instance_id;
+                let res = await axios.post(this.document_action_url, formData)
+                this.documents = res.data.filedata;
+                this.commsLogId = res.data.comms_instance_id;
             }
             this.show_spinner = false;
 
@@ -202,7 +204,7 @@ export default {
             }
             formData.append('csrfmiddlewaretoken', this.csrf_token);
             if (this.document_action_url) {
-                let res = await Vue.http.post(this.document_action_url, formData)
+                let res = await axios.post(this.document_action_url, formData)
             }
             this.show_spinner = false;
         },
@@ -222,10 +224,13 @@ export default {
         },
 
         handleChangeWrapper: async function(e) {
+            console.log('in handleChangeWrapper')
             if (this.documentActionUrl === 'temporary_document' && !this.temporary_document_collection_id) {
+                console.log('in handleChangeWrapper if')
                 // If temporary_document, create TemporaryDocumentCollection object and allow document_action_url to update
-                let res = await Vue.http.post(this.document_action_url)
-                this.temporary_document_collection_id = res.body.id
+                let res = await axios.post(this.document_action_url)
+                console.log({res})
+                this.temporary_document_collection_id = res.data.id
                 await this.$emit('update-temp-doc-coll-id',
                     {
                         "temp_doc_id": this.temporary_document_collection_id,
@@ -237,11 +242,13 @@ export default {
                     this.handleChange(e);
                 });
             } else {
+                console.log('in handleChangeWrapper else')
                 this.handleChange(e);
             }
         },
 
         save_document: async function(e) {
+            console.log('in save_document')
             this.show_spinner = true;
 
             if (this.document_action_url) {
@@ -257,7 +264,7 @@ export default {
                 formData.append('filename', e.target.files[0].name);
                 formData.append('_file', this.uploadFile(e));
                 formData.append('csrfmiddlewaretoken', this.csrf_token);
-                let res = await Vue.http.post(this.document_action_url, formData)
+                let res = await axios.post(this.document_action_url, formData)
 
                 if (this.replace_button_by_text){
                     let button_name = 'button-' + this.name + e.target.dataset.que
@@ -267,8 +274,8 @@ export default {
                     }
                 }
                 
-                this.documents = res.body.filedata;
-                this.commsLogId = res.body.comms_instance_id;
+                this.documents = res.data.filedata;
+                this.commsLogId = res.data.comms_instance_id;
                 this.show_spinner = false;
             } else {
             }

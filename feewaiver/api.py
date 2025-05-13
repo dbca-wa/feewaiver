@@ -642,7 +642,7 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
                     FeeWaiverUserAction.ACTION_SUBMIT.format(fee_waiver_obj.lodgement_number))
                 return Response(waiver_serializer.data)
         except Exception as e:
-            print(traceback.print_exc())
+            logger.error(f'Error creating Fee Waiver: {e}')
             raise serializers.ValidationError(str(e))
 
 
