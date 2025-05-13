@@ -3,23 +3,33 @@
         <FormSection :formCollapse="false" label="Fee Waiver Requests" Index="fee_waiver_requests">
             <div class="row">
                 <div class="col-md-3">
-                    <label class="form-label" for="lodged-from">Lodged From</label>
-                    <div class="input-group mb-3" ref="feewaiverDateFromPicker">
-                        <input type="text" id="lodged-from" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedFrom">
-                        <span class="input-group-text">
-                            <i class="fa fa-calendar"></i>
-                        </span>
+                    <div class="form-group">
+                        <label for="lodged_from" class="pt-2 pr-2">Lodged From：</label>
+                        <input
+                            id="lodged_from"
+                            v-model="filterFeeWaiverLodgedFrom"
+                            type="date"
+                            class="form-control"
+                            placeholder="DD/MM/YYYY"
+                            :max="filterFeeWaiverLodgedTo || null"
+                        />
                     </div>
                 </div>
+
                 <div class="col-md-3">
-                    <label class="form-label" for="lodged-to">Lodged To</label>
-                    <div class="input-group mb-3" ref="feewaiverDateToPicker">
-                        <input type="text" id="lodged-to" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedTo">
-                        <span class="input-group-text">
-                            <i class="fa fa-calendar"></i>
-                        </span>
+                    <div class="form-group">
+                        <label for="lodged_to" class="pt-2 pr-2">Lodged To：</label>
+                        <input
+                            id="lodged_to"
+                            v-model="filterFeeWaiverLodgedTo"
+                            type="date"
+                            class="form-control"
+                            placeholder="DD/MM/YYYY"
+                            :min="filterFeeWaiverLodgedFrom || null"
+                        />
                     </div>
                 </div>
+
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="form-label" for="status-filter">Status</label>
@@ -30,6 +40,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-lg-12" style="margin-top:25px;">
                     <datatable ref="feewaiver_datatable" :id="datatable_id" :dtOptions="feewaiver_options" :dtHeaders="feewaiver_headers"/>
@@ -41,9 +52,8 @@
 <script>
 
 import datatable from '@/utils/vue/datatable.vue'
-import Vue from 'vue'
+import { v4 as uuid } from 'uuid'
 import FormSection from "@/components/forms/section_toggle.vue"
-import ResponsiveDatatablesHelper from "@/utils/responsive_datatable_helper.js"
 import {
     api_endpoints,
     helpers
@@ -59,8 +69,8 @@ export default {
         return {
             processingActionShortcut: false,
             url: '/api/feewaivers_paginated/feewaiver_internal/?format=datatables',
-            pBody: 'pBody' + vm._uid,
-            datatable_id: 'feewaiver-datatable-'+vm._uid,
+            pBody: 'pBody' + uuid(),
+            datatable_id: 'feewaiver-datatable-' + uuid(),
             show_spinner: false, 
             filterFeeWaiverStatus: 'All',
             filterFeeWaiverLodgedFrom: '',
@@ -68,13 +78,6 @@ export default {
             dashboardTitle: '',
             dashboardDescription: '',
             dateFormat: 'DD/MM/YYYY',
-            datepickerOptions:{
-                format: 'DD/MM/YYYY',
-                showClear:true,
-                useCurrent:false,
-                keepInvalid:true,
-                allowInputToggle:true
-            },
             feewaiver_status:[],
             feewaiver_headers:["Lodgement Number", "Organisation", "Status", "Lodged on", "Document", "Assigned To", "", "", "Action", "Participant", "Comments to applicant"],
             feewaiver_options:{
@@ -91,8 +94,8 @@ export default {
                     "dataSrc": 'data',
                     // adding extra GET params for Custom filtering
                     "data": function ( d ) {
-                        d.date_from = vm.filterFeeWaiverLodgedFrom != '' && vm.filterFeeWaiverLodgedFrom != null ? moment(vm.filterFeeWaiverLodgedFrom, 'DD/MM/YYYY').format('YYYY-MM-DD'): '';
-                        d.date_to = vm.filterFeeWaiverLodgedTo != '' && vm.filterFeeWaiverLodgedTo != null ? moment(vm.filterFeeWaiverLodgedTo, 'DD/MM/YYYY').format('YYYY-MM-DD'): '';
+                        d.date_from = vm.filterFeeWaiverLodgedFrom;
+                        d.date_to = vm.filterFeeWaiverLodgedTo;
                         d.processing_status = vm.filterFeeWaiverStatus;
                     }
 
@@ -258,10 +261,23 @@ export default {
             this.$refs.feewaiver_datatable.vmDataTable.draw();
         },
 
-        filterFeeWaiverLodgedFrom: function(){
+        filterFeeWaiverLodgedFrom: function(newVal){
+            console.log({newVal})
+            // If lodged_to date is set and it's before the new lodged_from date
+            if (this.filterFeeWaiverLodgedTo && newVal && this.filterFeeWaiverLodgedTo < newVal) {
+                // Update the lodged_to date to be the same as lodged_from
+                this.filterFeeWaiverLodgedTo = newVal;
+            }
             this.$refs.feewaiver_datatable.vmDataTable.draw();
         },
-        filterFeeWaiverLodgedTo: function(){
+        
+        filterFeeWaiverLodgedTo: function(newVal){
+            console.log({newVal})
+            // If lodged_from date is set and it's after the new lodged_to date
+            if (this.filterFeeWaiverLodgedFrom && newVal && this.filterFeeWaiverLodgedFrom > newVal) {
+                // Update the lodged_from date to be the same as lodged_to
+                this.filterFeeWaiverLodgedFrom = newVal;
+            }
             this.$refs.feewaiver_datatable.vmDataTable.draw();
         }
     },
@@ -307,48 +323,62 @@ export default {
         },
         addEventListeners: async function(){
             let vm = this;
+            // const picker = new TempusDominus(document.getElementById('datetimepicker1'), {
+            //     localization: {
+            //         format: 'dd/MM/yyyy',
+            //         close: 'Close'
+            //     },
+            //     display: {
+            //         components: {
+            //             clock: false
+            //         },
+            //         buttons: {
+            //             close: true
+            //         }
+            //     }
+            // });
             // Initialise Proposal Date Filters
-            $(vm.$refs.feewaiverDateToPicker).datetimepicker(vm.datepickerOptions);
-            $(vm.$refs.feewaiverDateToPicker).on('dp.change', function(e){
-                if ($(vm.$refs.feewaiverDateToPicker).data('DateTimePicker').date()) {
-                    vm.filterFeeWaiverLodgedTo =  e.date.format('DD/MM/YYYY');
-                }
-                else if ($(vm.$refs.feewaiverDateToPicker).data('date') === "") {
-                    vm.filterFeeWaiverLodgedTo = "";
-                }
-             });
-            $(vm.$refs.feewaiverDateFromPicker).datetimepicker(vm.datepickerOptions);
-            $(vm.$refs.feewaiverDateFromPicker).on('dp.change',function (e) {
-                if ($(vm.$refs.feewaiverDateFromPicker).data('DateTimePicker').date()) {
-                    vm.filterFeeWaiverLodgedFrom = e.date.format('DD/MM/YYYY');
-                    $(vm.$refs.feewaiverDateToPicker).data("DateTimePicker").minDate(e.date);
-                }
-                else if ($(vm.$refs.feewaiverDateFromPicker).data('date') === "") {
-                    vm.filterFeeWaiverLodgedFrom = "";
-                }
-            });
-            let table = vm.$refs.feewaiver_datatable.vmDataTable
-            table.on('responsive-display.dt', function () {
-                var tablePopover = $(this).find('[data-bs-toggle="popover"]');
-                if (tablePopover.length > 0) {
-                    tablePopover.popover();
-                    // the next line prevents from scrolling up to the top after clicking on the popover.
-                    $(tablePopover).on('click', function (e) {
-                        e.preventDefault();
-                        return true;   
-                    });
-                }
-            }).on('draw.dt', function () {
-                var tablePopover = $(this).find('[data-bs-toggle="popover"]');
-                if (tablePopover.length > 0) {
-                    tablePopover.popover();
-                    // the next line prevents from scrolling up to the top after clicking on the popover.
-                    $(tablePopover).on('click', function (e) {
-                        e.preventDefault();
-                        return true;
-                    });
-                }
-            });
+            // $(vm.$refs.feewaiverDateToPicker).datetimepicker(vm.datepickerOptions);
+            // $(vm.$refs.feewaiverDateToPicker).on('dp.change', function(e){
+            //     if ($(vm.$refs.feewaiverDateToPicker).data('DateTimePicker').date()) {
+            //         vm.filterFeeWaiverLodgedTo =  e.date.format('DD/MM/YYYY');
+            //     }
+            //     else if ($(vm.$refs.feewaiverDateToPicker).data('date') === "") {
+            //         vm.filterFeeWaiverLodgedTo = "";
+            //     }
+            //  });
+            // $(vm.$refs.feewaiverDateFromPicker).datetimepicker(vm.datepickerOptions);
+            // $(vm.$refs.feewaiverDateFromPicker).on('dp.change',function (e) {
+            //     if ($(vm.$refs.feewaiverDateFromPicker).data('DateTimePicker').date()) {
+            //         vm.filterFeeWaiverLodgedFrom = e.date.format('DD/MM/YYYY');
+            //         $(vm.$refs.feewaiverDateToPicker).data("DateTimePicker").minDate(e.date);
+            //     }
+            //     else if ($(vm.$refs.feewaiverDateFromPicker).data('date') === "") {
+            //         vm.filterFeeWaiverLodgedFrom = "";
+            //     }
+            // });
+            // let table = vm.$refs.feewaiver_datatable.vmDataTable
+            // table.on('responsive-display.dt', function () {
+            //     var tablePopover = $(this).find('[data-bs-toggle="popover"]');
+            //     if (tablePopover.length > 0) {
+            //         tablePopover.popover();
+            //         // the next line prevents from scrolling up to the top after clicking on the popover.
+            //         $(tablePopover).on('click', function (e) {
+            //             e.preventDefault();
+            //             return true;   
+            //         });
+            //     }
+            // }).on('draw.dt', function () {
+            //     var tablePopover = $(this).find('[data-bs-toggle="popover"]');
+            //     if (tablePopover.length > 0) {
+            //         tablePopover.popover();
+            //         // the next line prevents from scrolling up to the top after clicking on the popover.
+            //         $(tablePopover).on('click', function (e) {
+            //             e.preventDefault();
+            //             return true;
+            //         });
+            //     }
+            // });
 
             vm.addActionShortcutEventListeners();
         },
@@ -395,46 +425,6 @@ export default {
                 */
             });
         },
-        initialiseSearch:function(){
-            this.dateSearch();
-        },
-        dateSearch:function(){
-            let vm = this;
-            vm.$refs.feewaiver_datatable.table.dataTableExt.afnFiltering.push(
-                function(settings,data,dataIndex,original){
-                    let from = vm.filterFeeWaiverLodgedFrom;
-                    let to = vm.filterFeeWaiverLodgedTo;
-                    let val = original.lodgement_date;
-
-                    if ( from == '' && to == ''){
-                        return true;
-                    }
-                    else if (from != '' && to != ''){
-                        return val != null && val != '' ? moment().range(moment(from,vm.dateFormat),moment(to,vm.dateFormat)).contains(moment(val)) :false;
-                    }
-                    else if(from == '' && to != ''){
-                        if (val != null && val != ''){
-                            return moment(to,vm.dateFormat).diff(moment(val)) >= 0 ? true : false;
-                        }
-                        else{
-                            return false;
-                        }
-                    }
-                    else if (to == '' && from != ''){
-                        if (val != null && val != ''){
-                            return moment(val).diff(moment(from,vm.dateFormat)) >= 0 ? true : false;
-                        }
-                        else{
-                            return false;
-                        }
-                    }
-                    else{
-                        return false;
-                    }
-                }
-            );
-        },
-
     },
     mounted: function(){
         this.$nextTick(() => {
@@ -446,21 +436,14 @@ export default {
                     $( chev ).toggleClass( "glyphicon-chevron-down glyphicon-chevron-up" );
                 }, 100 );
             });
-            this.initialiseSearch();
             this.addEventListeners();
         });
     },
-    /*
-    updated: function() {
-        this.$nextTick(() => {
-            this.initialiseSearch();
-            this.addEventListeners();
-        });
-    },
-    */
     created: function() {
+
     },
 }
 </script>
+
 <style scoped>
 </style>

@@ -168,9 +168,11 @@
 <script>
     import { api_endpoints, helpers }from '@/utils/hooks'
     import FormSection from "@/components/forms/section_toggle.vue"
-    import 'bootstrap/dist/css/bootstrap.css';
-    import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-    import 'eonasdan-bootstrap-datetimepicker';
+    import 'bootstrap/dist/css/bootstrap.css'
+    import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+    import '@popperjs/core/dist/umd/popper.min.js'
+    // import '@eonasdan/tempus-dominus/dist/js/tempus-dominus.min.js'
+    // import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
     import VisitSection from "./feewaiver_visit.vue"
     import FileField from '@/components/forms/filefield_immediate.vue'
     import Swal from 'sweetalert2';
@@ -298,6 +300,7 @@
                 this.$emit('all-visits-unchecked', allVisitsUnchecked);
             },
             updateTempDocCollId: function(id) {
+                console.log('in updateTempDocCollId')
                 this.temporary_document_collection_id = id.temp_doc_id;
             },
             addVisit: async function () {
@@ -377,9 +380,11 @@
 
             },
             submit: async function(){
+                console.log('in submit()')
                 let visitRef = null;
                 let ageOfParticipants = null;
                 for (let visit of this.visits) {
+                    console.log({visit})
                     if (visit && visit.age_of_participants_array && visit.age_of_participants_array.length < 1) {
                         const visitIdxRef = 'visit_' + visit.index;
                         const ageOfParticipantsIdx = 'age_of_participants_' + visit.index
@@ -412,6 +417,7 @@
                             state: { fee_waiver: returnedFeeWaiver.data }
                         });
                     } catch (error) {
+                        console.log({error})
                         let swalTitle = "Error";
                         let swalText = error.data[0];
                         if (error.data[0].slice(0,1) === '"{') {
@@ -460,10 +466,14 @@
                     let visit = Object.assign({}, visitData);
                     // convert date strings
                     if (visit.date_from) {
-                        visit.date_from = moment(visit.date_from, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                        if (/^\d{2}\/\d{2}\/\d{4}$/.test(visit.date_from)) {
+                            visit.date_from = moment(visit.date_from, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                        }
                     }
                     if (visit.date_to) {
-                        visit.date_to = moment(visit.date_to, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                        if (/^\d{2}\/\d{2}\/\d{4}$/.test(visit.date_to)) {
+                            visit.date_to = moment(visit.date_to, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                        }
                     }
                     // add to payload
                     this.payload.visits.push(visit)

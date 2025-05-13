@@ -78,40 +78,36 @@
         </div>
         <div class="row mb-2">
             <label class="col-sm-4 col-form-label">Date from</label>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="input-group date" >
                     <input 
                         :disabled="readonly" 
                         required 
-                        type="text" 
+                        type="date" 
                         class="form-control" 
                         placeholder="DD/MM/YYYY" 
                         v-model="visit.date_from" 
                         :id="'dateFromPicker_' + visit.index"
+                        :max="visit.date_to"
                     />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
                 </div>
             </div>
         </div>
 
         <div class="row mb-2">
             <label class="col-sm-4 col-form-label">Date to</label>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="input-group date" >
                     <input 
                         :disabled="readonly" 
                         required 
-                        type="text" 
+                        type="date" 
                         class="form-control" 
                         placeholder="DD/MM/YYYY" 
                         v-model="visit.date_to" 
                         :id="'dateToPicker_' + visit.index"
-                        />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
+                        :min="visit.date_from"
+                    />
                 </div>
             </div>
         </div>
@@ -205,15 +201,13 @@
 </template>
 
 <script>
-    import { api_endpoints, helpers }from '@/utils/hooks'
     import FormSection from "@/components/forms/section_toggle.vue"
-    import 'bootstrap/dist/css/bootstrap.css';
-    require("moment");
-    require("select2/dist/css/select2.min.css");
-    require("select2-bootstrap-theme/dist/select2-bootstrap.min.css");
-    import select2 from "select2/dist/js/select2.full.js";
-    require('eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
-    require('eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+    import 'bootstrap/dist/css/bootstrap.css'
+    import "select2/dist/css/select2.min.css"
+    // import "select2-bootstrap-theme/dist/select2-bootstrap.min.css"
+    import '@popperjs/core/dist/umd/popper.min.js'
+    // import '@eonasdan/tempus-dominus/dist/js/tempus-dominus.min.js'
+    // import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
 
     export default {
         name: 'FeeWaiverVisit',
@@ -411,50 +405,38 @@
                 el_to_date.trigger('change');
             },
             addEventListeners: function() {
-              let vm = this;
-              // Parks multi select
-              let el_fr_date = $('#dateFromPicker_' + vm.visit.index);
-              let el_to_date = $('#dateToPicker_' + vm.visit.index);
+                let vm = this;
+                // Parks multi select
+                let el_fr_date = $('#dateFromPicker_' + vm.visit.index);
+                let el_to_date = $('#dateToPicker_' + vm.visit.index);
 
-              // 遅延させてDOMが完全に描画されてから初期化
-              setTimeout(() => {
-                // "From" field
-                el_fr_date.datetimepicker({
-                  format: "DD/MM/YYYY",
-                  minDate: "now",
-                  showClear: true,
-                  widgetPositioning: {
-                      horizontal: 'auto',
-                      vertical: 'bottom'
-                  },
-                  widgetParent: el_fr_date.parent()
-                });
-                el_fr_date.on("dp.change", function(e) {
-                  if (el_fr_date.data("DateTimePicker") && el_fr_date.data("DateTimePicker").date()) {
-                    vm.visit.date_from = e.date.format("DD/MM/YYYY");
-                    el_to_date.data("DateTimePicker").minDate(e.date);
-                  } else if (el_fr_date.data("date") === "") {
-                    vm.visit.date_from = "";
-                  }
-                });
+                // // "From" field
+                // el_fr_date.datetimepicker({
+                //   format: "DD/MM/YYYY",
+                //   minDate: "now",
+                //   showClear: true,
+                // });
+                // el_fr_date.on("dp.change", function(e) {
+                //   if (el_fr_date.data("DateTimePicker") && el_fr_date.data("DateTimePicker").date()) {
+                //     vm.visit.date_from = e.date.format("DD/MM/YYYY");
+                //     el_to_date.data("DateTimePicker").minDate(e.date);
+                //   } else if (el_fr_date.data("date") === "") {
+                //     vm.visit.date_from = "";
+                //   }
+                // });
 
-                // "To" field
-                el_to_date.datetimepicker({
-                  format: "DD/MM/YYYY",
-                  showClear: true,
-                  widgetPositioning: {
-                      horizontal: 'auto',
-                      vertical: 'bottom'
-                  },
-                  widgetParent: el_to_date.parent()
-                });
-                el_to_date.on("dp.change", function(e) {
-                  if (el_to_date.data("DateTimePicker") && el_to_date.data("DateTimePicker").date()) {
-                    vm.visit.date_to = e.date.format("DD/MM/YYYY");
-                  } else if (el_to_date.data("date") === "") {
-                    vm.visit.date_to = "";
-                  }
-                });
+                // // "To" field
+                // el_to_date.datetimepicker({
+                //   format: "DD/MM/YYYY",
+                //   showClear: true,
+                // });
+                // el_to_date.on("dp.change", function(e) {
+                //   if (el_to_date.data("DateTimePicker") && el_to_date.data("DateTimePicker").date()) {
+                //     vm.visit.date_to = e.date.format("DD/MM/YYYY");
+                //   } else if (el_to_date.data("date") === "") {
+                //     vm.visit.date_to = "";
+                //   }
+                // });
                 
                 $('.input-group').css('z-index', 20);
                 
@@ -479,7 +461,6 @@
                     }
                 });
                 $('.parkclass').css('z-index', 10);
-              }, 100);
             },
             addFreeParksEventListener: function(internal) {
                 let vm = this;

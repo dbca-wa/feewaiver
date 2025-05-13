@@ -224,9 +224,12 @@ export default {
         },
 
         handleChangeWrapper: async function(e) {
+            console.log('in handleChangeWrapper')
             if (this.documentActionUrl === 'temporary_document' && !this.temporary_document_collection_id) {
+                console.log('in handleChangeWrapper if')
                 // If temporary_document, create TemporaryDocumentCollection object and allow document_action_url to update
                 let res = await axios.post(this.document_action_url)
+                console.log({res})
                 this.temporary_document_collection_id = res.data.id
                 await this.$emit('update-temp-doc-coll-id',
                     {
@@ -239,11 +242,13 @@ export default {
                     this.handleChange(e);
                 });
             } else {
+                console.log('in handleChangeWrapper else')
                 this.handleChange(e);
             }
         },
 
         save_document: async function(e) {
+            console.log('in save_document')
             this.show_spinner = true;
 
             if (this.document_action_url) {
