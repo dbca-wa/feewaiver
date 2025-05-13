@@ -1,40 +1,40 @@
 <template id="proposal_dashboard">
     <div class="container">
         <FormSection :formCollapse="false" label="Fee Waiver Requests" Index="fee_waiver_requests">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="">Lodged From</label>
-                            <div class="input-group date" ref="feewaiverDateFromPicker">
-                                <input type="text" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedFrom">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="">Lodged To</label>
-                            <div class="input-group date" ref="feewaiverDateToPicker">
-                                <input type="text" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedTo">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="">Status</label>
-                                <select class="form-control" v-model="filterFeeWaiverStatus">
-                                    <option value="All">All</option>
-                                    <option v-for="s in feewaiver_status" :value="s">{{s}}</option>
-                                </select>
-                            </div>
-                        </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label" for="lodged-from">Lodged From</label>
+                    <div class="input-group mb-3" ref="feewaiverDateFromPicker">
+                        <input type="text" id="lodged-from" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedFrom">
+                        <span class="input-group-text">
+                            <i class="fa fa-calendar"></i>
+                        </span>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12" style="margin-top:25px;">
-                            <datatable ref="feewaiver_datatable" :id="datatable_id" :dtOptions="feewaiver_options" :dtHeaders="feewaiver_headers"/>
-                        </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" for="lodged-to">Lodged To</label>
+                    <div class="input-group mb-3" ref="feewaiverDateToPicker">
+                        <input type="text" id="lodged-to" class="form-control" placeholder="DD/MM/YYYY" v-model="filterFeeWaiverLodgedTo">
+                        <span class="input-group-text">
+                            <i class="fa fa-calendar"></i>
+                        </span>
                     </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label" for="status-filter">Status</label>
+                        <select id="status-filter" class="form-select" v-model="filterFeeWaiverStatus">
+                            <option value="All">All</option>
+                            <option v-for="(s, index) in feewaiver_status" :key="index" :value="s">{{s}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="margin-top:25px;">
+                    <datatable ref="feewaiver_datatable" :id="datatable_id" :dtOptions="feewaiver_options" :dtHeaders="feewaiver_headers"/>
+                </div>
+            </div>
         </FormSection>
         </div>
 </template>
@@ -48,6 +48,8 @@ import {
     api_endpoints,
     helpers
 }from '@/utils/hooks'
+import axios from 'axios'
+
 export default {
     name: 'FeeWaiverDash',
     props: {
@@ -95,7 +97,10 @@ export default {
                     }
 
                 },
-                dom: 'lBfrtip',
+                // dom: 'lBfrtip',
+                "dom":  "<'d-flex'<'me-auto'l>fB>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'d-flex'<'me-auto'i>p>",
                 buttons:[
                     {
                         extend: 'excel',
@@ -204,7 +209,7 @@ export default {
                                 popTemplate = _.template('<a href="#" ' +
                                 //popTemplate = _.template('<button ' +
                                     'role="button" ' +
-                                    'data-toggle="popover" ' +
+                                    'data-bs-toggle="popover" ' +
                                     'data-trigger="click" ' +
                                     'data-placement="top auto"' +
                                     'data-html="true" ' +
@@ -267,7 +272,7 @@ export default {
             let vm = this;
 
             vm.$http.get(api_endpoints.filter_list).then((response) => {
-                vm.feewaiver_status = response.body.feewaiver_status_choices;
+                vm.feewaiver_status = response.data.feewaiver_status_choices;
             },(error) => {
             })
         },
@@ -290,8 +295,8 @@ export default {
             processingTable.replaceWith("<div><i class='fa fa-2x fa-spinner fa-spin'></i></div>");
             processView.replaceWith("");
             let post_url = '/api/feewaivers/' + id + '/final_approval/'
-            let res = await Vue.http.post(post_url, {'approval_type': approvalType});
-            if (res.ok) {
+            let res = await axios.post(post_url, {'approval_type': approvalType});
+            if (res.status === 200) {
                 // this should also be await?
                 await this.refreshFromResponse();
             }
@@ -324,7 +329,7 @@ export default {
             });
             let table = vm.$refs.feewaiver_datatable.vmDataTable
             table.on('responsive-display.dt', function () {
-                var tablePopover = $(this).find('[data-toggle="popover"]');
+                var tablePopover = $(this).find('[data-bs-toggle="popover"]');
                 if (tablePopover.length > 0) {
                     tablePopover.popover();
                     // the next line prevents from scrolling up to the top after clicking on the popover.
@@ -334,7 +339,7 @@ export default {
                     });
                 }
             }).on('draw.dt', function () {
-                var tablePopover = $(this).find('[data-toggle="popover"]');
+                var tablePopover = $(this).find('[data-bs-toggle="popover"]');
                 if (tablePopover.length > 0) {
                     tablePopover.popover();
                     // the next line prevents from scrolling up to the top after clicking on the popover.
@@ -435,7 +440,7 @@ export default {
         this.$nextTick(() => {
             this.fetchFilterLists();
             let vm = this;
-            $( 'a[data-toggle="collapse"]' ).on( 'click', function () {
+            $( 'a[data-bs-toggle="collapse"]' ).on( 'click', function () {
                 var chev = $( this ).children()[ 0 ];
                 window.setTimeout( function () {
                     $( chev ).toggleClass( "glyphicon-chevron-down glyphicon-chevron-up" );

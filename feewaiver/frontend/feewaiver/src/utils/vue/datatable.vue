@@ -1,20 +1,20 @@
 <template lang="html">
    <div id="DataTable" >
-      <table class="hover table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%" :id="id">
+      <table class="table table-hover table-striped table-bordered border dt-responsive nowrap" cellspacing="0" width="100%" :id="id">
             <thead>
                 <tr>
-                    <th :data-class="(i == 0 )? 'expand':null" v-for="(header,i) in dtHeaders"> {{ header}}</th>
+                    <th :data-class="(i == 0 )? 'expand':null" v-for="(header,i) in dtHeaders" :key="i">{{ header }}</th>
                 </tr>
             </thead>
             <tbody>
             </tbody>
         </table>
    </div>
-
 </template>
+
 <script>
 import ResponsiveDatatablesHelper from "../responsive_datatable_helper.js"
-module.exports = {
+export default {
    name : 'DataTable',
    props:{
       dtHeaders:{

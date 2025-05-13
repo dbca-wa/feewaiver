@@ -40,5 +40,6 @@ def is_departmentUser(request):
     return request.user.is_authenticated and is_model_backend(request) and in_dbca_domain(request)
 
 def is_internal(request):
-    return is_departmentUser(request)
+    is_internal = is_departmentUser(request)
+    return is_internal
 
