@@ -50,7 +50,8 @@ SHOW_ROOT_API = env('SHOW_ROOT_API', False)
 
 INSTALLED_APPS += [
     'reversion_compare',
-    'bootstrap3',
+    # 'bootstrap3',
+    'django_bootstrap5',
     'feewaiver',
     'taggit',
     'rest_framework',
@@ -224,3 +225,7 @@ PRIVATE_MEDIA_URL = '/private-media/'
 if not os.path.exists(PRIVATE_MEDIA_ROOT):
     os.makedirs(PRIVATE_MEDIA_ROOT)
 DEFAULT_FILE_STORAGE = 'feewaiver.storage.PrivateMediaStorage'
+
+# from pprint import pprint
+# print("\n=== LOGGING Configuration ===\n")
+# pprint(LOGGING, indent=2, width=80)

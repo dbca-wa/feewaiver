@@ -1,35 +1,33 @@
-<template id="bootstrap-modal">
-    <div v-show="show" :transition="transition">
-        <div class="modal" @click.self="clickMask">
-            <div class="modal-dialog" :class="modalClass" role="document">
-                <div class="modal-content">
-                    <!--Header-->
-                    <slot name="header">
-                        <div class="modal-header">
-                            <a type="button" class="close" @click="cancel">x</a>
-                            <h4 class="modal-title">
-                                <slot name="title">
-                                    {{title}}
-                                </slot>
-                            </h4>
-                        </div>
-                    </slot>
-                    <!--Container-->
-                    <div class="modal-body">
-                        <slot></slot>
-                    </div>
-                    <!--Footer-->
-                    <div class="modal-footer">
-                        <slot name="footer">
-                            <button id="okBtn" type="button" :class="okClass" @click="ok">{{okText}}</button>
-                            <button type="button" :class="cancelClass" @click="cancel">{{cancelText}}</button>
+<template>
+    <Transition :name="transition">
+        <div v-show="show">
+            <div class="modal" @click.self="clickMask">
+                <div class="modal-dialog modal-dialog-centered" :class="modalClass" role="document">
+                    <div class="modal-content">
+                        <!--Header-->
+                        <slot name="header">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{title}}</h5>
+                                <button type="button" class="btn-close" @click="cancel" aria-label="Close"></button>
+                            </div>
                         </slot>
+                        <!--Container-->
+                        <div class="modal-body">
+                            <slot></slot>
+                        </div>
+                        <!--Footer-->
+                        <div class="modal-footer">
+                            <slot name="footer">
+                                <button id="okBtn" type="button" :class="okClass" @click="ok">{{okText}}</button>
+                                <button type="button" :class="cancelClass" @click="cancel">{{cancelText}}</button>
+                            </slot>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="modal-backdrop fade show"></div>
         </div>
-        <div class="modal-backdrop in"></div>
-    </div>
+    </Transition>
 </template>
 
 <script>
@@ -74,11 +72,11 @@
             },
             okClass: {
                 type: String,
-                default: 'btn btn-default'
+                default: 'btn btn-primary'
             },
             cancelClass: {
                 type: String,
-                default: 'btn btn-default'
+                default: 'btn btn-secondary'
             },
             closeWhenOK: {
                 type: Boolean,
@@ -102,14 +100,15 @@
                 return this.$parent.isModalOpen;
             }
         },
-        created () {
+        mounted () {
             if (this.show) {
                 document.body.className += ' modal-open';
             }
         },
-        beforeDestroy () {
+        beforeUnmount () {
             document.body.className = document.body.className.replace(/\s?modal-open/, '');
         },
+        emits: [ 'ok', 'cancel' ],
         watch: {
             show (value) {
                 if (value) {
@@ -181,8 +180,7 @@
     .modal-enter .modal-backdrop, .modal-leave .modal-backdrop {
         opacity: 0;
     }
-    .close {
-        font-size: 2.5rem;
+    .btn-close {
         opacity: .3;
     }
     .close:hover {

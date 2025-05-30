@@ -1,28 +1,20 @@
-{% load bootstrap3 %}
+{% load django_bootstrap5 %}
 {% load utils %}
 
 {% system_name as system_name %}
 
 {% load static %}
-    <div class="container">
-        <div class="masthead">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="agency-freespace">
-                        <h1 id="site-title" class="site-logo"style="color: white;">
-                            <div class="col-sm-5">
-                                <a href="{%url 'home'%}">
-                                    <img src="/static/feewaiver/img/logo-park-stay-trunc.gif" alt="Department of Biodiversity, Conservation and Attractions" class="img-responsive"/>
-                                </a>
-                            </div>
-                            <div class="col-sm-7">
-                                <div>
-                                    Fee Waiver System
-                                </div>
-                            </div>
-                        </h1>
-                    </div>
-                </div>
-            </div>
+<div class="container">
+    <div class="row masthead d-flex align-items-center">
+        <div class="col-md-3">
+            <a href="{%url 'home'%}">
+                <img src="/static/feewaiver/img/logo-park-stay-trunc.gif" alt="Department of Biodiversity, Conservation and Attractions" class="img-responsive"/>
+            </a>
+        </div>
+        <div class="col-md-7">
+            <h1 id="site-title" class="site-logo" style="color: white;">
+                Fee Waiver System
+            </h1>
         </div>
     </div>
+</div>
