@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label" for="status-filter">Status</label>
+                    <label class="pr-2 pt-2" for="status-filter">Status</label>
                     <select id="status-filter" class="form-select" v-model="filterFeeWaiverStatus">
                         <option value="All">All</option>
                         <option v-for="(s, index) in feewaiver_status" :key="index" :value="s">{{s}}</option>
@@ -94,18 +94,20 @@ export default {
                     }
                 },
                 // dom: 'lBfrtip',
-                "dom":  "<'d-flex'<'me-auto'l>fB>" +
+                "dom":  "<'d-flex'<'me-auto'l><'mx-2'f>B>" +
                         "<'row'<'col-sm-12 my-2'tr>>" +
                         "<'d-flex'<'me-auto'i>p>",
                 buttons:[
                     {
-                        extend: 'excel',
+                        extend: 'excelHtml5',
+                        className: 'btn btn-secondary',
                         exportOptions: {
                             columns: ':visible'
                         }
                     },
                     {
-                        extend: 'csv',
+                        extend: 'csvHtml5',
+                        className: 'btn btn-secondary',
                         exportOptions: {
                             columns: ':visible'
                         }
