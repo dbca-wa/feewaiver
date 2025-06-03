@@ -3,7 +3,6 @@
         <FormSection :formCollapse="false" label="Fee Waiver Requests" Index="fee_waiver_requests">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="form-group">
                         <label for="lodged_from" class="pt-2 pr-2">Lodged From：</label>
                         <input
                             id="lodged_from"
@@ -13,11 +12,9 @@
                             placeholder="DD/MM/YYYY"
                             :max="filterFeeWaiverLodgedTo || null"
                         />
-                    </div>
                 </div>
 
                 <div class="col-md-3">
-                    <div class="form-group">
                         <label for="lodged_to" class="pt-2 pr-2">Lodged To：</label>
                         <input
                             id="lodged_to"
@@ -27,17 +24,14 @@
                             placeholder="DD/MM/YYYY"
                             :min="filterFeeWaiverLodgedFrom || null"
                         />
-                    </div>
                 </div>
 
                 <div class="col-md-3">
-                    <div class="form-group">
                         <label class="form-label" for="status-filter">Status</label>
                         <select id="status-filter" class="form-select" v-model="filterFeeWaiverStatus">
                             <option value="All">All</option>
                             <option v-for="(s, index) in feewaiver_status" :key="index" :value="s">{{s}}</option>
                         </select>
-                    </div>
                 </div>
             </div>
 
