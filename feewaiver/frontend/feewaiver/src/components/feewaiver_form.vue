@@ -528,8 +528,9 @@
                 for (let retrievedVisit of returnVal.data.fee_waiver.visits) {
                     let visit = Object.assign({}, retrievedVisit);
                     // we are now saving the index to db
-                    visit.date_to = moment(visit.date_to, 'YYYY-MM-DD').format('DD/MM/YYYY');
-                    visit.date_from = moment(visit.date_from, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                    console.log({visit})
+                    visit.date_to = moment(visit.date_to, 'YYYY-MM-DD').format('YYYY-MM-DD');
+                    visit.date_from = moment(visit.date_from, 'YYYY-MM-DD').format('YYYY-MM-DD');
                     visit.number_of_vehicles = visit.number_of_vehicles.toString()
                     this.visits.push(visit);
                 }
