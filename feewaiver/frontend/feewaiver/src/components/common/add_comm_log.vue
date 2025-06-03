@@ -2,101 +2,85 @@
     <div id="AddComms">
         <modal transition="modal fade" @ok="ok()" @cancel="cancel()" title="Communication log - Add entry" large>
             <div class="container-fluid">
-                <div class="row">
-                    <form class="form-horizontal" name="commsForm">
-                        <alert :show.sync="showError" type="danger"><strong>{{errorString}}</strong></alert>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <label class="form-label pull-left"  for="Name">To</label>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" name="to" v-model="comms.to">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <label class="form-label pull-left"  for="Name">From</label>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" name="fromm" v-model="comms.fromm">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <label class="form-label pull-left"  for="Name">Type</label>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <select class="form-control" name="type" v-model="comms.type">
-                                            <option value="">Select Type</option>
-                                            <option value="email">Email</option>
-                                            <option value="mail">Mail</option>
-                                            <option value="phone">Phone</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <label class="form-label pull-left"  for="Name">Subject/Description</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="subject" style="width:70%;" v-model="comms.subject">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <label class="form-label pull-left"  for="Name">Text</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <textarea name="text" class="form-control" style="width:70%;" v-model="comms.text"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        <label class="form-label pull-left"  for="Name">Attachments</label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <template v-for="(f,i) in files">
-                                            <div :class="'row top-buffer file-row-'+i">
-                                                <div class="col-sm-4">
-                                                    <span v-if="f.file == null" class="btn btn-info btn-file pull-left">
-                                                        Attach File <input type="file" :name="'file-upload-'+i" :class="'file-upload-'+i" @change="uploadFile('file-upload-'+i,f)" :ref="'fileInput-' + i"/>
-                                                    </span>
-                                                    <span v-else class="btn btn-info btn-file pull-left">
-                                                        Update File <input type="file" :name="'file-upload-'+i" :class="'file-upload-'+i" @change="uploadFile('file-upload-'+i,f)" :ref="'fileInput-' + i"/>
-                                                    </span>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <span>{{f.name}}</span>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <button @click="removeFile(i)" class="btn btn-danger">Remove</button>
-                                                </div>
-                                            </div>
-                                        </template>
-                                        <a href="" @click.prevent="attachAnother"><i class="fa fa-lg fa-plus top-buffer-2x"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+                <form class="form-horizontal" name="commsForm">
+                    <alert :show.sync="showError" type="danger"><strong>{{errorString}}</strong></alert>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <label class="form-label pull-left"  for="Name">To</label>
                         </div>
-                    </form>
-                </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="to" v-model="comms.to">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <label class="form-label pull-left"  for="Name">From</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="fromm" v-model="comms.fromm">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <label class="form-label pull-left"  for="Name">Type</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <select class="form-select" name="type" v-model="comms.type">
+                                <option value="">Select Type</option>
+                                <option value="email">Email</option>
+                                <option value="mail">Mail</option>
+                                <option value="phone">Phone</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <label class="form-label pull-left"  for="Name">Subject/Description</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="subject" style="width:70%;" v-model="comms.subject">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <label class="form-label pull-left"  for="Name">Text</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <textarea name="text" class="form-control" style="width:70%;" v-model="comms.text"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label class="form-label pull-left"  for="Name">Attachments</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <template v-for="(f,i) in files">
+                                <div :class="'row top-buffer file-row-'+i">
+                                    <div class="col-sm-4">
+                                        <span v-if="f.file == null" class="btn btn-info btn-file pull-left">
+                                            Attach File <input type="file" :name="'file-upload-'+i" :class="'file-upload-'+i" @change="uploadFile('file-upload-'+i,f)" :ref="'fileInput-' + i"/>
+                                        </span>
+                                        <span v-else class="btn btn-info btn-file pull-left">
+                                            Update File <input type="file" :name="'file-upload-'+i" :class="'file-upload-'+i" @change="uploadFile('file-upload-'+i,f)" :ref="'fileInput-' + i"/>
+                                        </span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <span>{{f.name}}</span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <button @click="removeFile(i)" class="btn btn-danger">Remove</button>
+                                    </div>
+                                </div>
+                            </template>
+                            <a href="" @click.prevent="attachAnother"><i class="fa fa-lg fa-plus top-buffer-2x"></i></a>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div slot="footer">
                 <button type="button" v-if="addingComms" disabled class="btn btn-default" @click="ok"><i class="fa fa-spinner fa-spin"></i> Adding</button>
-                <button type="button" v-else class="btn btn-default" @click="ok">Add</button>
-                <button type="button" class="btn btn-default" @click="cancel">Cancel</button>
+                <!-- <button type="button" v-else class="btn btn-default" @click="ok">Add</button> -->
+                <!-- <button type="button" class="btn btn-default" @click="cancel">Cancel</button> -->
             </div>
         </modal>
     </div>

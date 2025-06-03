@@ -127,39 +127,34 @@
                 />
             </div>
 
-            <div v-if="isInternal">
+            <template v-if="isInternal">
                 <FormSection :formCollapse="false" label="Comments to applicant" :Index="'comments_to_applicant' + feeWaiverId">
-                    <div class="form-group">
-                        <div class="row">
-                        <label class="col-sm-4 col-form-label">Comments</label>
-                        <div class="col-sm-8">
-                            <textarea :disabled="readonly" class="form-control" v-model="feeWaiver.comments_to_applicant"/>
-                        </div>
-                        </div>
+                    <div class="row">
+                    <label class="col-sm-4 col-form-label">Comments</label>
+                    <div class="col-sm-8">
+                        <textarea :disabled="readonly" class="form-control" v-model="feeWaiver.comments_to_applicant"/>
+                    </div>
                     </div>
                 </FormSection>
-            </div>
+            </template>
 
-            <div>
-                <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
-                <div class="row mb-5">
-                    <div v-if="feeWaiverId && canProcess" class="fixed-bottom bg-light py-2">
-                            <div class="container">
-                            <p class="d-flex justify-content-end">
-                                <button class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="save()">Save Changes</button>
-                            </p>
-                            </div>
-                    </div>
-                    <div v-else-if="!feeWaiverId" class="fixed-bottom bg-light py-2">
-                        <div class="container">
-                            <p class="d-flex justify-content-end gap-2">
-                                <input type="button" @click.prevent="addVisit" class="btn btn-primary" value="Add another visit"/>
-                                <button :title="submitDisabledText" :disabled="submitDisabled" class="btn btn-primary" type="submit">Submit</button>
-                            </p>
-                        </div>
-                    </div>
+            <div class="spacer_for_footer"></div>
+
+            <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
+            <div v-if="feeWaiverId && canProcess" class="fixed-bottom bg-light py-2">
+                <div class="container">
+                    <p class="d-flex justify-content-end">
+                        <button class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="save()">Save Changes</button>
+                    </p>
                 </div>
-
+            </div>
+            <div v-else-if="!feeWaiverId" class="fixed-bottom bg-light py-2">
+                <div class="container">
+                    <p class="d-flex justify-content-end gap-2">
+                        <input type="button" @click.prevent="addVisit" class="btn btn-primary" value="Add another visit"/>
+                        <button :title="submitDisabledText" :disabled="submitDisabled" class="btn btn-primary" type="submit">Submit</button>
+                    </p>
+                </div>
             </div>
         </form>
     </div>
@@ -528,8 +523,9 @@
                 for (let retrievedVisit of returnVal.data.fee_waiver.visits) {
                     let visit = Object.assign({}, retrievedVisit);
                     // we are now saving the index to db
-                    visit.date_to = moment(visit.date_to, 'YYYY-MM-DD').format('DD/MM/YYYY');
-                    visit.date_from = moment(visit.date_from, 'YYYY-MM-DD').format('DD/MM/YYYY');
+                    console.log({visit})
+                    visit.date_to = moment(visit.date_to, 'YYYY-MM-DD').format('YYYY-MM-DD');
+                    visit.date_from = moment(visit.date_from, 'YYYY-MM-DD').format('YYYY-MM-DD');
                     visit.number_of_vehicles = visit.number_of_vehicles.toString()
                     this.visits.push(visit);
                 }
@@ -599,6 +595,9 @@
     }
     .error {
         color: red;
+    }
+    .spacer_for_footer {
+        margin-bottom: 6rem;
     }
 </style>
 
