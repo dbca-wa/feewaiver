@@ -129,13 +129,11 @@
 
             <template v-if="isInternal">
                 <FormSection :formCollapse="false" label="Comments to applicant" :Index="'comments_to_applicant' + feeWaiverId">
-                    <div class="form-group">
-                        <div class="row">
-                        <label class="col-sm-4 col-form-label">Comments</label>
-                        <div class="col-sm-8">
-                            <textarea :disabled="readonly" class="form-control" v-model="feeWaiver.comments_to_applicant"/>
-                        </div>
-                        </div>
+                    <div class="row">
+                    <label class="col-sm-4 col-form-label">Comments</label>
+                    <div class="col-sm-8">
+                        <textarea :disabled="readonly" class="form-control" v-model="feeWaiver.comments_to_applicant"/>
+                    </div>
                     </div>
                 </FormSection>
             </template>
