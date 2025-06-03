@@ -3,35 +3,35 @@
         <FormSection :formCollapse="false" label="Fee Waiver Requests" Index="fee_waiver_requests">
             <div class="row">
                 <div class="col-md-3">
-                        <label for="lodged_from" class="pt-2 pr-2">Lodged From：</label>
-                        <input
-                            id="lodged_from"
-                            v-model="filterFeeWaiverLodgedFrom"
-                            type="date"
-                            class="form-control"
-                            placeholder="DD/MM/YYYY"
-                            :max="filterFeeWaiverLodgedTo || null"
-                        />
+                    <label for="lodged_from" class="pt-2 pr-2">Lodged From：</label>
+                    <input
+                        id="lodged_from"
+                        v-model="filterFeeWaiverLodgedFrom"
+                        type="date"
+                        class="form-control"
+                        placeholder="DD/MM/YYYY"
+                        :max="filterFeeWaiverLodgedTo || null"
+                    />
                 </div>
 
                 <div class="col-md-3">
-                        <label for="lodged_to" class="pt-2 pr-2">Lodged To：</label>
-                        <input
-                            id="lodged_to"
-                            v-model="filterFeeWaiverLodgedTo"
-                            type="date"
-                            class="form-control"
-                            placeholder="DD/MM/YYYY"
-                            :min="filterFeeWaiverLodgedFrom || null"
-                        />
+                    <label for="lodged_to" class="pt-2 pr-2">Lodged To：</label>
+                    <input
+                        id="lodged_to"
+                        v-model="filterFeeWaiverLodgedTo"
+                        type="date"
+                        class="form-control"
+                        placeholder="DD/MM/YYYY"
+                        :min="filterFeeWaiverLodgedFrom || null"
+                    />
                 </div>
 
                 <div class="col-md-3">
-                        <label class="form-label" for="status-filter">Status</label>
-                        <select id="status-filter" class="form-select" v-model="filterFeeWaiverStatus">
-                            <option value="All">All</option>
-                            <option v-for="(s, index) in feewaiver_status" :key="index" :value="s">{{s}}</option>
-                        </select>
+                    <label class="form-label" for="status-filter">Status</label>
+                    <select id="status-filter" class="form-select" v-model="filterFeeWaiverStatus">
+                        <option value="All">All</option>
+                        <option v-for="(s, index) in feewaiver_status" :key="index" :value="s">{{s}}</option>
+                    </select>
                 </div>
             </div>
 
@@ -92,11 +92,10 @@ export default {
                         d.date_to = vm.filterFeeWaiverLodgedTo;
                         d.processing_status = vm.filterFeeWaiverStatus;
                     }
-
                 },
                 // dom: 'lBfrtip',
                 "dom":  "<'d-flex'<'me-auto'l>fB>" +
-                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-12 my-2'tr>>" +
                         "<'d-flex'<'me-auto'i>p>",
                 buttons:[
                     {
