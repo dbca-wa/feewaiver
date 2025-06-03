@@ -127,7 +127,7 @@
                 />
             </div>
 
-            <div v-if="isInternal">
+            <template v-if="isInternal">
                 <FormSection :formCollapse="false" label="Comments to applicant" :Index="'comments_to_applicant' + feeWaiverId">
                     <div class="form-group">
                         <div class="row">
@@ -138,28 +138,25 @@
                         </div>
                     </div>
                 </FormSection>
-            </div>
+            </template>
 
-            <div>
-                <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
-                <div class="row mb-5">
-                    <div v-if="feeWaiverId && canProcess" class="fixed-bottom bg-light py-2">
-                            <div class="container">
-                            <p class="d-flex justify-content-end">
-                                <button class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="save()">Save Changes</button>
-                            </p>
-                            </div>
-                    </div>
-                    <div v-else-if="!feeWaiverId" class="fixed-bottom bg-light py-2">
-                        <div class="container">
-                            <p class="d-flex justify-content-end gap-2">
-                                <input type="button" @click.prevent="addVisit" class="btn btn-primary" value="Add another visit"/>
-                                <button :title="submitDisabledText" :disabled="submitDisabled" class="btn btn-primary" type="submit">Submit</button>
-                            </p>
-                        </div>
-                    </div>
+            <div class="spacer_for_footer"></div>
+
+            <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
+            <div v-if="feeWaiverId && canProcess" class="fixed-bottom bg-light py-2">
+                <div class="container">
+                    <p class="d-flex justify-content-end">
+                        <button class="btn btn-primary float-end" style="margin-top:5px;" @click.prevent="save()">Save Changes</button>
+                    </p>
                 </div>
-
+            </div>
+            <div v-else-if="!feeWaiverId" class="fixed-bottom bg-light py-2">
+                <div class="container">
+                    <p class="d-flex justify-content-end gap-2">
+                        <input type="button" @click.prevent="addVisit" class="btn btn-primary" value="Add another visit"/>
+                        <button :title="submitDisabledText" :disabled="submitDisabled" class="btn btn-primary" type="submit">Submit</button>
+                    </p>
+                </div>
             </div>
         </form>
     </div>
@@ -600,6 +597,9 @@
     }
     .error {
         color: red;
+    }
+    .spacer_for_footer {
+        margin-bottom: 6rem;
     }
 </style>
 
