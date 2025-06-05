@@ -114,14 +114,14 @@
 
         <div class="row mb-2">
             <label for="number_of_vehicles" class="col-sm-4 col-form-label">Number of vehicles used for visit</label>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
                 <input :disabled="readonly" required type="number" class="form-control" name="number_of_vehicles" min="0" step="1" v-model="visit.number_of_vehicles">
             </div>
         </div>
 
         <div class="row mb-2">
             <label for="number_of_participants" class="col-sm-4 col-form-label">Number of participants</label>
-            <div class="col-sm-1">
+            <div class="col-sm-2">
                 <input :disabled="readonly" required type="number" class="form-control" name="number_of_participants" min="0" step="1" v-model="visit.number_of_participants">
             </div>
         </div>
