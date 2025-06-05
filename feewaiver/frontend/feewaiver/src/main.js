@@ -13,23 +13,26 @@ import axios from 'axios'
 // Import jQuery 
 import $ from 'jquery'
 window.$ = window.jQuery = $  // Import jQuery and make it globally available
+import 'select2'
+import 'bootstrap'
 import 'jquery-validation'
-import select2 from 'select2'  // Select2 is a jQuery-based replacement for select boxes.
+// import select2 from 'select2'  // Select2 is a jQuery-based replacement for select boxes.
 
 // Datatable is jQuery plugin.  import here to make it globally available
 import 'datatables.net-bs5'
 import 'datatables.net-buttons-bs5'
-import 'datatables.net-responsive-bs'
+import 'datatables.net-responsive-bs5'
 import 'datatables.net-buttons/js/dataTables.buttons.js';
 import 'datatables.net-buttons/js/buttons.html5.js';
 
 // Style imports
 import 'sweetalert2/dist/sweetalert2.css';
-import 'select2/dist/css/select2.min.css';
-import 'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css';
+import 'select2/dist/css/select2.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css'
-import 'datatables.net-responsive-bs/css/responsive.bootstrap.min.css'
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 
 // Vue 3 uses createApp to instantiate the application
