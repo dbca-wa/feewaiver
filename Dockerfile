@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     TZ=Australia/Perth \
     PRODUCTION_EMAIL=True \
     SECRET_KEY="ThisisNotRealKey" \
-    NODE_MAJOR=16
+    NODE_MAJOR=22
 
 FROM builder_base_feewaiver as apt_packages_feewaiver
 
