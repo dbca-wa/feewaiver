@@ -2,9 +2,9 @@
 {% comment %} {% extends "webtemplate_dbca/base_b5_auth_session.html" %} {% endcomment %}
 
 {% load static %}
-
 {% load users %}
 {% load utils %}
+
 {% is_internal as is_internal_login %}
 {% is_feewaiver_admin as is_feewaiver_admin_user %}
 {% can_show_tests as show_tests %}
@@ -21,16 +21,16 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-            {% bootstrap_css %}
-                <link type="text/css" href="{% static 'feewaiver/css/base.css' %}?ver={{ git_commit_hash }}" rel="stylesheet"/>
+            <link rel="stylesheet" href="{% static 'feewaiver/css/base.css' %}?ver={{ git_commit_hash }}"/>
+            <link rel="stylesheet" href="{% static 'feewaiver_vue/css/app.css' %}?v={{git_commit_hash}}"/>
+            <link rel="stylesheet" href="{% static 'feewaiver_vue/css/chunk-vendors.css' %}?v={{git_commit_hash}}"/>
 
-            {% if not dev %}
-	    <link rel="stylesheet" href="{% static 'feewaiver_vue/css/app.css' %}?v={{git_commit_hash}}">
-            {% endif %}
             {% block extra_css %}
             {% endblock %}
+
             {% block extra_js %}
             {% endblock %}
+
             <title>
                 {% block title %}
                 {{ short_name }} - {{ department_name }}

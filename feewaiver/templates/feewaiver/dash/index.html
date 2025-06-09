@@ -1,21 +1,14 @@
 {% extends 'feewaiver/base.html' %}
 {% load static %}
 {% load users %}
+
 {% block extra_css %}
-{% comment %}
-    All CSS files should be bundled into a single file, so there is no need to include links to each file here.
-    However, for some reason, the CSS files are not being bundled correctly, so listing links to each file here.
-    Ideally, there should be no links at all in this section.
-{% endcomment %}
-    <link rel="stylesheet" href="{% static 'feewaiver/css/dataTables.bootstrap5.min.css' %}">
-    <link rel="stylesheet" href="{% static 'feewaiver/css/buttons.bootstrap5.min.css' %}">
-    <link rel="stylesheet" href="{% static 'feewaiver/css/responsive.bootstrap5.min.css' %}">
-    <link rel="stylesheet" href="{% static 'feewaiver/css/select2.min.css' %}">
-    <link rel="stylesheet" href="{% static 'feewaiver/css/select2-bootstrap-5-theme.min.css' %}">
 {% endblock %}
+
 {% block extra_js %}
     {{super}}
 {% endblock %}
+
 {% block requirements %}
 {% endblock %}
 
