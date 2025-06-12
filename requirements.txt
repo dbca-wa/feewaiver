@@ -54,3 +54,4 @@ gevent==25.5.1
 python-decouple>=3.8
 pytz==2024.2
 setuptools==80.4.0
+# git+https://github.com/dbca-wa/webtemplate2.git#egg=webtemplate_dbca

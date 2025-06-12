@@ -3,13 +3,13 @@
         <div v-if="!hideHeader" class="card-header">
             <h3 class="card-title">{{label}} 
                 <a :href="'#'+section_id" class="panelClicker" :id="custom_id" data-bs-toggle="collapse" expanded="true" :aria-controls="section_id">
-                    <span v-if="!noChevron" :class="panel_chevron_class"></span>
+                    <span v-if="!noChevron" :class="panel_chevron_class" style="color: #333;"></span>
                 </a>
             </h3>
         </div>
         <div :class="panel_collapse_class" :id="section_id">
             <div class="card-body">
-            <slot></slot>
+                <slot></slot>
             </div>
         </div>
     </div>
@@ -47,6 +47,7 @@ export default {
             return "section_"+this.Index
         },
         panel_collapse_class: function() {
+            console.log('panel_collapse_class')
             if (this.formCollapse) {
                 this.panel_chevron_class = "bi bi-chevron-down float-end";
                 return "card-body collapse";
@@ -62,18 +63,20 @@ export default {
         },
     },
     mounted: function() {
-        // $('#' + this.custom_id).on('click',function () {
-        //     var chev = $(this).children()[0];
-        //     window.setTimeout(function () {
-        //         $(chev).toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
-        //     }, 100);
-        // });
+        let vm = this
         this.clickHandler = function() {
             const chev = this.querySelector('span');
             setTimeout(function() {
                 chev.classList.toggle('bi-chevron-up');
                 chev.classList.toggle('bi-chevron-down');
-            }, 100);
+                console.log('vm.section_id')
+                console.log(vm.section_id)
+                if (chev.classList.contains('bi-chevron-up')) {
+                    $('#' + vm.section_id).find('.card-body').slideDown()
+                } else if (chev.classList.contains('bi-chevron-down')) {
+                    $('#' + vm.section_id).find('.card-body').slideUp()
+                }
+            }, 0);
         };
         
         document.getElementById(this.custom_id).addEventListener('click', this.clickHandler);

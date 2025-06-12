@@ -29,6 +29,7 @@ import 'datatables.net-buttons/js/buttons.html5.js';
 import 'sweetalert2/dist/sweetalert2.css';
 import 'select2/dist/css/select2.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css'
