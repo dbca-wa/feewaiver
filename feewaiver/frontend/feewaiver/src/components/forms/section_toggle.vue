@@ -3,7 +3,7 @@
         <div v-if="!hideHeader" class="card-header">
             <h3 class="card-title">{{label}} 
                 <a :href="'#'+section_id" class="panelClicker" :id="custom_id" data-bs-toggle="collapse" expanded="true" :aria-controls="section_id">
-                    <span v-if="!noChevron" :class="panel_chevron_class"></span>
+                    <span v-if="!noChevron" :class="panel_chevron_class" style="color: #333;"></span>
                 </a>
             </h3>
         </div>
@@ -69,12 +69,14 @@ export default {
             setTimeout(function() {
                 chev.classList.toggle('bi-chevron-up');
                 chev.classList.toggle('bi-chevron-down');
+                console.log('vm.section_id')
+                console.log(vm.section_id)
                 if (chev.classList.contains('bi-chevron-up')) {
-                    $('#' + vm.section_id).slideDown()
+                    $('#' + vm.section_id).find('.card-body').slideDown()
                 } else if (chev.classList.contains('bi-chevron-down')) {
-                    $('#' + vm.section_id).slideUp()
+                    $('#' + vm.section_id).find('.card-body').slideUp()
                 }
-            }, 100);
+            }, 0);
         };
         
         document.getElementById(this.custom_id).addEventListener('click', this.clickHandler);
