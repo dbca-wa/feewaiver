@@ -49,14 +49,13 @@ STATIC_URL = '/static/'
 SHOW_ROOT_API = env('SHOW_ROOT_API', False)
 
 INSTALLED_APPS += [
+    # 'webtemplate_dbca',
     'reversion_compare',
-    # 'bootstrap3',
     'django_bootstrap5',
     'feewaiver',
     'taggit',
     'rest_framework',
     'rest_framework_datatables',
-    #'rest_framework_gis',
     'reset_migrations',
     'ckeditor',
     'appmonitor_client',
