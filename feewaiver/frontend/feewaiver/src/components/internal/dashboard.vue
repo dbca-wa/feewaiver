@@ -146,12 +146,11 @@ export default {
                         orderable: false,
                         mRender:function(data,type,full){
                             if (data) {
-                                return `<a href="${data}" target="_blank"><i style="color:red" class="fa fa-file-pdf-o"></i></a>`;
+                                return `<a href="${data}" target="_blank"><i style="color:red" class="bi bi-file-pdf-fill"></i></a>`;
                             } else {
                                 return null;
                             }
                         },
-
                         //searchable: false,
                     },
                     {
