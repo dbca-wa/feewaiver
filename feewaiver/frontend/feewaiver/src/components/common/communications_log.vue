@@ -11,7 +11,6 @@
 </template>
 
 <script>
-//import $ from 'jquery'
 import modal from '@vue-utils/bootstrap-modal.vue'
 import {v4 as uuidv4} from 'uuid';
 import alert from '@vue-utils/alert.vue'
@@ -24,7 +23,7 @@ export default {
         alert
     },
     props:{
-        comms_url:{
+        log_url:{
             type: String,
             required: true
         },
@@ -35,7 +34,7 @@ export default {
             isModalOpen:false,
             table_id: uuidv4(),
             dateFormat: 'DD/MM/YYYY HH:mm:ss',
-            commsDtOptions:{
+            datatableOptions:{
                 language: {
                     processing: "<i class='fa fa-4x fa-spinner fa-spin'></i>"
                 },
@@ -45,7 +44,7 @@ export default {
                 order: [[8, 'desc']], // order the non-formatted date as a hidden column
                 processing:true,
                 ajax: {
-                    "url": vm.comms_url, 
+                    "url": vm.log_url, 
                     "dataSrc": '',
                 },
                 columns:[
@@ -169,7 +168,7 @@ export default {
    },
    mounted:function () {
         let vm =this;
-        $('#' + vm.table_id).DataTable(vm.commsDtOptions);
+        $('#' + vm.table_id).DataTable(vm.datatableOptions);
    }
 }
 </script>
