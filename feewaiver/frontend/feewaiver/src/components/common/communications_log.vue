@@ -15,6 +15,7 @@
 import modal from '@vue-utils/bootstrap-modal.vue'
 import {v4 as uuidv4} from 'uuid';
 import alert from '@vue-utils/alert.vue'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 export default {
     name:'Communications-Log',
@@ -61,77 +62,18 @@ export default {
                         title: 'Type',
                         data: 'type'
                     },
-                    /*{
-                        title: 'Reference',
-                        data: 'reference'
-                    },*/
                     {
                         title: 'To',
                         data: 'to',
-                        //render: vm.commaToNewline
-                        'render': function (value) {
-                            var ellipsis = '...',
-                                truncated = _.truncate(value, {
-                                    length: 25,
-                                    omission: ellipsis,
-                                    separator: ' '
-                                }),
-                                result = '<span>' + truncated + '</span>',
-                                popTemplate = _.template('<a href="#" ' +
-                                    'role="button" ' +
-                                    'data-bs-toggle="popover" ' +
-                                    'data-bs-trigger="click" ' +
-                                    'data-bs-placement="top auto"' +
-                                    'data-bs-html="true" ' +
-                                    'data-bs-content="<%= text %>" ' +
-                                    '>more</a>');
-                            if (_.endsWith(truncated, ellipsis)) {
-                                result += popTemplate({
-                                    text: value
-                                });
-                            }
-
-                            return result;
-                        },
-                        'createdCell': function (cell) {
-                            //TODO why this is not working?
-                            // the call to popover is done in the 'draw' event
-                            $(cell).popover();
+                        'render': function(value) {
+                            return vm.processString(value);
                         }
                     },
                     {
                         title: 'CC',
                         data: 'cc',
-                        //render: vm.commaToNewline
                           'render': function (value) {
-                            var ellipsis = '...',
-                                truncated = _.truncate(value, {
-                                    length: 25,
-                                    omission: ellipsis,
-                                    separator: ' '
-                                }),
-                                result = '<span>' + truncated + '</span>',
-                                popTemplate = _.template('<a href="#" ' +
-                                    'role="button" ' +
-                                    'data-bs-toggle="popover" ' +
-                                    'data-bs-trigger="click" ' +
-                                    'data-bs-placement="top auto"' +
-                                    'data-bs-html="true" ' +
-                                    'data-bs-content="<%= text %>" ' +
-                                    '>more</a>');
-                            if (_.endsWith(truncated, ellipsis)) {
-                                result += popTemplate({
-                                    text: value
-                                });
-                            }
-
-                            return result;
-                        },
-                        'createdCell': function (cell) {
-                            const popoverElement = $(cell).find('[data-bs-toggle="popover"]')[0];
-                            if (popoverElement) {
-                                new bootstrap.Popover(popoverElement);
-                            }
+                            return vm.processString(value);
                         }
                     },
                     {
@@ -143,66 +85,14 @@ export default {
                         title: 'Subject/Desc.',
                         data: 'subject',
                           'render': function (value) {
-                            var ellipsis = '...',
-                                truncated = _.truncate(value, {
-                                    length: 25,
-                                    omission: ellipsis,
-                                    separator: ' '
-                                }),
-                                result = '<span>' + truncated + '</span>',
-                                popTemplate = _.template('<a href="#" ' +
-                                    'role="button" ' +
-                                    'data-bs-toggle="popover" ' +
-                                    'data-trigger="click" ' +
-                                    'data-placement="top auto"' +
-                                    'data-html="true" ' +
-                                    'data-content="<%= text %>" ' +
-                                    '>more</a>');
-                            if (_.endsWith(truncated, ellipsis)) {
-                                result += popTemplate({
-                                    text: value
-                                });
-                            }
-
-                            return result;
-                        },
-                        'createdCell': function (cell) {
-                            //TODO why this is not working?
-                            // the call to popover is done in the 'draw' event
-                            $(cell).popover();
+                            return vm.processString(value);
                         }
                     },
                     {
                         title: 'Text',
                         data: 'text',
                         'render': function (value) {
-                            var ellipsis = '...',
-                                truncated = _.truncate(value, {
-                                    length: 100,
-                                    omission: ellipsis,
-                                    separator: ' '
-                                }),
-                                result = '<span>' + truncated + '</span>',
-                                popTemplate = _.template('<a href="#" ' +
-                                    'role="button" ' +
-                                    'data-bs-toggle="popover" ' +
-                                    'data-bs-trigger="click" ' +
-                                    'data-bs-placement="top auto"' +
-                                    'data-bs-html="true" ' +
-                                    'data-bs-content="<%= text %>" ' +
-                                    '>more</a>');
-                            if (_.endsWith(truncated, ellipsis)) {
-                                result += popTemplate({
-                                    text: value
-                                });
-                            }
-
-                            return result;
-                        },
-                        'createdCell': function (cell) {
-                            //TODO why this is not working?
-                            // the call to popover is done in the 'draw' event
-                            $(cell).popover();
+                            return vm.processString(value);
                         }
                     },
                     {
@@ -247,6 +137,25 @@ export default {
 
     },
     methods:{
+        processString: function (context_str) {
+            let truncated = this.truncateString(context_str, 25);
+            let popover_id = uuidv4();
+            let result_html = ''
+            let body = `<p>${context_str}</p>`;
+
+            if (truncated.length < context_str.length) {
+                result_html = truncated + `<button popovertarget="${popover_id}" class="link-button">more...</button><div id="${popover_id}" popover class="popover-content">${body}</div>`
+            } else {
+                result_html = body
+            }
+            return result_html;
+        },
+        truncateString: function(str, maxLength) {
+            if (str.length > maxLength) {
+                return str.slice(0, maxLength - 3) + '...';
+            }
+            return str;
+        },
         ok:function () {
             console.log('ok clicked');
         },
@@ -287,4 +196,29 @@ export default {
 }
 .top-buffer{margin-top: 5px;}
 .top-buffer-2x{margin-top: 10px;}
+
+/* Start: Popover */
+.link-button {
+    background: none;
+    border: none;
+    color: #03a9f4;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+.link-button:focus {
+    outline: none;
+}
+.popover-content {
+    max-width: 300px;
+    width: auto;
+    word-wrap: break-word;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* END: Popover */
 </style>
+

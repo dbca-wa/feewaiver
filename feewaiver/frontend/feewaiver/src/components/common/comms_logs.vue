@@ -168,7 +168,11 @@ export default {
                         'createdCell': function (cell) {
                             //TODO why this is not working?
                             // the call to popover is done in the 'draw' event
-                            $(cell).popover();
+                            // $(cell).popover();
+                            const popoverElement = $(cell).find('[data-bs-toggle="popover"]')[0];
+                            if (popoverElement) {
+                                new bootstrap.Popover(popoverElement);
+                            }
                         }
                     },
                     {
