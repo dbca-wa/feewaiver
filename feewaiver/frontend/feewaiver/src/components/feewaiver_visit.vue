@@ -88,6 +88,7 @@
                         placeholder="DD/MM/YYYY" 
                         v-model="visit.date_from" 
                         :id="'dateFromPicker_' + visit.index"
+                        :min="minDate"
                         :max="visit.date_to"
                     />
                 </div>
@@ -204,10 +205,7 @@
     import FormSection from "@/components/forms/section_toggle.vue"
     import 'bootstrap/dist/css/bootstrap.css'
     import "select2/dist/css/select2.min.css"
-    // import "select2-bootstrap-theme/dist/select2-bootstrap.min.css"
     import '@popperjs/core/dist/umd/popper.min.js'
-    // import '@eonasdan/tempus-dominus/dist/js/tempus-dominus.min.js'
-    // import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
 
     export default {
         name: 'FeeWaiverVisit',
@@ -264,7 +262,7 @@
                     keepInvalid:true,
                     allowInputToggle:true
                 },
-
+                minDate: ''
             }
         },
         components: {
@@ -324,7 +322,6 @@
             */
 
         },
-
         methods:{
             /*
             triggerCampGroundSelector: async function(internal) {
@@ -396,10 +393,12 @@
                 let el_parks = $('#parks_'+vm.visit.index)
                 el_parks.val(vm.visit.selected_park_ids);
                 el_parks.trigger('change');
+
                 // campgrounds
                 let el_fr_date = $('#dateFromPicker_' + vm.visit.index);
                 el_fr_date.val(vm.visit.date_from);
                 el_fr_date.trigger('change');
+
                 let el_to_date = $('#dateToPicker_' + vm.visit.index);
                 el_to_date.val(vm.visit.date_to);
                 el_to_date.trigger('change');
@@ -535,8 +534,9 @@
             */
 
         },
-
         mounted: function() {
+            const today = new Date();
+            this.minDate = today.toISOString().split('T')[0];
         },
         created: async function() {
             await this.$nextTick();
@@ -545,12 +545,6 @@
             if (this.isInternal) {
                 await this.triggerFreeParksSelector(true);
             }
-
-            /*
-            if (this.isInternal) {
-                await this.triggerCampGroundSelector(true);
-            }
-            */
         },
     }
 </script>

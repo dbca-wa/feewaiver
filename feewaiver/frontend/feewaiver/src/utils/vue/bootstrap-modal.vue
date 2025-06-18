@@ -50,6 +50,10 @@
                 type: Boolean,
                 default: false
             },
+            xlarge: {
+                type: Boolean,
+                default: false
+            },
             full: {
                 type: Boolean,
                 default: false
@@ -91,6 +95,7 @@
         computed: {
             modalClass () {
                 return {
+                    'modal-xl': this.xlarge,
                     'modal-lg': this.large,
                     'modal-sm': this.small,
                     'modal-full': this.full
