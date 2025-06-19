@@ -142,7 +142,7 @@
                 if (!this.force) {
                     this.cancel();
                 }
-            },
+            }
         }
      };
 </script>
