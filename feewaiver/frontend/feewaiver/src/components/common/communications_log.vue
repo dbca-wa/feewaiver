@@ -210,13 +210,16 @@ export default {
     outline: none;
 }
 .popover-content {
-    max-width: 300px;
+    max-width: 500px;
     width: auto;
     word-wrap: break-word;
     padding: 10px;
     border: 1px solid #ccc;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 /* END: Popover */
 </style>
