@@ -1,6 +1,6 @@
 psycopg2-binary>=2.9.4
 reportlab==4.2.2
-Django~=5.2
+Django~=5.2.3
 jedi==0.17.2
 django-extensions==3.2.3
 dbca-utils==2.1.0
@@ -53,5 +53,5 @@ django-phonenumber-field==8.0.0
 gevent==25.5.1
 python-decouple>=3.8
 pytz==2024.2
-setuptools==80.4.0
+setuptools==80.9.0
 # git+https://github.com/dbca-wa/webtemplate2.git#egg=webtemplate_dbca
