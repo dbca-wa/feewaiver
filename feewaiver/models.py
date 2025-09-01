@@ -1,13 +1,17 @@
+import logging
+
 from django.db import models
 from feewaiver.main_models import CommunicationsLogEntry, UserAction, Document
 from feewaiver.storage import PrivateMediaStorage
 from ledger.accounts.models import EmailUser, RevisionedMixin
 from django.contrib.postgres.fields import ArrayField
-from feewaiver.exceptions import FeeWaiverNotAuthorized
+from feewaiver.exceptions import FeeWaiverNotAuthorized, InvalidStatusTransitionError
 from django.db import transaction
 from feewaiver.doctopdf import create_feewaiver_pdf_contents
 from django.core.files.base import ContentFile
 
+
+logger = logging.getLogger(__name__)
 
 def update_feewaiver_doc_filename(instance, filename):
     return 'feewaiver/{}/documents/{}'.format(instance.feewaiver.id,filename)
@@ -149,11 +153,35 @@ class FeeWaiver(RevisionedMixin):
             request)
 
     def move_to_approver(self, request):
+        # Ensure the object is in the correct status before proceeding.
+        if self.processing_status != self.PROCESSING_STATUS_WITH_ASSESSOR:
+            # Create a detailed error message for both logging and the exception.
+            error_message = (
+                f"Attempted to move FeeWaiver: [{self}] to 'with_approver' from an invalid status '{self.processing_status}'.  The expected status was '{self.PROCESSING_STATUS_WITH_ASSESSOR}'."
+            )
+
+            logger.error(error_message)
+            raise InvalidStatusTransitionError(error_message)
+
         self.assigned_officer = None
         self.processing_status = self.PROCESSING_STATUS_WITH_APPROVER
         self.save()
 
     def issue(self, request):
+        """
+        Issues the fee waiver.
+        Raises InvalidStatusTransitionError if the current status is not 'with_approver'.
+        """
+        # Ensure the object is in the correct status before proceeding.
+        if self.processing_status != self.PROCESSING_STATUS_WITH_APPROVER:
+            # Create a detailed error message for both logging and the exception.
+            error_message = (
+                f"Attempted to issue FeeWaiver: [{self}]) with an invalid status '{self.processing_status}'. The expected status was '{self.PROCESSING_STATUS_WITH_APPROVER}'."
+            )
+
+            logger.error(error_message)
+            raise InvalidStatusTransitionError(error_message)
+
         self.assigned_officer = None
         self.processing_status = self.PROCESSING_STATUS_ISSUED
         self.log_user_action(
