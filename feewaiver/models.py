@@ -153,6 +153,16 @@ class FeeWaiver(RevisionedMixin):
             request)
 
     def move_to_approver(self, request):
+        # Ensure the object is in the correct status before proceeding.
+        if self.processing_status != self.PROCESSING_STATUS_WITH_ASSESSOR:
+            # Create a detailed error message for both logging and the exception.
+            error_message = (
+                f"Attempted to move FeeWaiver: [{self}] to 'with_approver' from an invalid status '{self.processing_status}'.  The expected status was '{self.PROCESSING_STATUS_WITH_ASSESSOR}'."
+            )
+
+            logger.error(error_message)
+            raise InvalidStatusTransitionError(error_message)
+
         self.assigned_officer = None
         self.processing_status = self.PROCESSING_STATUS_WITH_APPROVER
         self.save()
@@ -169,10 +179,7 @@ class FeeWaiver(RevisionedMixin):
                 f"Attempted to issue FeeWaiver: [{self}]) with an invalid status '{self.processing_status}'. The expected status was '{self.PROCESSING_STATUS_WITH_APPROVER}'."
             )
 
-            # Log the error with detailed context for easier debugging.
             logger.error(error_message)
-
-            # Raise an exception to halt the operation and notify the caller.
             raise InvalidStatusTransitionError(error_message)
 
         self.assigned_officer = None
