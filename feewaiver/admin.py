@@ -6,7 +6,7 @@ from feewaiver.main_models import SystemMaintenance, FeeWaiverWordTemplate
 from ledger.accounts import admin as ledger_admin
 from ledger.accounts.models import EmailUser
 from copy import deepcopy
-from feewaiver import forms
+from feewaiver import forms, settings
 from feewaiver.utils import to_local_tz
 from django.utils.safestring import mark_safe
 
@@ -24,11 +24,11 @@ class FeeWaiverWordTemplateAdmin(admin.ModelAdmin):
         return obj.id
 
     def Date(self, obj):
-        local_date = to_local_tz(obj.uploaded_date)
+        local_date = to_local_tz(settings.TIME_ZONE, obj.uploaded_date)
         return local_date.strftime('%d/%m/%Y')
 
     def Time(self, obj):
-        local_date = to_local_tz(obj.uploaded_date)
+        local_date = to_local_tz(settings.TIME_ZONE, obj.uploaded_date)
         return local_date.strftime('%H:%M')
 
 
