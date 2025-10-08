@@ -1,16 +1,19 @@
-from django.core.exceptions import ImproperlyConfigured
-from django.utils.log import DEFAULT_LOGGING
-
 import os
 import confy
 import decouple
 import json
+import time
+
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.log import DEFAULT_LOGGING
+from feewaiver.utils import get_git_commit_hash
+from ledger.settings_base import *
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 confy.read_environment_file(BASE_DIR+"/.env")
 os.environ.setdefault("BASE_DIR", BASE_DIR)
 
-from ledger.settings_base import *
 
 ROOT_URLCONF = 'feewaiver.urls'
 SITE_ID = 1
@@ -106,13 +109,12 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 DEV_APP_BUILD_URL = env('DEV_APP_BUILD_URL')  # URL of the Dev app.js served by webpack & express
 
 # Use git commit hash for purging cache in browser for deployment changes
-GIT_COMMIT_HASH = ''
-if  os.path.isdir(BASE_DIR+'/.git/') is True:
-    GIT_COMMIT_HASH = os.popen('cd  '+BASE_DIR+' ; git log -1 --format=%H').read()
-if len(GIT_COMMIT_HASH) == 0: 
-    GIT_COMMIT_HASH = os.popen('cat /app/git_hash').read()
-    if len(GIT_COMMIT_HASH) == 0:
-       print ("ERROR: No git hash provided")
+_git_hash = get_git_commit_hash(BASE_DIR)
+if _git_hash:
+    GIT_COMMIT_HASH = _git_hash
+else:
+    # Fallback to a timestamp if not in a Git repo.
+    GIT_COMMIT_HASH = str(int(time.time()))
 
 # Department details
 SYSTEM_NAME = env('SYSTEM_NAME', 'Fee waiver')
