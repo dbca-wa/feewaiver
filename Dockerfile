@@ -111,14 +111,16 @@ RUN python3 manage_fw.py collectstatic --noinput
 
 FROM collectstatic_feewaiver as configure_feewaiver
 
-# 1. Copy the .git directory temporarily.
-COPY --chown=oim:oim .git ./.git
+# # 1. Copy the .git directory temporarily.
+# COPY --chown=oim:oim .git ./.git
 
-# 2. In a single RUN command:
-#    - Generate the hash file from the .git directory.
-#    - Immediately and forcefully remove the .git directory.
-RUN git rev-parse HEAD > GIT_-COMMIT_HASH.txt && \
-    rm -rf ./.git
+# # 2. In a single RUN command:
+# #    - Generate the hash file from the .git directory.
+# #    - Immediately and forcefully remove the .git directory.
+# RUN git rev-parse HEAD > GIT_COMMIT_HASH.txt && \
+#     rm -rf ./.git
+
+COPY --chown=oim:oim .git ./.git
 
 COPY --chown=oim:oim gunicorn.ini ./
 COPY --chown=oim:oim python-cron ./
