@@ -109,12 +109,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 DEV_APP_BUILD_URL = env('DEV_APP_BUILD_URL')  # URL of the Dev app.js served by webpack & express
 
 # Use git commit hash for purging cache in browser for deployment changes
-_git_hash = get_git_commit_hash(BASE_DIR)
-if _git_hash:
-    GIT_COMMIT_HASH = _git_hash
-else:
-    # Fallback to a timestamp if not in a Git repo.
-    GIT_COMMIT_HASH = str(int(time.time()))
+GIT_COMMIT_HASH = get_git_commit_hash(BASE_DIR)
 
 # Department details
 SYSTEM_NAME = env('SYSTEM_NAME', 'Fee waiver')

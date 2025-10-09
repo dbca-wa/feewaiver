@@ -1,9 +1,9 @@
 import sys
 import pytz
 from django.db import connection
-import os
-import subprocess
+import time
 from pathlib import Path
+from typing import Union
 
 
 def to_local_tz(time_zone, _date):
@@ -26,32 +26,30 @@ def are_migrations_running():
     return sys.argv and ('migrate' in sys.argv or 'makemigrations' in sys.argv or 'showmigrations' in sys.argv or 'sqlmigrate' in sys.argv)
 
 
-def get_git_commit_hash(repo_path: Path):
+def get_git_commit_hash(base_dir: Union[str, Path]):
     """
-    Attempts to get the latest Git commit hash from a given repository path.
-    Returns the hash string if successful, otherwise returns None.
+    Reads the git commit hash from a file generated during the Docker build.
+    Provides a fallback to the current timestamp for local development
+    environments where the file may not exist.
     
-    :param repo_path: The Path object to the root of the repository.
+    :param base_dir: A Path object to the project's base directory.
     """
-    # repo_path might be 'str'.  Convert it to the Path obj.
-    repo_path = Path(repo_path)
-
-    # The .git directory should be directly inside the repo_path
-    git_dir = repo_path / '.git'
-    if not os.path.isdir(git_dir):
-        return None
-
     try:
-        # Run the git command using the provided path as the working directory.
-        result = subprocess.run(
-            ['git', 'log', '-1', '--format=%H'],
-            cwd=repo_path,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return result.stdout.strip()
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        # Handle cases where git command fails or is not found.
-        return None
+        # Define the path to the hash file relative to the base directory.
+        base_dir = Path(base_dir)
+        hash_file_path = base_dir / 'GIT_COMMIT_HASH.txt'
+        
+        # Open the file, read its content, and strip any surrounding whitespace.
+        with open(hash_file_path, 'r') as f:
+            hash_value = f.read().strip()
+            # Ensure the file is not empty. If it is, fall back.
+            if hash_value:
+                return hash_value
+        
+        # If the file exists but is empty, manually raise an error to trigger the except block.
+        raise FileNotFoundError
 
+    except FileNotFoundError:
+        # If the file is not found (e.g., in local development),
+        # return the current Unix timestamp as a string for cache busting.
+        return str(int(time.time()))
