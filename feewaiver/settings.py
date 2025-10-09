@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import confy
 import decouple
 import json
@@ -109,11 +110,22 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 DEV_APP_BUILD_URL = env('DEV_APP_BUILD_URL')  # URL of the Dev app.js served by webpack & express
 
 # Use git commit hash for purging cache in browser for deployment changes
-_git_hash = get_git_commit_hash(BASE_DIR)
-if _git_hash:
-    GIT_COMMIT_HASH = _git_hash
-else:
-    # Fallback to a timestamp if not in a Git repo.
+# GIT_COMMIT_HASH = get_git_commit_hash(BASE_DIR)
+GIT_COMMIT_HASH = ''
+GIT_COMMIT_DATE = ''
+if  os.path.isdir(BASE_DIR + '/.git/') is True:
+    # Try to read git commit hash from the .git folder
+    GIT_COMMIT_DATE = os.popen('cd ' + BASE_DIR + ' ; git log -1 --format=%cd').read().strip()
+    GIT_COMMIT_HASH = os.popen('cd ' + BASE_DIR + ' ; git log -1 --format=%H').read().strip()
+if not GIT_COMMIT_HASH:
+    # Try to read git commit hash from the rand_hash file created by the startup.py
+    try:
+        with open('/app/rand_hash', 'r') as f:
+            GIT_COMMIT_HASH = f.read().strip()
+    except FileNotFoundError:
+        print ("ERROR: No random hash provided")
+if not GIT_COMMIT_HASH:
+    # Fallback
     GIT_COMMIT_HASH = str(int(time.time()))
 
 # Department details
