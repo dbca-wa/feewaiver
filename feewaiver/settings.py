@@ -113,20 +113,13 @@ DEV_APP_BUILD_URL = env('DEV_APP_BUILD_URL')  # URL of the Dev app.js served by 
 # GIT_COMMIT_HASH = get_git_commit_hash(BASE_DIR)
 GIT_COMMIT_HASH = ''
 GIT_COMMIT_DATE = ''
-if  os.path.isdir(BASE_DIR + '/.git/') is True:
-    # Try to read git commit hash from the .git folder
-    GIT_COMMIT_DATE = os.popen('cd ' + BASE_DIR + ' ; git log -1 --format=%cd').read().strip()
-    GIT_COMMIT_HASH = os.popen('cd ' + BASE_DIR + ' ; git log -1 --format=%H').read().strip()
-if not GIT_COMMIT_HASH:
-    # Try to read git commit hash from the rand_hash file created by the startup.py
-    try:
-        with open('/app/rand_hash', 'r') as f:
-            GIT_COMMIT_HASH = f.read().strip()
-    except FileNotFoundError:
-        print ("ERROR: No random hash provided")
-if not GIT_COMMIT_HASH:
-    # Fallback
-    GIT_COMMIT_HASH = str(int(time.time()))
+if len(GIT_COMMIT_HASH) == 0:
+    GIT_COMMIT_HASH = os.popen('cat /app/git_hash').read()
+    if len(GIT_COMMIT_HASH) == 0:
+        print ("ERROR: No git hash provided")
+        if  os.path.isdir(BASE_DIR+'/.git/') is True:
+            GIT_COMMIT_DATE = os.popen('cd '+BASE_DIR+' ; git log -1 --format=%cd').read()
+            GIT_COMMIT_HASH = os.popen('cd  '+BASE_DIR+' ; git log -1 --format=%H').read()     
 
 # Department details
 SYSTEM_NAME = env('SYSTEM_NAME', 'Fee waiver')
