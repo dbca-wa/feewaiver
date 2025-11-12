@@ -7,7 +7,7 @@ import time
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.log import DEFAULT_LOGGING
-from feewaiver.utils import get_git_commit_hash
+# from feewaiver.utils import get_git_commit_hash
 from ledger.settings_base import *
 
 
