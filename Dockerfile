@@ -121,7 +121,7 @@ FROM collectstatic_feewaiver AS configure_feewaiver
 # RUN git rev-parse HEAD > GIT_COMMIT_HASH.txt && \
 #     rm -rf ./.git
 
-COPY --chown=oim:oim .git ./.git
+# COPY --chown=oim:oim .git ./.git
 
 COPY --chown=oim:oim gunicorn.ini ./
 COPY --chown=oim:oim python-cron ./
