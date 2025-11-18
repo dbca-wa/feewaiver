@@ -1,6 +1,6 @@
 psycopg2-binary>=2.9.4
 reportlab==4.2.2
-Django~=5.2.4
+Django~=5.2.8
 jedi==0.17.2
 django-extensions==3.2.3
 dbca-utils==2.1.0
