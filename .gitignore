@@ -101,7 +101,7 @@ uwsgi*.ini
 *.djcache
 
 # npm lock
-feewaiver/frontend/feewaiver/package-lock.json
+# feewaiver/frontend/feewaiver/package-lock.json
 
 # npm build files
 # feewaiver/static/feewaiver_vue/css/app.css
