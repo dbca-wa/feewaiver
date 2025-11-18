@@ -62,6 +62,7 @@ INSTALLED_APPS += [
     'rest_framework_datatables',
     'reset_migrations',
     'ckeditor',
+    'django_cron',
     'appmonitor_client',
     'ledger',
 ]
