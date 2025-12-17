@@ -28,6 +28,7 @@ stages:
       inputs:
         command: buildAndPush
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        arguments: '--build-arg GIT_COMMIT_HASH=$(Build.SourceVersion)'
         tags: | 
               latest
               $(tagDate)
@@ -40,6 +41,7 @@ stages:
       inputs:
         command: buildAndPush
         dockerfile: '$(Build.SourcesDirectory)/dockerdev/Dockerfile'
+        arguments: '--build-arg GIT_COMMIT_HASH=$(Build.SourceVersion)'
         tags: | 
               feewaiver_dev_latest
               feewaiver_dev_$(tagDate)              
