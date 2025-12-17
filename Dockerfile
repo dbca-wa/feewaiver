@@ -86,6 +86,14 @@ RUN /tmp/default_script_installer.sh
 FROM node_feewaiver AS python_libs_feewaiver
 WORKDIR /app
 USER oim
+
+# 1. Declare a build-time argument that can be passed from the 'docker build' command.
+ARG GIT_COMMIT_HASH=unknown 
+
+# 2. Write the value of the received argument into the /app/git_hash file.
+#    This file will be read by settings.py when the application starts.
+RUN echo "${GIT_COMMIT_HASH}" > /app/git_hash
+
 RUN virtualenv /app/venv
 ENV PATH=/app/venv/bin:$PATH
 COPY requirements.txt ./
