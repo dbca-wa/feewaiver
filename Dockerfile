@@ -86,6 +86,7 @@ RUN /tmp/default_script_installer.sh
 FROM node_feewaiver AS python_libs_feewaiver
 WORKDIR /app
 USER oim
+
 RUN virtualenv /app/venv
 ENV PATH=/app/venv/bin:$PATH
 COPY requirements.txt ./

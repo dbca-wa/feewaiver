@@ -114,7 +114,7 @@ DEV_APP_BUILD_URL = env('DEV_APP_BUILD_URL')  # URL of the Dev app.js served by 
 GIT_COMMIT_HASH = ''
 GIT_COMMIT_DATE = ''
 if len(GIT_COMMIT_HASH) == 0:
-    GIT_COMMIT_HASH = os.popen('cat /app/git_hash').read()
+    GIT_COMMIT_HASH = os.popen('cat /app/rand_hash').read()
     if len(GIT_COMMIT_HASH) == 0:
         print ("ERROR: No git hash provided")
         if  os.path.isdir(BASE_DIR+'/.git/') is True:
