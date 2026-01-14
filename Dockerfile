@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1.2
 
 # Prepare the base environment.
-FROM ubuntu:24.04 as builder_base_feewaiver
+FROM ghcr.io/dbca-wa/docker-apps-dev:ubuntu_2510_base_python_node AS builder_base_feewaiver
 
 LABEL maintainer="asi@dbca.wa.gov.au"
 
@@ -17,56 +17,23 @@ FROM builder_base_feewaiver as apt_packages_feewaiver
 # RUN sed 's/archive.ubuntu.com/au.archive.ubuntu.com/g' /etc/apt/sources.list > /etc/apt/sourcesau.list && \
 #    mv /etc/apt/sourcesau.list /etc/apt/sources.list
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
+RUN apt-get update 
+RUN apt-get upgrade -y && \
     apt-get install --no-install-recommends -y \
-    binutils \
-    bzip2 \
     ca-certificates \
-    cron \
-    curl \
-    gcc \
-    gdal-bin \
     gpg-agent \
     g++ \
-    git \
-    gunicorn \
-    htop \
-    libmagic-dev \
-    libpq-dev \
-    libproj-dev \
-    libreoffice \
-    mtr \
-    patch \
-    postgresql-client \
-    python3 \
-    python3-dev \
-    python3-pip \
-    python3-setuptools \
-    software-properties-common \
-    ssh \
-    tzdata \
-    vim \
-    wget \
-    virtualenv 
-    # rm -rf /var/lib/apt/lists/*
-
-# RUN add-apt-repository ppa:deadsnakes/ppa && \
-#     apt-get update && \
-#     apt-get install --no-install-recommends -y python3.9 python3.9-dev python3.9-distutils && \
-#     ln -s /usr/bin/python3.9 /usr/bin/python && \
-#     python3.9 -m pip install --upgrade pip && \
-#     apt-get install -y rsyslog
+    software-properties-common
 
 FROM apt_packages_feewaiver as node_feewaiver
 
 # install node
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
-    | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && \
-    apt-get install -y nodejs
+# RUN mkdir -p /etc/apt/keyrings && \
+#     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+#     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
+#     | tee /etc/apt/sources.list.d/nodesource.list && \
+#     apt-get update && \
+#     apt-get install -y nodejs
 
 RUN groupadd -g 5000 oim 
 RUN useradd -g 5000 -u 5000 oim -s /bin/bash -d /app
@@ -77,10 +44,6 @@ COPY timezone /etc/timezone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY startup.sh /
 RUN chmod 755 /startup.sh
-
-RUN wget https://raw.githubusercontent.com/dbca-wa/wagov_utils/main/wagov_utils/bin/default_script_installer.sh -O /tmp/default_script_installer.sh
-RUN chmod 755 /tmp/default_script_installer.sh
-RUN /tmp/default_script_installer.sh
 
 # Install Python libs from requirements.txt.
 FROM node_feewaiver AS python_libs_feewaiver
