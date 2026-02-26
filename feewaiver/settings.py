@@ -1,11 +1,11 @@
 import os
+import sys
 from pathlib import Path
 import confy
 import decouple
 import json
 import time
 
-from django.core.exceptions import ImproperlyConfigured
 from django.utils.log import DEFAULT_LOGGING
 # from feewaiver.utils import get_git_commit_hash
 from ledger.settings_base import *
@@ -64,6 +64,7 @@ INSTALLED_APPS += [
     'ckeditor',
     'appmonitor_client',
     'ledger',
+    'django_vite',
 ]
 
 CRON_CLASSES = [
@@ -82,6 +83,7 @@ REST_FRAMEWORK = {
 
 
 TEMPLATES[0]['DIRS'].append(os.path.join(BASE_DIR, 'feewaiver', 'templates'))
+TEMPLATES[0]['OPTIONS']['context_processors'].append('feewaiver.context_processors.config')
 BOOTSTRAP3 = {
     'jquery_url': '//static.dpaw.wa.gov.au/static/libs/jquery/2.2.1/jquery.min.js',
     'base_url': '//static.dpaw.wa.gov.au/static/libs/twitter-bootstrap/3.3.6/',
@@ -102,12 +104,26 @@ CACHES = {
 }
 STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles_fw')
 STATICFILES_DIRS.append(os.path.join(os.path.join(BASE_DIR, 'feewaiver', 'static')))
-DEV_STATIC = env('DEV_STATIC',False)
-DEV_STATIC_URL = env('DEV_STATIC_URL')
-if DEV_STATIC and not DEV_STATIC_URL:
-    raise ImproperlyConfigured('If running in DEV_STATIC, DEV_STATIC_URL has to be set')
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
-DEV_APP_BUILD_URL = env('DEV_APP_BUILD_URL')  # URL of the Dev app.js served by webpack & express
+
+RUNNING_DEVSERVER = len(sys.argv) > 1 and sys.argv[1] == 'runserver'
+DJANGO_VITE_DEV_MODE = RUNNING_DEVSERVER and DEBUG is True
+
+STATIC_URL_PREFIX = '/static/feewaiver_vue/' if DJANGO_VITE_DEV_MODE else 'feewaiver_vue/'
+
+DJANGO_VITE = {
+    'default': {
+        'dev_mode': DJANGO_VITE_DEV_MODE,
+        'manifest_path': os.path.join(
+            BASE_DIR, 'feewaiver', 'static', 'feewaiver_vue', 'manifest.json'
+        ),
+        'dev_server_host': 'localhost',
+        'dev_server_port': 5173,
+        'static_url_prefix': STATIC_URL_PREFIX,
+    }
+}
+
+VUE3_ENTRY_SCRIPT = env('VUE3_ENTRY_SCRIPT', default='src/main.js')
 
 # Use git commit hash for purging cache in browser for deployment changes
 # GIT_COMMIT_HASH = get_git_commit_hash(BASE_DIR)
