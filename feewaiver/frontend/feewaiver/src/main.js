@@ -1,18 +1,21 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import 'vite/modulepreload-polyfill';
 import { createApp } from 'vue'
 import App from './App'
 import router from './router'
 import helpers from '@/utils/helpers'
 import api_endpoints from './api'
-// vue-resource is not officially supported in Vue 3
-// We need to use an alternative like axios or implement a custom plugin
-// This example implements axios as a replacement
 import axios from 'axios'
-
-// Import jQuery 
 import $ from 'jquery'
-window.$ = window.jQuery = $  // Import jQuery and make it globally available
+import _ from 'lodash'
+import moment from 'moment'
+import Swal from 'sweetalert2'
+
+// Make globals available on window
+window.$ = window.jQuery = $
+window._ = _
+window.moment = moment
+window.Swal = Swal
+
 import 'select2'
 import 'bootstrap'
 import 'jquery-validation'
@@ -36,14 +39,8 @@ import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css'
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 
-// Vue 3 uses createApp to instantiate the application
 const app = createApp(App)
 
-// Global configuration
-app.config.devtools = true
-app.config.productionTip = false
-
-// Make axios available globally as a replacement for vue-resource, but ideally using axios in each file is the recommended approach
 app.config.globalProperties.$http = axios
 
 // Add interceptor to include CSRF token in all requests
