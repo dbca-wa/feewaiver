@@ -1,4 +1,3 @@
-import Vue from 'vue'
 // import Router from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 import external_routes from '@/components/external/routes'
