@@ -112,3 +112,4 @@ uwsgi*.ini
 feewaiver/static/feewaiver_vue/*
 
 git_history_recent
+.eslintcache

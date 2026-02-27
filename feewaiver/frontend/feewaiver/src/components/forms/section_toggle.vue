@@ -1,67 +1,93 @@
 <template lang="html">
-    <div :class="['card', customClass]">
-        <div v-if="!hideHeader" class="card-header">
-            <h3 class="card-title">{{label}} 
-                <a :href="'#'+section_id" class="panelClicker" :id="custom_id" data-bs-toggle="collapse" expanded="true" :aria-controls="section_id">
-                    <span v-if="!noChevron" :class="panel_chevron_class" style="color: #333;"></span>
-                </a>
-            </h3>
-        </div>
-        <div :class="panel_collapse_class" :id="section_id">
-            <div class="card-body">
-                <slot></slot>
-            </div>
-        </div>
+  <div :class="['card', customClass]">
+    <div v-if="!hideHeader" class="card-header">
+      <h3 class="card-title">
+        {{ label }}
+        <a
+          :id="custom_id"
+          :href="'#' + section_id"
+          :aria-controls="section_id"
+          class="panelClicker"
+          data-bs-toggle="collapse"
+          expanded="true"
+        >
+          <span
+            v-if="!noChevron"
+            :class="panel_chevron_class"
+            style="color: #333;"
+          />
+        </a>
+      </h3>
     </div>
+    <div :id="section_id" :class="panel_collapse_class">
+      <div class="card-body">
+        <slot />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import {v4 as uuidv4} from 'uuid';
 
 export default {
-    name:"FormSection",
-    props: {
-        label: {}, 
-        Index: {}, 
-        formCollapse: {}, 
-        hideHeader: {},
-        treeHeight: {},
-        noChevron: {
-            default: false,
-        },
-        customClass: {
-            type: [String, Object, Array],
-            default: ""
-        }
+  name: "FormSection",
+  props: {
+    label: {
+      type: String,
+      default: '',
     },
-    data:function () {
-        return {
-            title:"Section title",
-            panel_chevron_class: null,
-            custom_id: uuidv4(),
-            clickHandler: null
-        }
+    Index: {
+      type: [String, Number],
+      default: 0,
     },
-    computed:{
-        section_id: function () {
-            return "section_"+this.Index
-        },
-        panel_collapse_class: function() {
-            console.log('panel_collapse_class')
-            if (this.formCollapse) {
-                this.panel_chevron_class = "bi bi-chevron-down float-end";
-                return "card-body collapse";
-            } else {
-                if (this.treeHeight) {
-                    this.panel_chevron_class = "bi bi-chevron-up float-end";
-                    return "card-body collapse show flex-container";
-                } else {
-                    this.panel_chevron_class = "bi bi-chevron-up float-end";
-                    return "card-body collapse show";
-                }
-            }
-        },
+    formCollapse: {
+      type: Boolean,
+      default: false,
     },
+    hideHeader: {
+      type: Boolean,
+      default: false,
+    },
+    treeHeight: {
+      type: Boolean,
+      default: false,
+    },
+    noChevron: {
+      type: Boolean,
+      default: false,
+    },
+    customClass: {
+      type: [String, Object, Array],
+      default: '',
+    },
+  },
+  data: function () {
+    return {
+      title: "Section title",
+      custom_id: uuidv4(),
+      clickHandler: null,
+    };
+  },
+  computed: {
+    section_id: function () {
+      return "section_" + this.Index;
+    },
+    panel_chevron_class: function () {
+      return this.formCollapse
+        ? "bi bi-chevron-down float-end"
+        : "bi bi-chevron-up float-end";
+    },
+    panel_collapse_class: function () {
+      if (this.formCollapse) {
+        return "card-body collapse";
+      } else if (this.treeHeight) {
+        return "card-body collapse show flex-container";
+      } else {
+        return "card-body collapse show";
+      }
+    },
+  },
     mounted: function() {
         let vm = this
         this.clickHandler = function() {
