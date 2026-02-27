@@ -16,6 +16,7 @@ export default defineConfig(({ command }) => ({
         port: port,
         strictPort: true,
         open: false,
+        origin: `http://localhost:${port}`,
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Headers':
@@ -42,6 +43,10 @@ export default defineConfig(({ command }) => ({
                 {
                     src: 'node_modules/@fortawesome/fontawesome-free/webfonts',
                     dest: 'node_modules/@fortawesome/fontawesome-free/',
+                },
+                {
+                    src: 'node_modules/bootstrap-icons/font/fonts',
+                    dest: 'node_modules/bootstrap-icons/font/',
                 },
             ],
         }),
