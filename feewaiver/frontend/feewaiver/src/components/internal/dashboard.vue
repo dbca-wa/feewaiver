@@ -305,9 +305,21 @@ export default {
             processingTable.replaceWith("<div><i class='fa fa-2x fa-spinner fa-spin'></i></div>");
             processView.replaceWith("");
             let post_url = '/api/feewaivers/' + id + '/final_approval/'
-            let res = await axios.post(post_url, {'approval_type': approvalType});
-            if (res.status === 200) {
-                // this should also be await?
+            try {
+                let res = await axios.post(post_url, {'approval_type': approvalType});
+                if (res.status === 200) {
+                    await this.refreshFromResponse();
+                }
+            } catch(err) {
+                let msg = 'An unexpected error occurred.';
+                if (err.response && err.response.data) {
+                    const data = err.response.data;
+                    msg = typeof data === 'string' ? data : JSON.stringify(data);
+                } else if (err.message) {
+                    msg = err.message;
+                }
+                console.error('actionShortcut error:', msg);
+                alert('Error: ' + msg);
                 await this.refreshFromResponse();
             }
         },
