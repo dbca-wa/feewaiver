@@ -35,7 +35,6 @@ import {
   helpers
 }
 from '@/utils/hooks';
-import Vue from 'vue';
 import axios from 'axios';
 
 export default {

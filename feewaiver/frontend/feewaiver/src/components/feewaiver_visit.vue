@@ -206,6 +206,8 @@
     import 'bootstrap/dist/css/bootstrap.css'
     import "select2/dist/css/select2.min.css"
     import '@popperjs/core/dist/umd/popper.min.js'
+    import $ from 'jquery'
+    import 'select2'
 
     export default {
         name: 'FeeWaiverVisit',

@@ -1,5 +1,5 @@
 
-module.exports = {
+export default {
     feewaivers: '/api/feewaivers/',
     participants: '/api/participants/participants_list',
     parks: '/api/parks/parks_list',

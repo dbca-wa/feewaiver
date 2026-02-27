@@ -86,9 +86,10 @@
 import CommsLogs from '@common-utils/comms_logs.vue'
 import { api_endpoints, helpers } from '@/utils/hooks'
 import FeeWaiverForm from '../feewaiver_form.vue'
-import Vue from 'vue'
 import AssessmentWorkflow from './assessment_modal.vue'
 import axios from 'axios'
+import $ from 'jquery'
+import 'select2'
 
 export default {
     name: 'Assessment',
