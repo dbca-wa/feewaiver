@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import svgLoader from 'vite-svg-loader';
+import inject from '@rollup/plugin-inject';
 
 const applicationNameShort = 'feewaiver';
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5173;
@@ -27,6 +28,10 @@ export default defineConfig(({ command }) => ({
         },
     },
     plugins: [
+        inject({
+            $: 'jquery',
+            jQuery: 'jquery',
+        }),
         vue(),
         svgLoader({
             defaultImport: 'url',
@@ -42,6 +47,7 @@ export default defineConfig(({ command }) => ({
         }),
     ],
     resolve: {
+        dedupe: ['jquery'],
         alias: {
             '@': path.resolve(__dirname, './src'),
             '@vue-utils': path.resolve(__dirname, 'src/utils/vue'),
@@ -53,6 +59,9 @@ export default defineConfig(({ command }) => ({
         drop: ['console', 'debugger'],
         minify: true,
     } : {},
+    optimizeDeps: {
+        include: ['jquery', 'select2'],
+    },
     build: {
         manifest: 'manifest.json',
         commonjsOptions: { transformMixedEsModules: true },
