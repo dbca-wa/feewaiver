@@ -30,6 +30,7 @@ export default defineConfig(({ command }) => ({
     },
     plugins: [
         inject({
+            include: ['**/*.js', '**/*.mjs', '**/*.jsx', '**/*.ts', '**/*.tsx'],
             $: 'jquery',
             jQuery: 'jquery',
         }),

@@ -89,8 +89,7 @@ import FeeWaiverForm from '../feewaiver_form.vue'
 import AssessmentWorkflow from './assessment_modal.vue'
 import axios from 'axios'
 import $ from 'jquery'
-import select2 from 'select2'
-select2($)  // Explicitly attach select2 plugin to this jQuery instance
+import 'select2'
 
 export default {
     name: 'Assessment',

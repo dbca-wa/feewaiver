@@ -9,16 +9,13 @@ import $ from 'jquery'
 import _ from 'lodash'
 import moment from 'moment'
 import Swal from 'sweetalert2'
-import select2 from 'select2'
-
 // Make globals available on window
 window.$ = window.jQuery = $
 window._ = _
 window.moment = moment
 window.Swal = Swal
 
-// Attach select2 to jQuery
-select2($)
+import 'select2'
 import 'bootstrap'
 import 'jquery-validation'
 // import select2 from 'select2'  // Select2 is a jQuery-based replacement for select boxes.
