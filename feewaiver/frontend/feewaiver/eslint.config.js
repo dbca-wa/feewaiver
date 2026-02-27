@@ -1,6 +1,4 @@
 import pluginVue from 'eslint-plugin-vue';
-import configPrettier from 'eslint-config-prettier';
-import pluginPrettier from 'eslint-plugin-prettier';
 
 export default [
     {
@@ -8,14 +6,9 @@ export default [
     },
     ...pluginVue.configs['flat/recommended'],
     {
-        plugins: {
-            prettier: pluginPrettier,
-        },
         rules: {
-            ...configPrettier.rules,
             'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
             'vue/multi-word-component-names': 'off',
-            'prettier/prettier': 'warn',
         },
         languageOptions: {
             globals: {
