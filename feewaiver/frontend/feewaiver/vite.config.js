@@ -29,7 +29,7 @@ export default defineConfig(({ command }) => ({
     },
     plugins: [
         vue(),
-        eslint({ minErrorLevel: 'error' }),
+        eslint(),
         svgLoader({
             defaultImport: 'url',
         }),
