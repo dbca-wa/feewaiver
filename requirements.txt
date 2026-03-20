@@ -52,7 +52,7 @@ django-vite~=3.0.6
 gevent==25.5.1
 python-decouple>=3.8
 pytz==2024.2
-setuptools==80.9.0
+setuptools==82.0.1
 # Security: pin minimum versions to address known vulnerabilities
 urllib3~=2.6.3
 wheel~=0.46.1
