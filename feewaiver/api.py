@@ -465,6 +465,18 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 instance = self.get_object()
+                terminal_statuses = [
+                    FeeWaiver.PROCESSING_STATUS_ISSUED,
+                    FeeWaiver.PROCESSING_STATUS_CONCESSION,
+                    FeeWaiver.PROCESSING_STATUS_DECLINED,
+                ]
+                # Guard against old records where finalised=False but status is already terminal
+                # (records processed before the 'finalised' field was introduced)
+                if instance.processing_status in terminal_statuses:
+                    if not instance.finalised:
+                        instance.finalised = True
+                        instance.save()
+                    return Response()
                 if not instance.finalised:
                     instance.finalised = True
                     instance.save()

@@ -191,7 +191,7 @@ export default {
             return canProcess;
         },
         isFinalised: function(){
-            return this.feeWaiver.processing_status == 'Declined' || this.feeWaiver.processing_status == 'Issued';
+            return ['Declined', 'Issued Fee Waiver', 'Issued Concession'].includes(this.feeWaiver.processing_status);
         },
     },
     methods: {
@@ -205,20 +205,25 @@ export default {
           this.show_spinner = true;
           let post_url = '/api/feewaivers/' + this.feeWaiver.id + '/final_approval/'
           let payload = {"approval_type": approval_type}
-          let feeWaiverRes = await this.parentSave(false)
-          if (feeWaiverRes.status === 200) {
-              try {
+          try {
+              let feeWaiverRes = await this.parentSave(false)
+              if (feeWaiverRes.status === 200) {
                   let res = await axios.post(post_url, payload);
                   if (res.status === 200) {    
                       this.$router.push({
                           name: 'fee-waiver-dash',
                       });
                   }
-              } catch(err) {
-                  this.errorResponse = 'Error:' + err.statusText;
-              } 
-          } else {
-              this.errorResponse = 'Error:' + feeWaiverRes.statusText;
+              } else {
+                  this.errorResponse = 'Error saving fee waiver: ' + feeWaiverRes.statusText;
+              }
+          } catch(err) {
+              if (err.response && err.response.data) {
+                  const data = err.response.data;
+                  this.errorResponse = 'Error: ' + (typeof data === 'string' ? data : JSON.stringify(data));
+              } else {
+                  this.errorResponse = 'Error: ' + (err.message || 'An unexpected error occurred');
+              }
           }
           this.show_spinner = false;
       },
