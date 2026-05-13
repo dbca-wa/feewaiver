@@ -54,6 +54,7 @@ python-decouple>=3.8
 pytz==2024.2
 setuptools==82.0.1
 # Security: pin minimum versions to address known vulnerabilities
+lxml>=6.1.0
 urllib3~=2.6.3
 wheel~=0.46.1
 jaraco.context>=6.1.2
