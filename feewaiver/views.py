@@ -1,5 +1,5 @@
 import os
-from django.http import Http404, FileResponse, JsonResponse
+from django.http import Http404, FileResponse, HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from reversion_compare.views import HistoryCompareDetailView
 
+from django_crispy_jcaptcha.widget import CaptchaImages
 from feewaiver.helpers import is_internal
 from feewaiver.forms import *
 from django.core.management import call_command
@@ -39,6 +40,15 @@ class InternalView(UserPassesTestMixin, TemplateView):
 
 class ExternalView(TemplateView):
     template_name = 'feewaiver/dash/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['captcha_widget'] = CaptchaImages().render('captcha', None)
+        return context
+
+
+def refresh_captcha(request):
+    return HttpResponse(CaptchaImages().render('captcha', None), content_type='text/html')
 
 
 class FeeWaiverRoutingView(TemplateView):
