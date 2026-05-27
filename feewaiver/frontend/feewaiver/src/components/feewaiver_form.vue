@@ -138,6 +138,10 @@
                 </FormSection>
             </template>
 
+            <template v-if="!isInternal">
+                <div id="captcha-inner-slot"></div>
+            </template>
+
             <div class="spacer_for_footer"></div>
 
             <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
@@ -395,6 +399,18 @@
                 } else {
                     let swalTitle = "Submit Request";
                     let swalText = "Are you sure you want to submit this request?";
+                    if (!this.isInternal) {
+                        const captchaInput = document.getElementById('id_captcha');
+                        if (!captchaInput || !captchaInput.value) {
+                            await Swal.fire({
+                                title: 'Captcha Required',
+                                text: 'Please select a matching image to complete the captcha.',
+                                icon: 'warning',
+                                confirmButtonText: 'Ok'
+                            });
+                            return;
+                        }
+                    }
                     await this.updatePayload();
                     await Swal.fire({
                         title: swalTitle,
@@ -426,6 +442,12 @@
                             //showCancelButton: true,
                             confirmButtonText: 'Ok'
                         });
+                        if (!this.isInternal) {
+                            const response = await fetch('/feewaiver/captcha/refresh/');
+                            const html = await response.text();
+                            const slot = document.getElementById('captcha-inner-slot');
+                            if (slot) slot.innerHTML = html;
+                        }
                     }
 
                 }
@@ -456,6 +478,7 @@
                     'fee_waiver': Object.assign({}, this.feeWaiver),
                     'visits': [],
                     'temporary_document_collection_id': this.temporary_document_collection_id,
+                    'captcha': !this.isInternal ? (document.getElementById('id_captcha')?.value || '') : '',
                 }
                 for (let visitData of this.visits) {
                     let visit = Object.assign({}, visitData);
@@ -542,6 +565,19 @@
 
         },
         mounted: function() {
+            if (!this.isInternal) {
+                const jwidget = document.getElementById('jwidget_div_captcha');
+                if (jwidget) {
+                    const slot = document.getElementById('captcha-inner-slot');
+                    if (slot) {
+                        const parent = jwidget.parentElement;
+                        while (parent.firstChild) {
+                            slot.appendChild(parent.firstChild);
+                        }
+                        parent.remove();
+                    }
+                }
+            }
         },
         created: async function() {
             if (this.isInternal) {
