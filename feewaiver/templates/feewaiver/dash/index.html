@@ -16,4 +16,7 @@
     <div class="container-fluid" id="dashboard-table-container">
         <div id="app"></div>
     </div>
+    {% if captcha_widget %}
+        <div style="display:none">{{ captcha_widget }}</div>
+    {% endif %}
 {% endblock %}
