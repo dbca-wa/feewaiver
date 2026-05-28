@@ -31,6 +31,7 @@ export default defineConfig(({ command }) => ({
     plugins: [
         inject({
             include: ['**/*.js', '**/*.mjs', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+            exclude: ['**/node_modules/select2/**'],
             $: 'jquery',
             jQuery: 'jquery',
         }),

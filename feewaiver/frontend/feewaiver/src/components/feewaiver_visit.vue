@@ -207,7 +207,6 @@
     import "select2/dist/css/select2.min.css"
     import '@popperjs/core/dist/umd/popper.min.js'
     import $ from 'jquery'
-    import 'select2'
 
     export default {
         name: 'FeeWaiverVisit',
@@ -536,11 +535,9 @@
             */
 
         },
-        mounted: function() {
+        mounted: async function() {
             const today = new Date();
             this.minDate = today.toISOString().split('T')[0];
-        },
-        created: async function() {
             await this.$nextTick();
             this.addEventListeners();
             this.updateJqueryData();

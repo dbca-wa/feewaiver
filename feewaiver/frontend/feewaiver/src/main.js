@@ -15,10 +15,11 @@ window._ = _
 window.moment = moment
 window.Swal = Swal
 
-import 'select2'
+import initSelect2 from 'select2'
 import 'bootstrap'
 import 'jquery-validation'
-// import select2 from 'select2'  // Select2 is a jQuery-based replacement for select boxes.
+// select2 exports a factory in CJS mode; it must be called to attach $.fn.select2
+initSelect2()
 
 // Datatable is jQuery plugin.  import here to make it globally available
 import 'datatables.net-bs5'
