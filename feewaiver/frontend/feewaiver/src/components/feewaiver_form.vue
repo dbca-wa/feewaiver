@@ -430,10 +430,10 @@
                     } catch (error) {
                         console.log({error})
                         let swalTitle = "Error";
-                        let swalText = error.data[0];
-                        if (error.data[0].slice(0,1) === '"{') {
-                            // remove the {} from the data string with slice
-                            swalText = error.data[0].slice(1,-1);
+                        const errorData = error.response?.data;
+                        let swalText = Array.isArray(errorData) ? errorData[0] : (errorData?.detail ?? 'An unexpected error occurred.');
+                        if (typeof swalText === 'string' && swalText.slice(0,1) === '"{') {
+                            swalText = swalText.slice(1,-1);
                         }
                         await Swal.fire({
                             title: swalTitle,
