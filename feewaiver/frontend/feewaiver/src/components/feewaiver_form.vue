@@ -139,7 +139,9 @@
             </template>
 
             <template v-if="!isInternal">
-                <div id="captcha-inner-slot"></div>
+                <FormSection :formCollapse="false" label="Verification" Index="captcha" :noChevron="true" :customClass="'mb-3'">
+                    <div id="captcha-inner-slot"></div>
+                </FormSection>
             </template>
 
             <div class="spacer_for_footer"></div>
@@ -564,7 +566,7 @@
             },
 
         },
-        mounted: function() {
+        mounted: async function() {
             if (!this.isInternal) {
                 const jwidget = document.getElementById('jwidget_div_captcha');
                 if (jwidget) {
@@ -576,6 +578,14 @@
                         }
                         parent.remove();
                     }
+                } else {
+                    // SPA navigation back to this page: jwidget_div_captcha is only
+                    // rendered once by Django on initial page load, so fetch a fresh
+                    // captcha widget from the server instead.
+                    const response = await fetch('/feewaiver/captcha/refresh/');
+                    const html = await response.text();
+                    const slot = document.getElementById('captcha-inner-slot');
+                    if (slot) slot.innerHTML = html;
                 }
             }
         },
