@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 from rest_framework import routers
 #from feewaiver import views, users_api, api
 from feewaiver import views, api
+from django_crispy_jcaptcha import views as jcaptcha_views
 
 from ledger.urls import urlpatterns as ledger_patterns
 from feewaiver.utils import are_migrations_running
@@ -31,6 +32,11 @@ api_patterns = [
 urlpatterns = [
     re_path(r'^ledger/admin/', admin.site.urls, name='ledger_admin'),
     re_path(r'', include(api_patterns)),
+    re_path(r'^jcaptcha/image-selection/(?P<hashkey>\w+).(?P<extension>\w\w\w)$',
+            jcaptcha_views.getImagePrimary, name='jcaptcha-image-primary'),
+    re_path(r'^jcaptcha/image-match/(?P<hashkey>\w+).(?P<extension>\w\w\w)$',
+            jcaptcha_views.getImageHash, name='jcaptcha-image-match'),
+    re_path(r'^feewaiver/captcha/refresh/$', views.refresh_captcha, name='captcha-refresh'),
     re_path(r'^$', views.FeeWaiverRoutingView.as_view(), name='home'),
     re_path(r'^contact/', views.FeeWaiverContactView.as_view(), name='ds_contact'),
     re_path(r'^admin_data/', views.FeeWaiverAdminDataView.as_view(), name='admin_data'),

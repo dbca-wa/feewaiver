@@ -65,7 +65,10 @@ INSTALLED_APPS += [
     'appmonitor_client',
     'ledger',
     'django_vite',
+    'django_crispy_jcaptcha',
 ]
+
+JCAPTCHA_IMAGE_LIST = 'jcaptcha2'
 
 CRON_CLASSES = [
     'appmonitor_client.cron.CronJobAppMonitorClient',
