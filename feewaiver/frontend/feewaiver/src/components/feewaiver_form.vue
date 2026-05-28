@@ -138,6 +138,12 @@
                 </FormSection>
             </template>
 
+            <template v-if="!isInternal">
+                <FormSection :formCollapse="false" label="Verification" Index="captcha" :noChevron="true" :customClass="'mb-3'">
+                    <div id="captcha-inner-slot"></div>
+                </FormSection>
+            </template>
+
             <div class="spacer_for_footer"></div>
 
             <input type="hidden" name="csrfmiddlewaretoken" :value="csrf_token"/>
@@ -395,6 +401,18 @@
                 } else {
                     let swalTitle = "Submit Request";
                     let swalText = "Are you sure you want to submit this request?";
+                    if (!this.isInternal) {
+                        const captchaInput = document.getElementById('id_captcha');
+                        if (!captchaInput || !captchaInput.value) {
+                            await Swal.fire({
+                                title: 'Captcha Required',
+                                text: 'Please select a matching image to complete the captcha.',
+                                icon: 'warning',
+                                confirmButtonText: 'Ok'
+                            });
+                            return;
+                        }
+                    }
                     await this.updatePayload();
                     await Swal.fire({
                         title: swalTitle,
@@ -414,10 +432,10 @@
                     } catch (error) {
                         console.log({error})
                         let swalTitle = "Error";
-                        let swalText = error.data[0];
-                        if (error.data[0].slice(0,1) === '"{') {
-                            // remove the {} from the data string with slice
-                            swalText = error.data[0].slice(1,-1);
+                        const errorData = error.response?.data;
+                        let swalText = Array.isArray(errorData) ? errorData[0] : (errorData?.detail ?? 'An unexpected error occurred.');
+                        if (typeof swalText === 'string' && swalText.slice(0,1) === '"{') {
+                            swalText = swalText.slice(1,-1);
                         }
                         await Swal.fire({
                             title: swalTitle,
@@ -426,6 +444,12 @@
                             //showCancelButton: true,
                             confirmButtonText: 'Ok'
                         });
+                        if (!this.isInternal) {
+                            const response = await fetch('/feewaiver/captcha/refresh/');
+                            const html = await response.text();
+                            const slot = document.getElementById('captcha-inner-slot');
+                            if (slot) slot.innerHTML = html;
+                        }
                     }
 
                 }
@@ -456,6 +480,7 @@
                     'fee_waiver': Object.assign({}, this.feeWaiver),
                     'visits': [],
                     'temporary_document_collection_id': this.temporary_document_collection_id,
+                    'captcha': !this.isInternal ? (document.getElementById('id_captcha')?.value || '') : '',
                 }
                 for (let visitData of this.visits) {
                     let visit = Object.assign({}, visitData);
@@ -541,7 +566,28 @@
             },
 
         },
-        mounted: function() {
+        mounted: async function() {
+            if (!this.isInternal) {
+                const jwidget = document.getElementById('jwidget_div_captcha');
+                if (jwidget) {
+                    const slot = document.getElementById('captcha-inner-slot');
+                    if (slot) {
+                        const parent = jwidget.parentElement;
+                        while (parent.firstChild) {
+                            slot.appendChild(parent.firstChild);
+                        }
+                        parent.remove();
+                    }
+                } else {
+                    // SPA navigation back to this page: jwidget_div_captcha is only
+                    // rendered once by Django on initial page load, so fetch a fresh
+                    // captcha widget from the server instead.
+                    const response = await fetch('/feewaiver/captcha/refresh/');
+                    const html = await response.text();
+                    const slot = document.getElementById('captcha-inner-slot');
+                    if (slot) slot.innerHTML = html;
+                }
+            }
         },
         created: async function() {
             if (this.isInternal) {

@@ -1,4 +1,6 @@
 import traceback
+import django.forms as django_forms
+from django_crispy_jcaptcha.widget import CaptchaValidation
 from django.db import transaction
 from django.core.exceptions import ValidationError
 from rest_framework import viewsets, serializers, views
@@ -603,6 +605,18 @@ class FeeWaiverViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError(str(e))
 
     def create(self, request, *args, **kwargs):
+        if not is_internal(request):
+            captcha_value = request.data.get('captcha', '')
+            if not captcha_value:
+                raise serializers.ValidationError(
+                    'Captcha verification failed, please reload the page and try again.'
+                )
+            try:
+                CaptchaValidation(captcha_value, django_forms)
+            except django_forms.ValidationError:
+                raise serializers.ValidationError(
+                    'Captcha verification failed, please reload the page and try again.'
+                )
         try:
             with transaction.atomic():
                 contact_details_data = request.data.get('contact_details')
