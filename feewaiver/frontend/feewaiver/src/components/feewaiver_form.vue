@@ -447,8 +447,10 @@
                         if (!this.isInternal) {
                             const response = await fetch('/feewaiver/captcha/refresh/');
                             const html = await response.text();
+                            const doc = new DOMParser().parseFromString(html, 'text/html');
+                            const newWidget = doc.getElementById('jwidget_div_captcha');
                             const slot = document.getElementById('captcha-inner-slot');
-                            if (slot) slot.innerHTML = html;
+                            if (newWidget && slot) slot.innerHTML = newWidget.outerHTML;
                         }
                     }
 
@@ -573,9 +575,16 @@
                     const slot = document.getElementById('captcha-inner-slot');
                     if (slot) {
                         const parent = jwidget.parentElement;
-                        while (parent.firstChild) {
-                            slot.appendChild(parent.firstChild);
-                        }
+                        // Move <link> and <script> to <head> so they survive captcha refreshes.
+                        // Setting slot.innerHTML on refresh removes all slot children, so keeping
+                        // these assets outside the slot prevents the stylesheet from being torn
+                        // down and re-inserted (which causes a FOUC in production builds).
+                        Array.from(parent.children).forEach(child => {
+                            if (child !== jwidget) {
+                                document.head.appendChild(child);
+                            }
+                        });
+                        slot.appendChild(jwidget);
                         parent.remove();
                     }
                 } else {
@@ -584,8 +593,10 @@
                     // captcha widget from the server instead.
                     const response = await fetch('/feewaiver/captcha/refresh/');
                     const html = await response.text();
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    const newWidget = doc.getElementById('jwidget_div_captcha');
                     const slot = document.getElementById('captcha-inner-slot');
-                    if (slot) slot.innerHTML = html;
+                    if (newWidget && slot) slot.innerHTML = newWidget.outerHTML;
                 }
             }
         },
