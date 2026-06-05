@@ -11,6 +11,13 @@
                     <p>You can add multiple visits to the same fee waiver request by clicking add another visit prior to submitting.</p>
                 </strong>
             </div>
+            <div v-if="!isInternal" class="alert alert-info mb-3 py-5 px-5" role="alert">
+                <strong>Privacy Notice</strong>
+                <p class="mb-2 mt-2">The Department of Biodiversity, Conservation and Attractions (DBCA) collects your personal information to assess and approve fee waiver requests in Western Australia's national parks and other conservation reserves.</p>
+                <p class="mb-2">You are required to provide this information under the <em>Conservation and Land Management Act 1984</em> and Conservation and Land Management Regulations 2002.</p>
+                <p class="mb-2">If you choose not to provide personal information, a fee waiver request will not be approved.</p>
+                <p class="mb-0">For further details on how DBCA manage your personal information, you can read our <a href="https://www.dbca.wa.gov.au/media/6324/download" target="_blank">Privacy Policy</a>. If you have any questions about how your personal information will be handled, or if you would like to access your personal information, please contact <a href="mailto:privacy@dbca.wa.gov.au">privacy@dbca.wa.gov.au</a></p>
+            </div>
             <FormSection :formCollapse="false" label="Contact Details" Index="contact_details" :noChevron="!isInternal" :customClass="'mb-3'">
                 <div class="row mb-2">
                     <label for="organisation" class="col-sm-2 col-form-label">Organisation</label>
