@@ -53,7 +53,6 @@ USER oim
 RUN virtualenv /app/venv
 ENV PATH=/app/venv/bin:$PATH
 COPY requirements.txt ./
-RUN touch /app/rand_hash
 RUN git config --global --add safe.directory /app
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt

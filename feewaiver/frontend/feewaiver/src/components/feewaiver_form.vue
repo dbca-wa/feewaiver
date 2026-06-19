@@ -528,7 +528,7 @@
             },
             fetchAdminData: async function() {
                 this.participantGroupList = [];
-                const response = await this.$http.get(api_endpoints.admin_data);
+                const response = await this.$http.get(api_endpoints.reference_data);
 
                 for (let group of response.data.participants_list) {
                     this.participantGroupList.push(group)
