@@ -98,6 +98,12 @@ RUN export IPYTHONDIR=/app/logs/.ipython/
 
 FROM configure_feewaiver AS launch_feewaiver
 
+# Switch to root user to remove the specified package
+USER root
+RUN apt purge -y linux-libc-dev
+# Switch back to non-root user for runtime security
+USER oim
+
 EXPOSE 8080
 HEALTHCHECK --interval=1m --timeout=5s --start-period=10s --retries=3 CMD ["wget", "-q", "-O", "-", "http://localhost:8080/"]
 CMD ["/startup.sh"]
