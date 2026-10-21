@@ -42,7 +42,8 @@ FROM node_feewaiver AS python_libs_feewaiver
 WORKDIR /app
 USER oim
 
-RUN virtualenv /app/venv
+# RUN virtualenv /app/venv
+RUN python -m venv $VIRTUAL_ENV
 ENV PATH=/app/venv/bin:$PATH
 COPY requirements.txt ./
 RUN git config --global --add safe.directory /app
