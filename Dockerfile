@@ -7,6 +7,8 @@ ARG IMAGE_NAME
 RUN echo "Building version: $IMAGE_TAG for $IMAGE_NAME"
 ENV CONTAINER_IMAGE_TAG=${IMAGE_TAG}
 ENV CONTAINER_IMAGE_NAME=${IMAGE_NAME}
+ENV VIRTUAL_ENV=/app/venv
+ENV PATH=$VIRTUAL_ENV/bin:$PATH
 LABEL maintainer="asi@dbca.wa.gov.au"
 
 ENV DEBIAN_FRONTEND=noninteractive \
