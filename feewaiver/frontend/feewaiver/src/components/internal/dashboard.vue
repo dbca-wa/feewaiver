@@ -3,7 +3,7 @@
         <FormSection :formCollapse="false" label="Fee Waiver Requests" Index="fee_waiver_requests">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="lodged_from" class="pt-2 pr-2">Lodged From：</label>
+                    <label for="lodged_from" class="pt-2 pr-2">Lodged From:</label>
                     <input
                         id="lodged_from"
                         v-model="filterFeeWaiverLodgedFrom"
@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="lodged_to" class="pt-2 pr-2">Lodged To：</label>
+                    <label for="lodged_to" class="pt-2 pr-2">Lodged To:</label>
                     <input
                         id="lodged_to"
                         v-model="filterFeeWaiverLodgedTo"
