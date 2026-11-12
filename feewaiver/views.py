@@ -1,7 +1,7 @@
 import os
 from django.http import Http404, FileResponse, HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import TemplateView
 from django.conf import settings
@@ -11,7 +11,6 @@ from reversion_compare.views import HistoryCompareDetailView
 from django_crispy_jcaptcha.widget import CaptchaImages
 from feewaiver.helpers import is_internal
 from feewaiver.forms import *
-from django.core.management import call_command
 from feewaiver.serializers import (
         ParticipantsSerializer,
         ParkSerializer,
@@ -89,20 +88,6 @@ class HelpView(LoginRequiredMixin, TemplateView):
                 qs = HelpPage.objects.filter(application_type__name__icontains=application_type, help_type=HelpPage.HELP_TEXT_EXTERNAL).order_by('-version')
                 context['help'] = qs.first()
         return context
-
-
-class ManagementCommandsView(LoginRequiredMixin, TemplateView):
-    template_name = 'feewaiver/mgt-commands.html'
-
-    def post(self, request):
-        data = {}
-        command_script = request.POST.get('script', None)
-        if command_script:
-            print ('running {}'.format(command_script))
-            call_command(command_script)
-            data.update({command_script: 'true'})
-
-        return render(request, self.template_name, data)
 
 
 class InternalFeeWaiverView(DetailView):

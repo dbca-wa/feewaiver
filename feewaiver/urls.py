@@ -46,7 +46,6 @@ urlpatterns = [
     re_path(r'^account/$', views.ExternalView.as_view(), name='manage-account'),
     re_path(r'^profiles/', views.ExternalView.as_view(), name='manage-profiles'),
     re_path(r'^help/(?P<application_type>[^/]+)/(?P<help_type>[^/]+)/$', views.HelpView.as_view(), name='help'),
-    re_path(r'^mgt-commands/$', views.ManagementCommandsView.as_view(), name='mgt-commands'),
     re_path(r'^internal/fee_waiver/(?P<feewaiver_pk>\d+)/$', views.InternalFeeWaiverView.as_view(), name='internal-feewaiver-detail'),
     re_path(r'^history/fee_waiver/(?P<pk>\d+)/$', views.FeeWaiverHistoryCompareView.as_view(), name='feewaiver_history'),
     path('private-media/<path:path>/', views.serve_private_file, name='serve_private_file'),
